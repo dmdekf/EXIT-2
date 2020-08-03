@@ -1,8 +1,11 @@
 @charset "utf-8";
 @import "./common";
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
-*{font-family:'Noto Sans KR', sans-serif; word-break: keep-all; padding: 0; margin: 0; outline: 0;}  
+@import "./fonts/payboocMedium.ttf";
+@font-face { font-family: payboocMedium;
+             src: url("./fonts/payboocMedium.ttf") format("true") }
+
+*{font-family:'payboocMedium', sans-serif; word-break: keep-all; padding: 0; margin: 0; outline: 0;}  
   
 /* reset */ 
 html, body, div, span, applet, object, iframe, 
