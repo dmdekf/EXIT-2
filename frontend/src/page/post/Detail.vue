@@ -1,44 +1,44 @@
 <template>
-  <v-row align="center">
+<div id="app">
+    <v-app id="inspire">
+    <v-window>
+        <v-window-item>
         <v-card flat>
-          <v-card-text>
-            <v-row class="mb-4" align="center">
-              <v-avatar color="grey" class="mr-4"></v-avatar>
-              <h3>#{{post.id}}</h3>
-              <strong class="title">제목 :  {{ subject }}</strong>
-              <p>작성날짜: {{this.created}}</p>
-              <hr/> 
-              <v-spacer></v-spacer>
-              <div class="contents">
-                <v-row>
-                    <v-col cols="auto">
-                        <div v-if="this.likestatus">
-                            <v-btn icon color="#DC143C" v-on:click="likePost(id)" >
-                                <v-icon>mdi-heart</v-icon>
-                            </v-btn>
-                        </div>
-                        <div v-if="!this.likestatus">
-                            <v-btn icon color="black" v-on:click="likePost(id)">
-                                <v-icon>mdi-heart</v-icon>
-                            </v-btn>
-                        </div>
-                    </v-col>
-                </v-row>
-
+        <v-card-title class="lime">
+            <v-list-item>
+            <v-list-item-content>
+            <v-list-item-subtitle><small>#{{id}}</small></v-list-item-subtitle>
+            
+            <v-list-item-title class="headline">제목 :  {{ subject }}</v-list-item-title>
+            <v-row justify="space-around"  class="child-flex">
+            <div class="ml-3"><small>작성날짜: {{this.created}}</small></div>
+                <div v-if="this.likestatus">
+                    <v-btn icon color="#DC143C" v-on:click="likePost(id)" >
+                        <v-icon>mdi-heart</v-icon>
+                    </v-btn>
                 </div>
-              <v-btn icon v:on="userdetail()">
-                <v-icon>mdi-account</v-icon>
-              </v-btn>
+                <div v-if="!this.likestatus">
+                    <v-btn icon color="black" v-on:click="likePost(id)">
+                        <v-icon>mdi-heart</v-icon>
+                    </v-btn>
+                </div>
+                <div>
+                <v-btn icon v:on="userdetail()">
+                    <v-icon>mdi-account</v-icon>
+                </v-btn>
+                </div>
             </v-row>
-
-            <p>
-              {{content}}
-            </p>
-          </v-card-text>
-        </v-card>
-      </v-window-item>
+            </v-list-item-content>
+            </v-list-item>
+        </v-card-title>
+        <v-card-text>
+            {{content}}
+        </v-card-text>
+    </v-card>
+    </v-window-item>
     </v-window>
-  </v-row>
+</v-app>
+</div>
 </template>
 
 

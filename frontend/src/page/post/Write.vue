@@ -1,10 +1,8 @@
 
 <template>
   <div id="app">
-    <v-app id="inspire">
-      <v-main>
-        <v-container class="fill-height" fluid>
-          <v-row align="center" justify="center">
+  <v-app id="inspire">
+    <v-row align="center">
             <v-col cols="12" sm="8" md="8">
               <v-card class="elevation-12">
                 <v-toolbar color="primary" dark flat>
@@ -40,8 +38,6 @@
               </v-card>
             </v-col>
           </v-row>
-        </v-container>
-      </v-main>
     </v-app>
   </div>
 </template>
