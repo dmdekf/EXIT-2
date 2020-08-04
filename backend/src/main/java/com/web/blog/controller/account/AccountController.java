@@ -1,8 +1,11 @@
 package com.web.blog.controller.account;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -22,6 +25,7 @@ import com.web.blog.model.user.SignupRequest;
 import com.web.blog.model.user.User;
 import com.web.blog.service.JwtService;
 import com.web.blog.service.MailSendService;
+import com.web.blog.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -45,6 +49,9 @@ public class AccountController {
 	@Autowired
 	private MailSendService mailSendService;
 
+	@Autowired
+	private UserService userService;
+	
 	@GetMapping("/account/login")
 	@ApiOperation(value = "로그인")
 	public Object login(@RequestParam(required = true) final String email,
@@ -109,7 +116,47 @@ public class AccountController {
 
 		return response;
 	}
+	@PostMapping("/user/signin")
+	public ResponseEntity<Map<String, Object>> signin(@RequestBody User user, HttpServletResponse res) {
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = null;
+		try {
+			User loginUser = userService.signin(user.getEmail(), user.getPassword());
+			// 로그인 성공했다면 토큰을 생성한다.
+			String token = jwtService.create(loginUser);
+			// 토큰 정보는 request의 헤더로 보내고 나머지는 Map에 담아주자.
+			res.setHeader("jwt-auth-token", token);
+			// resultMap.put("auth_token", token);
 
+			resultMap.put("status", true);
+			resultMap.put("data", loginUser);
+			status = HttpStatus.ACCEPTED;
+		} catch (RuntimeException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
+	}
+	@PostMapping("/user/info")
+	public ResponseEntity<Map<String, Object>> getInfo(HttpServletRequest req, @RequestBody User user) {
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = null;
+		try {
+			// 사용자에게 전달할 정보이다.
+			String info = userService.getServerInfo();
+			// 보너스로 토큰에 담긴 정보도 전달해보자. 서버에서 토큰을 사용하는 방법임을 알 수 있다.
+			resultMap.putAll(jwtService.get(req.getHeader("jwt-auth-token")));
+			
+			resultMap.put("status", true);
+			resultMap.put("info", info);
+			resultMap.put("request_body", user);
+			status = HttpStatus.ACCEPTED;
+		} catch (RuntimeException e) {
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
+	}
 	@GetMapping("/account/key_alter")
 	@ApiOperation(value="이메일 인증 완료")
 	public Object keyAlterConfirm(@RequestParam String uid,@RequestParam String userkey) {
