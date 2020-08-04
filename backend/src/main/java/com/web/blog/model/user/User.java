@@ -23,10 +23,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
-    @Id
+    public User(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
+
+	@Id
     private String uid;
 
-    @JsonIgnore
     private String password;
     private String email;
 

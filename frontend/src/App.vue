@@ -12,7 +12,8 @@
       </v-btn>
       <v-spacer></v-spacer>
       <div v-if="loginStatus">
-        <small class="font-weight-bold">{{ nickname }}</small
+        
+        <small class="font-weight-bold">{{ this.nickname }}</small
         >님 환영합니다.
       <v-btn rounded class="ma-2" color="primary" to="/search" >
             <v-icon>mdi-magnify</v-icon>검색하기
@@ -40,56 +41,41 @@
 </template>
 
 <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
+
 <script>
 import constants from "./lib/constants";
-
+import axios from "axios";
+// 토큰 및 사용자 정보를 저장하기 위해서 세션 스토리지를 사용한다.
 const storage = window.sessionStorage;
-  console.log(storage);
-  
+
+
 export default {
-  name: "App",
   data() {
     return {
       constants,
-      keyword: "",
-      nickname: "",
-      password: "",
+      nickname:"",
       email: "",
+      password: "",
+      message: "로그인해주세요.",
+      status: "",
+      token: "",
+      info: "",
       loginStatus: false,
-      isMobile: false,
-    }
+    };
   },
-    beforeDestroy () {
+  beforeDestroy () {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', this.onResize, { passive: true })
       }
     },
     created() {
       let url = this.$router.name;
-    this.checkUrl(url);
+      this.checkUrl(url);
     },
     mounted () {
       this.onResize()
       window.addEventListener('resize', this.onResize, { passive: true })
     },
-
-    methods: {
-      onResize () {
-        this.isMobile = window.innerWidth < 600
-      },
-    },
-  
-  watch: {
-    $router(to) {
-      this.checkUrl(to.name);
-    },
-  },
-  mounted() {
-    this.init();
-  },
-  updated() {
-    this.init();
-  },
   methods: {
     checkUrl(url) {
       let array = [
@@ -107,53 +93,54 @@ export default {
         constants.URL_TYPE.POST.UPDATE,
       ];
     },
-    init() {
-      if (storage.getItem("jwt-auth-token")) {
-        this.nickname = storage.getItem("login_user");
-        this.loginStatus = true;
-      } else {
-        storage.setItem("jwt-auth-token", "");
-        this.nickname = "";
-        this.loginStatus = false;
-      }
+    setInfo(status, token, info) {
+      this.status = status;
+      this.token = token;
+      this.info = info;
     },
     logout() {
       storage.setItem("jwt-auth-token", "");
       storage.setItem("login_user", "");
+      storage.setItem("user_email","");
       this.init();
     },
+    
+    init() {
+      if (storage.getItem("jwt-auth-token")) {
+        this.nickname = storage.getItem("login_user");
+        this.loginStatus = true;
+        this.message = storage.getItem("login_user") + "로 로그인 되었습니다.";
+      } else {
+        storage.setItem("jwt-auth-token", "");
+        
+        this.nickname = "";
+        this.loginStatus = false;
+      }
+    } // init
+    ,
     moveDetail() {
       this.$router.push("/user/detail");
     },
     moveSearch(){
       this.$router.push("/search");
-    }
+    },
   },
-}
+  mounted() {
+    this.init();
+  }
+};
 </script>
-<style>
-#app {
-  font-family: payboocMedium, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+<style scoped>
+table {
+    border-collapse: collapse;
+    width: 100%;
+    word-break: break-all;
 }
-
-@media ( max-width: 1280px ) {
-        #app {
-          width: auto;
-        }
-        #app all {
-          float: none;
-          width: auto;
-        }
-        .container {
-          float: none;
-          width: auto;
-        }
-        #inspire {
-          float: none;
-          width: auto;
-        }
+th {
+    width: 50px;
+}
+td,
+th {
+    border: 1px solid black;
 }
 </style>
