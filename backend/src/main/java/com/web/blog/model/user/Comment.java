@@ -22,9 +22,15 @@ public class Comment {
 	@Id
 	private int idx;
 	
-	private int board_idx;
+	private String boardIdx;
 	
 	private String content;
 	
 	private String writer;
+	
+	private String deleteYn;
+	
+	private Date insertTime;
+	private Date updateTime;
+	private Date deleteTime;
 }

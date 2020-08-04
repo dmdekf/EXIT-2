@@ -119,6 +119,7 @@ export default {
                     
                 }).then(
                         this.likestatus = !this.likestatus
+                        
                     )
             }
             

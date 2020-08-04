@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,15 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.dao.user.BoardDao;
+import com.web.blog.dao.user.CommentDao;
 import com.web.blog.dao.user.HeartDao;
 import com.web.blog.model.BasicResponse;
 import com.web.blog.model.user.Board;
-import com.web.blog.model.user.Heart;
-import com.web.blog.model.user.HeartPK;
 import com.web.blog.model.user.Post;
 
 import io.swagger.annotations.ApiOperation;
@@ -37,6 +34,8 @@ public class BoardController {
    BoardDao boardDao;
    @Autowired
    HeartDao heartDao;
+   @Autowired
+   CommentDao commentDao;
    
    
    
@@ -69,6 +68,7 @@ public class BoardController {
 		List<Post> plist = new ArrayList<Post>();
 		for(Board b : list){
 			int lnt = heartDao.findHeartByBid(b.getId()+"").size();
+			int cnt = commentDao.findByBoardIdx(b.getId()+"").size();
 			plist.add(new Post(b,lnt, 0, false));
 		}
 		plist.sort((a,b)->b.getId()-a.getId());
@@ -88,7 +88,11 @@ public class BoardController {
          // String uid = "test"; // 여기 수정 필요
          int lnt = heartDao.findHeartByBid(id).size();
          System.out.println(lnt);
-         return new Post(board.get(), lnt, 0, heartDao.findHeartByBidAndUid(id, uid)!=null );
+         boolean ilike = heartDao.findHeartByBidAndUid(id, uid).isPresent();
+         System.out.println(ilike);
+         int cnt = commentDao.findByBoardIdx(id).size();
+         System.out.println(cnt);
+         return new Post(board.get(), lnt, cnt, heartDao.findHeartByBidAndUid(id, uid).isPresent());
 
       }
       return new Post(0,"삭제된 Board","",null,"","","",0,0,0,false);
@@ -103,7 +107,8 @@ public class BoardController {
          // String uid = "test"; // 여기 수정 필요
          int lnt = heartDao.findHeartByBid(id).size();
         // System.out.println(lnt);
-         return new Post(board.get(), lnt, 0, false);
+         int cnt = commentDao.findByBoardIdx(id).size();
+         return new Post(board.get(), lnt, cnt, false);
 
       }
       return new Post(0,"삭제된 Board","",null,"","","",0,0,0,false);
