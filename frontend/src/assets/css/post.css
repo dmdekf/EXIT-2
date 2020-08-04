@@ -394,7 +394,7 @@
   position: fixed;
   left: calc(50% + 380px);
   top: 230px;
-  width: 230px;
+  width: 100%;
 }
 
 .tag-list-wrap h4 {

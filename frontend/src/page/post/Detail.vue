@@ -1,49 +1,46 @@
 <template>
-  <div class="user" id="join"> 
-        <div class="wrapC table">
-            <div class="middle">
-                <h1>게시글 정보</h1>
-                <div v-if="this.likestatus">
-                    <v-btn icon color="#DC143C" v-on:click="likePost(id)" >
-                        <v-icon>mdi-heart</v-icon>
-                    </v-btn>
-                </div>
-                <div v-if="!this.likestatus">
-                    <v-btn icon color="black" v-on:click="likePost(id)">
-                         <v-icon>mdi-heart</v-icon>
-                    </v-btn>
-                </div>
-                <div class="form-wrap">
-                    <div class="input-wrap">
-                       <p>제목: <input v-model="subject" id="subject" type="text" placeholder=this.subject/></p>
-                        <p>내용:  <input v-model="content" id="content" type="text" placeholder=this.content/>{{this.content}}</p>
-                        <p>작성날짜: {{this.created}}</p>
-                    </div>
+  <v-row align="center">
+        <v-card flat>
+          <v-card-text>
+            <v-row class="mb-4" align="center">
+              <v-avatar color="grey" class="mr-4"></v-avatar>
+              <h3>#{{post.id}}</h3>
+              <strong class="title">제목 :  {{ subject }}</strong>
+              <p>작성날짜: {{this.created}}</p>
+              <hr/> 
+              <v-spacer></v-spacer>
+              <div class="contents">
+                <v-row>
+                    <v-col cols="auto">
+                        <div v-if="this.likestatus">
+                            <v-btn icon color="#DC143C" v-on:click="likePost(id)" >
+                                <v-icon>mdi-heart</v-icon>
+                            </v-btn>
+                        </div>
+                        <div v-if="!this.likestatus">
+                            <v-btn icon color="black" v-on:click="likePost(id)">
+                                <v-icon>mdi-heart</v-icon>
+                            </v-btn>
+                        </div>
+                    </v-col>
+                </v-row>
 
                 </div>
+              <v-btn icon v:on="userdetail()">
+                <v-icon>mdi-account</v-icon>
+              </v-btn>
+            </v-row>
 
-                <button class="btn" v-on:click="moveUpdate()"> 
-                    <span>
-                        정보수정
-                    </span>
-                </button>
-                <button class="btn" v-on:click="moveList">
-                    <span>
-                        메인화면
-                    </span>
-                </button>
-                <button class="btn" v-on:click="deletePost(id)">
-                    <span>
-                        글 삭제
-                    </span>
-                </button>
-                    
-            </div>
-        </div> 
-        
-
-    </div>
+            <p>
+              {{content}}
+            </p>
+          </v-card-text>
+        </v-card>
+      </v-window-item>
+    </v-window>
+  </v-row>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -72,46 +69,7 @@ export default {
                 this.$router.push("/");
             },
            
-            moveUpdate(){
-                console.log(this.subject)
-                console.log(this.content)
-                axios({
-                    method:"put",
-                    url:SERVER.URL+"/feature/board/update",
-                    data :{
-                        subject : this.subject,
-                        content : this.content,
-                        created : this.created,
-                        id : this.id
-                    }
-                }).then((res)=>{
-                    var msg ;
-                    if(res.data.status){
-                        msg = "수정이 완료되었습니다.";
-                        this.$router.push("/");
-                    }
-                    alert(msg);
-                    this.$router.push("/");
-                })
-            },
-            deletePost(postId){
-                console.log(postId);
-                axios({
-                    method:"delete",
-                    url:SERVER.URL +"/feature/board/delete/"+postId,
-
-                    }).then((res)=>{
-                    let msg = postId+"번 글이 삭제가 완료됐습니다.";
-                    if(res.data.status){
-                        msg = "삭제가 완료되었습니다.";
-                        this.$router.push("/");
-                    }else{
-
-                    }
-                    alert(msg);
-                    this.$router.push("/");
-                })
-            },
+            
             likePost(postId){
                 axios({
                     method: "GET",
@@ -144,3 +102,4 @@ export default {
 <style>
 
 </style>
+
