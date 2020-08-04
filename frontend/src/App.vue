@@ -43,6 +43,7 @@
 <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
 
 <script>
+import { mapGetters } from 'vuex'
 import constants from "./lib/constants";
 import axios from "axios";
 // 토큰 및 사용자 정보를 저장하기 위해서 세션 스토리지를 사용한다.
@@ -50,6 +51,10 @@ const storage = window.sessionStorage;
 
 
 export default {
+  naem: 'App',
+  computed: {
+    ...mapGetters(['isLoggedIn'])
+  },
   data() {
     return {
       constants,
@@ -91,6 +96,9 @@ export default {
         constants.URL_TYPE.POST.WRITECOMPLETE,
         constants.URL_TYPE.POST.DETAIL,
         constants.URL_TYPE.POST.UPDATE,
+        // LOGIN,
+        // MAIN,
+        // SIGNUP,
       ];
     },
     setInfo(status, token, info) {
