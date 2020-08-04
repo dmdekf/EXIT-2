@@ -76,10 +76,22 @@ public class BoardController {
 	}
 
    @ApiOperation(value = "게시글번호에 해당하는 게시글의 정보를 반환한다.", response = BoardController.class)
-   @GetMapping("list/detail/{id}")
-   public Optional<Board> detailBoard(@RequestParam("id") int id) {
+   @GetMapping("/detail/{uid}/{id}")
+   public Object detailBoard2(@PathVariable String uid, @PathVariable String id ) {
+      System.out.println(id);
+      System.out.println("좋아요 포함 ");
+      System.out.println(uid);
+      if(uid==null)return "로그인하세요";
+      Optional<Board> board = boardDao.findById(Integer.parseInt(id));
+      if (board.isPresent()) {
+         
+         // String uid = "test"; // 여기 수정 필요
+         int lnt = heartDao.findHeartByBid(id).size();
+         System.out.println(lnt);
+         return new Post(board.get(), lnt, 0, heartDao.findHeartByBidAndUid(id, uid)!=null );
 
-      return boardDao.findById(id);
+      }
+      return new Post(0,"삭제된 Board","",null,"","","",0,0,0,false);
    }
 
    @ApiOperation(value = "게시글번호에 해당하는 게시글의 정보를 반환한다.", response = BoardController.class)

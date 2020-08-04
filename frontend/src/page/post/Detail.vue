@@ -115,7 +115,7 @@ export default {
             likePost(postId){
                 axios({
                     method: "GET",
-                    url : "http://i3a501.ssafy.p.io:8080/like/"+postId+"/"+storage.getItem("login_user"),
+                    url : SERVER.URL+"/like/"+postId+"/"+storage.getItem("login_user"),
                     
                 }).then(
                         this.likestatus = !this.likestatus
@@ -125,13 +125,15 @@ export default {
         },
         created() {
             axios
-                .get("http://i3a501.p.ssafy.io:8080/feature/board/list/detail/{id}?id="+this.id)
+                .get(SERVER.URL +"/feature/board/detail/"+storage.getItem("login_user")+"/"+this.id)
                 .then((res) => {
                     console.log(res.data);
                     this.subject = res.data.subject;
                     this.content = res.data.content;
                     this.created = res.data.created;
-                    this.likestatus = res.data.ilike  
+                   
+                    this.likestatus = res.data.ilike;  
+                     console.log(likestatus)
                 })
                 .catch((err) => console.error(err));
                 
