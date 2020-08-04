@@ -26,6 +26,21 @@ const routes = [
   // 포스트
   {
     path: "/",
+    name: 'MAIN',
+    component: List,
+  },
+  {
+    path: "/user/signup",
+    name: 'SIGNUP',
+    component: Signup,
+  },
+  {
+    path: "/user/logintest",
+    name: 'LOGIN',
+    component: Loginvutify,
+  },
+  {
+    path: "/",
     name: constants.URL_TYPE.POST.MAIN,
     component: List,
   },
@@ -105,18 +120,18 @@ const router = new Router({
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//   const publicPages = ["Login", "Signup", "List"]; // Login 안해도 됨
-//   const authPages = ["Login", "Signup"]; // Login 되어있으면 안됨
+router.beforeEach((to, from, next) => {
+  const storage = window.sessionStorage;
+  const publicPages = ["LOGIN", "SIGNUP", "MAIN"]; // Login 안해도 됨
+  const authPages = ["LOGIN", "SIGNUP"]; // Login 되어있으면 안됨
+  const authRequired = !publicPages.includes(to.name); // 로그인 해야 함.
+  const unauthRequired = authPages.includes(to.name); // 로그인 해서는 안됨
+  const isLoggedIn = !!storage.getItem("jwt-auth-token")
 
-//   const authRequired = !publicPages.includes(to.name); // 로그인 해야 함.
-//   const unauthRequired = authPages.includes(to.name); // 로그인 해서는 안됨
-//   const isLoggedIn = !!Vue.$cookies.isKey("auth-token");
-
-//   if (unauthRequired && isLoggedIn) {
-//     next("/");
-//   }
-//   authRequired && !isLoggedIn ? next({ name: "Login" }) : next();
-// });
+  if (unauthRequired && isLoggedIn) {
+    next("/");
+  }
+  authRequired && !isLoggedIn ? next({ name: "constants.URL_TYPE.USER.Login" }) : next();
+});
 
 export default router;
