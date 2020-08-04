@@ -4,6 +4,6 @@
       <rect width="22" height="22" stroke="none"/>
       <rect x="0.5" y="0.5" width="21" height="21" fill="none"/>
     </g>
-    <text id="T" transform="translate(581 312)" font-size="12" font-family="NanumMyeongjoExtraBold, NanumMyeongjo"><tspan x="0" y="0">T</tspan></text>
+    <text id="T" transform="translate(581 312)" font-size="12" font-family="payboocMedium"><tspan x="0" y="0">T</tspan></text>
   </g>
 </svg>

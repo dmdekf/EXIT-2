@@ -125,7 +125,7 @@ export default {
         },
         created() {
             axios
-                .get("http://i3a501.p.ssafy.io:8080/feature/board/list/detail/{id}?id="+this.id)
+                .get(SERVER.URL +"/feature/board/detail/"+storage.getItem("login_user")+"/"+this.id)
                 .then((res) => {
                     console.log(res.data);
                     this.subject = res.data.subject;
