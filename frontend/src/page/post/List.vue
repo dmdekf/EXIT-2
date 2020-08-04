@@ -87,7 +87,7 @@ export default {
         },
         showDetail(id){
             axios
-                .get(SERVER.URL+"/feature/board/list/detail/{id}?id="+id)
+                .get(SERVER.URL +"/feature/board/detail/"+storage.getItem("login_user")+"/"+id)
                 .then((res) => {
                     this.$router.push(`/post/detail/${id}`);
                 })

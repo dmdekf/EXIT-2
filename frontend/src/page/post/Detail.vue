@@ -77,7 +77,7 @@ export default {
                 console.log(this.content)
                 axios({
                     method:"put",
-                    url:"http://i3a501.ssafy.p.io:8080/feature/board/update",
+                    url:SERVER.URL+"/feature/board/update",
                     data :{
                         subject : this.subject,
                         content : this.content,
@@ -98,7 +98,7 @@ export default {
                 console.log(postId);
                 axios({
                     method:"delete",
-                    url:"http://i3a501.p.ssafy.io:8080/feature/board/delete/"+postId,
+                    url:SERVER.URL +"/feature/board/delete/"+postId,
 
                     }).then((res)=>{
                     let msg = postId+"번 글이 삭제가 완료됐습니다.";
@@ -115,7 +115,7 @@ export default {
             likePost(postId){
                 axios({
                     method: "GET",
-                    url : SERVER.URL+"/like/"+postId+"/"+storage.getItem("login_user"),
+                    url : SERVER.URL +"/like/"+postId+"/"+storage.getItem("login_user"),
                     
                 }).then(
                         this.likestatus = !this.likestatus
@@ -131,9 +131,7 @@ export default {
                     this.subject = res.data.subject;
                     this.content = res.data.content;
                     this.created = res.data.created;
-                   
-                    this.likestatus = res.data.ilike;  
-                     console.log(likestatus)
+                    this.likestatus = res.data.ilike  
                 })
                 .catch((err) => console.error(err));
                 
