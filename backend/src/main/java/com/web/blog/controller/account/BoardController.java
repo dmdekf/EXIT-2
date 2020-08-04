@@ -102,7 +102,7 @@ public class BoardController {
       if (board.isPresent()) {
          // String uid = "test"; // 여기 수정 필요
          int lnt = heartDao.findHeartByBid(id).size();
-         System.out.println(lnt);
+        // System.out.println(lnt);
          return new Post(board.get(), lnt, 0, false);
 
       }
@@ -113,7 +113,7 @@ public class BoardController {
 	@ApiOperation(value = "새로운 게시글 정보를 입력한다. 그리고 DB입력 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
 	@PostMapping("/write")
 	public Board writeBoard(@RequestBody Board board) {
-		// board = new Board(0, "test", "test", null, 0, "unknown", 300);
+		
 
 		return boardDao.save(board);
 	}
@@ -123,8 +123,8 @@ public class BoardController {
 	   @DeleteMapping("delete/{id}")
 	   public Optional<Board> deleteBoard(@PathVariable("id") int id) {
 		   Optional<Board> boardId = boardDao.findById(id);
-		   System.out.println(id); 
-		   System.out.println(boardId);
+//		   System.out.println(id); 
+//		   System.out.println(boardId);
 	      boardDao.deleteById(id);
 	      return null;
 	   }
