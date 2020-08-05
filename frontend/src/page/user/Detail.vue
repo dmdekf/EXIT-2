@@ -38,7 +38,6 @@
 <script>
 import axios from 'axios';
 import SERVER from "@/api/api";
-const storage = window.sessionStorage;
 
 export default {
     
@@ -60,8 +59,8 @@ export default {
             
         },
         created() {
-            this.nickName = storage.getItem("login_user");
-            this.email = storage.getItem("user_email");
+            this.nickName = this.$store.state.login_user
+            this.email = this.$store.state.user_email
             
             axios({
                 method:"get",

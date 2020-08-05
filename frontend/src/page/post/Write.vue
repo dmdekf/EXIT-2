@@ -48,7 +48,6 @@ import SERVER from "@/api/api";
 import constants from "../../lib/constants";
 import axios from "axios";
 import { required, rules, valid } from "vuelidate/lib/validators";
-const storage = window.sessionStorage;
 
 export default {
   components: {},
@@ -58,8 +57,8 @@ export default {
       this.$router.push("/");
     },
     writePost() {
-    this.email=storage.getItem("user_email");
-    this.uid=storage.getItem("login_user");
+    this.email=this.$store.state.user_email
+    this.uid=this.$store.state.login_user
       axios({
         method: "post",
         url: SERVER.URL+"/feature/board/write/",

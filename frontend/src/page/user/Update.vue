@@ -73,8 +73,7 @@
 <script>
 import axios from 'axios';
 import SERVER from "@/api/api";
-const storage = window.sessionStorage;
-console.log(storage);
+import { mapActions } from 'vuex'
 export default {
     data: () => {
             return {
@@ -87,8 +86,8 @@ export default {
             }
         },
         created() {
-            this.nickName = storage.getItem("login_user");
-            this.email = storage.getItem("user_email");
+            this.nickName = this.$store.state.login_user;
+            this.email = this.$store.state.user_email;
             axios({
                 method:"get",
                 url:SERVER.URL+"/user/update?uid="+this.nickName,
@@ -101,7 +100,9 @@ export default {
                 }
             })
         },
+        
         methods: {
+            ...mapActions(['logout']),
             moveList(){
                 this.$router.push("/");
             },
@@ -121,12 +122,10 @@ export default {
                 }).then((res)=>{
                     if(res.data.status){
                         alert("수정이 완료되었습니다.");
-                        storage.setItem("jwt-auth-token","");
-                        storage.setItem("login_user","");
-                        stotage.setItem("user_email","");
+                        this.logout()
                         this.$router.push("/user/logintest");
                     }else{
-
+                        alert("정확한 정보를 입력해주세요.");
                     }
                 })
             }

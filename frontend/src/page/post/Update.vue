@@ -50,9 +50,6 @@
 <script>
 import axios from 'axios';
 import SERVER from "@/api/api";
-
-const storage = window.sessionStorage;
-console.log(storage);
 export default {
     props:{
         id:{
@@ -117,7 +114,7 @@ export default {
             likePost(postId){
                 axios({
                     method: "GET",
-                    url : SERVER.URL +"/like/"+postId+"/"+storage.getItem("login_user"),
+                    url : SERVER.URL +"/like/"+postId+"/"+this.$store.state.login_user,
                     
                 }).then(
                         this.likestatus = !this.likestatus
@@ -127,7 +124,7 @@ export default {
         },
         created() {
             axios
-                .get(SERVER.URL +"/feature/board/detail/"+storage.getItem("login_user")+"/"+this.id)
+                .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+this.id)
                 .then((res) => {
                     console.log(res.data);
                     this.subject = res.data.subject;

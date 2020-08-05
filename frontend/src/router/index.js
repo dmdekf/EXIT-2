@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-
+import store from "../store/index"
 import constants from "../lib/constants";
 
 // 유저
@@ -11,7 +11,7 @@ import Authentication from "../page/user/Authentication";
 import Detail from "../page/user/Detail";
 import Update from "../page/user/Update";
 import Delete from "../page/user/Delete";
-
+import Logout from "../page/user/LogoutView.vue"
 // 포스트
 import List from "../page/post/List.vue";
 import Write from "../page/post/Write.vue";
@@ -30,87 +30,80 @@ const routes = [
     component: List,
   },
   {
-    path: "/user/signup",
+    path: "/user/jointest",
     name: 'SIGNUP',
-    component: Signup,
+    component: Joinvuetify,
   },
   {
     path: "/user/logintest",
     name: 'LOGIN',
     component: Loginvutify,
   },
-  {
-    path: "/",
-    name: constants.URL_TYPE.POST.MAIN,
-    component: List,
-  },
   // 로그인/가입
   {
-    path: "/user/jointest",
-    name: constants.URL_TYPE.USER.JOIN,
-    component: Joinvuetify,
-  },
-  {
-    path: "/user/logintest",
-    name: constants.URL_TYPE.USER.LOGIN,
-    component: Loginvutify,
-  },
-  {
     path: "/user/detail",
-    name: constants.URL_TYPE.USER.DETAIL,
+    name: "USERDETAIL",
     component: Detail,
   },
   {
     path: "/user/signup",
-    name: constants.URL_TYPE.USER.SIGNUP,
+    name: "USERSIGNUP",
     component: Signup,
   },
   {
     path: "/user/auth",
-    name: constants.URL_TYPE.USER.AUTH,
+    name: "AUTH",
     component: Authentication,
   },
    {
     path: "/user/delete",
-    name: constants.URL_TYPE.USER.DELETE,
+    name: "USERDELETE",
     component: Delete,
   },
   {
     path: "/user/update",
-    name: constants.URL_TYPE.USER.UPDATE,
+    name: "USERUPDATE",
     component: Update,
   },
-   {
-    path: "/user/detail",
-    name: constants.URL_TYPE.USER.DETAIL,
-    component: Detail,
+  {
+    path: '/user/logout',
+    name: 'Logout',
+    component: Logout,
   },
+
   //검색
   {
     path: "/search",
-    name: constants.URL_TYPE.POST.SEARCH,
+    name: "SEARCH",
     component: Search,
   },
   {
     path: "/post/write",
-    name: constants.URL_TYPE.POST.WRITE,
+    name: "WRITE",
     component: Write
   },
   {
     path: "/post/writecomplete",
-    name: constants.URL_TYPE.POST.WRITECOMPLETE,
+    name: "WRITECOMPLETE",
     component: WriteComplete
   },
   {
     path: "/post/detail/:id",
     props: ({params}) => ({id:Number.parseInt(params.id)}),
-    name: constants.URL_TYPE.POST.DETAIL,
+    name: "POSTDETAIL",
     component: postDetail
-  },{
+  },
+  {
     path: "/post/update",
-    name: constants.URL_TYPE.POST.UPDATE,
+    name: "POSTUPDATE",
     component: postUpdate
-  }
+  },
+  {
+    path: "/post/detail/:id",
+    props: ({params}) => ({id:Number.parseInt(params.id)}),
+    name: "POSTDETAIL",
+    component: postDetail
+  },
 
 ];
 
@@ -121,17 +114,16 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  const storage = window.sessionStorage;
-  const publicPages = ["LOGIN", "SIGNUP", "MAIN"]; // Login 안해도 됨
+  const publicPages = ["LOGIN", "SIGNUP", "MAIN","POSTDETAIL","SEARCH"]; // Login 안해도 됨
   const authPages = ["LOGIN", "SIGNUP"]; // Login 되어있으면 안됨
   const authRequired = !publicPages.includes(to.name); // 로그인 해야 함.
   const unauthRequired = authPages.includes(to.name); // 로그인 해서는 안됨
-  const isLoggedIn = !!storage.getItem("jwt-auth-token")
-
-  if (unauthRequired && isLoggedIn) {
+  // const isLoggedIn = !!this.$store.state.status
+ 
+  if (unauthRequired && store.state.status) {
     next("/");
   }
-  authRequired && !isLoggedIn ? next({ name: "constants.URL_TYPE.USER.Login" }) : next();
+  authRequired && !store.state.status ? next({ name: 'LOGIN' }) : next();
 });
 
 export default router;
