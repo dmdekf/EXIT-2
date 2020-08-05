@@ -1,11 +1,15 @@
 package com.web.blog.controller.account;
 
+import java.io.File;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.web.blog.dao.user.UserDao;
 import com.web.blog.model.BasicResponse;
@@ -26,85 +30,26 @@ public class ImageController {
 
 	@Autowired
 	UserDao userDao;
-	/*
-	@GetMapping("/user/detail/{uid}")
-    @ApiOperation(value = "회원정보조회")
-    public Object search(@PathVariable String uid) throws Exception {
-        ResponseEntity response = null;
-        final BasicResponse result = new BasicResponse();
-        Optional<User> user = userDao.findUserByUid(uid);
-        if(user.isPresent()) {
-        	result.status = true;
-        	result.data = "success";
-        	result.object = user.get();
-        	System.out.println(user.get());
-        	response = new ResponseEntity<>(result, HttpStatus.OK);
-        	
-        }else {
-        	result.status = false;
-			result.data = "find Error";
-			response = new ResponseEntity<>(result,HttpStatus.BAD_REQUEST);
-        }
+	
+	@PostMapping("/user/image")
+	@ApiOperation(value = "회원사진")
+	public Object image(@RequestParam("profile") MultipartFile profile, @RequestParam("uid") String uid) throws Exception {
+		System.out.println("이거시 실행");
+		System.out.println(profile);
+		System.out.println(uid);
+		System.out.println(profile.getName());
+		System.out.println(profile.getContentType());
+		System.out.println(profile.getOriginalFilename());
+		System.out.println(profile.getSize());
+		System.out.println(profile.getBytes());
 
-        return response;
-    }*/
-	@PostMapping("/user/update")
-    @ApiOperation(value = "회원정보수정")
-    public Object update(@RequestBody Profile request) throws Exception {
-		System.out.println("이미지 실행");
-        ResponseEntity response = null;
-        final BasicResponse result = new BasicResponse();
-        System.out.println("1111");
-        System.out.println(request.getProfile());
-       /*
-        Optional<User> user = userDao.findUserByUid(request.getUid());
-        
-        if(user.isPresent()) {
-        	System.out.println("수정");
-        	System.out.println(request.getPassword());
-        	User u = user.get();
-        	u.setEmail(request.getEmail());
-        	if(request.getPassword()!=null) {
-        		u.setPassword(request.getPassword());
-        	}
-        	u = userDao.save(u);
-        	// Password는 별도 
-        	result.status = true;
-        	result.data = "success";
-        	result.object = u;
-        	System.out.println(user.get());
-        	response = new ResponseEntity<>(result, HttpStatus.OK);
-        	
-        }else {
-        	result.status = false;
-			result.data = "find Error";
-			response = new ResponseEntity<>(result,HttpStatus.BAD_REQUEST);
-        }
-        */
-        return response;
-    }
-	/*
-    @DeleteMapping("/user/delete/{uid}")
-    @ApiOperation(value = "회원 탈퇴")
-    public Object delete(@PathVariable String uid) {
-        ResponseEntity response = null;
-        final BasicResponse result = new BasicResponse();
-        System.out.println(uid);
-        System.out.println("탈퇴하기");
-        Optional<User> user = userDao.findUserByUid(uid);
-        if(user.isPresent()) {
-        	userDao.delete(user.get());
-        	result.status = true;
-        	result.data = "success";
-        	System.out.println(user.get());
-        	response = new ResponseEntity<>(result, HttpStatus.OK);
-        	
-        }else {
-        	result.status = false;
-			result.data = "find Error";
-			response = new ResponseEntity<>(result,HttpStatus.BAD_REQUEST);
-        }
-
-        return response;
-    }*/
+		
+		try {
+			profile.transferTo(new File("c:/img/"+profile.getOriginalFilename()));
+		}catch(Exception e) {
+			System.out.println("에러");
+		}
+		ResponseEntity response = null;
+		return response;
+	}
 }

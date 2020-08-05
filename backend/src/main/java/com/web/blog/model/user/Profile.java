@@ -2,10 +2,7 @@
 
 package com.web.blog.model.user;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Entity;
-import javax.persistence.Id;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,20 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Profile {
-    @Id
-    private String uid;
+    private MultipartFile name;
 
-    private String password;
-    private String email;
-
-    private LocalDateTime createDate;
-
-    private String userkey;
-    
-    private  String profile;
 }

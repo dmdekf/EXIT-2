@@ -1,7 +1,9 @@
 package com.web.blog.controller.account;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +39,29 @@ public class SearchController {
         ResponseEntity response = null;
         List<Board> list = new ArrayList<Board>();
         if(select.equals("all")) {
-        	// 고민중
+        	Set<Board> slist = new HashSet<Board>();
+        	list = dao.findBoardByUidLike("%"+keyword+"%");
+        	for(Board b : list) {
+        		slist.add(b);
+        	}
+        	list = dao.findBoardBySubjectLike("%"+keyword+"%");
+        	for(Board b : list) {
+        		slist.add(b);
+        	}
+        	list = dao.findBoardByContentLike("%"+keyword+"%");
+        	for(Board b : list) {
+        		slist.add(b);
+        	}
+        	list = dao.findBoardByTag(keyword);
+        	for(Board b : list) {
+        		slist.add(b);
+        	}
+        	final BasicResponse result = new BasicResponse();
+            result.status = true;
+    		result.data = "success";
+    		result.object = slist;
+    		response = new ResponseEntity<>(result, HttpStatus.OK);
+    		return response;
         }else if(select.equals("user")) {
         	list = dao.findBoardByUidLike("%"+keyword+"%");
         }else if(select.equals("title")) {

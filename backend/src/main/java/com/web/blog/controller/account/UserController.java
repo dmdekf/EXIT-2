@@ -1,11 +1,7 @@
 package com.web.blog.controller.account;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
 import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,12 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.web.blog.dao.user.UserDao;
 import com.web.blog.model.BasicResponse;
 import com.web.blog.model.user.User;
-import com.web.blog.service.JwtService;
 import com.web.blog.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
@@ -120,6 +117,27 @@ public class UserController {
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
+		return response;
+	}
+	@PostMapping("/user/image")
+	@ApiOperation(value = "회원사진")
+	public Object image(@RequestParam("profile") MultipartFile profile, @RequestParam("uid") String uid) throws Exception {
+		System.out.println("이거시 실행");
+		System.out.println(profile);
+		System.out.println(uid);
+		System.out.println(profile.getName());
+		System.out.println(profile.getContentType());
+		System.out.println(profile.getOriginalFilename());
+		System.out.println(profile.getSize());
+		System.out.println(profile.getBytes());
+
+		
+		try {
+			profile.transferTo(new File("c:/img/"+profile.getOriginalFilename()));
+		}catch(Exception e) {
+			System.out.println("에러");
+		}
+		ResponseEntity response = null;
 		return response;
 	}
 }

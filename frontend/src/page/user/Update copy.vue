@@ -1,11 +1,8 @@
 <template>
   <div class="user" id="join"> 
         <div class="wrapC table">
-            <form id="my-form" th:action="@{/user/image}" th:method="post" enctype="multipart/form-data">
             <div class="middle">
-                
                 <h1>회원정보</h1>
-                
                 <div class="form-wrap">
                     <div class="input-wrap">
                         <input v-model="nickName"
@@ -38,26 +35,18 @@
                             </span>
                     </div>
                     <div class="input-wrap password-wrap">
-                        <input   
-                            class="input-file"                         
-                            name="profile" accept="image/*"
+                        <input  
                             id="profile"
                             type="file"
-                            placeholder="프로필 사진을 등록해주세요"
-                            @change="upload($event.target.name, $event.target.files)"
-
-
-                            />
-                            <!-- <button type="submit" class="btn btn-sm btn-primary"@click.prevent="Submit()"> Submit</button> -->
+                            placeholder="프로필 사진을 등록해주세요"/>
                     </div>
                     <div class="input-wrap password-wrap">
                         <textarea id="introduce" placeholder="자기소개를 등록해주세요" >
                         </textarea>
                     </div>
                 </div>
-                
 
-                <button class="btn" v-on:click="userUpdate" type="submit"> 
+                <button class="btn" v-on:click="userUpdate"> 
                     <span>
                         수정하기
                     </span>
@@ -73,7 +62,8 @@
                     </span>
                 </button>
             </div>
-            </form>
+
+
         </div> 
         
 
@@ -94,7 +84,6 @@ export default {
                 passwordConfirm: '',
                 passwordType:"password",
                 passwordConfirmType:"password",
-                profile:'',
             }
         },
         created() {
@@ -113,59 +102,21 @@ export default {
             })
         },
         methods: {
-            upload(name, files){
-                const fd = new FormData();
-                fd.append('profile', files[0]);
-                fd.append('uid',storage.getItem('login_user'));
-                console.log(files[0])
-                this.profile = files[0]
-                console.log(this.profile)
-                // let formData = new FormData(form);
-                // console.log(formData)
-                // formData.append("name", name);
-                // formData.append("image", files[0]);
-                // console.dir(files)
-                // formData.append(name,files[0], files[0].name );
-                // console.dir(formData)
-                const url = SERVER.URL+"/user/image"
-                axios({
-                    method:"post",
-                    url:SERVER.URL+"/user/image",
-                    data:fd
-                }).then((res)=>{
-                    if(res.data.status){
-                        alert("수정이 완료되었습니다.");
-                        storage.setItem("jwt-auth-token","");
-                        storage.setItem("login_user","");
-                        stotage.setItem("user_email","");
-                        this.$router.push("/user/logintest");
-                    }else{
-
-                    }
-                })
-
-            },
             moveList(){
-                
                 this.$router.push("/");
             },
             moveDelete(){
                 this.$router.push("/user/delete");
             },
             userUpdate(){
-                let form = document.getElementById("my-form").submit()
-                console.log(form)
-                // let formData = new FormData(form);
-                // console.log(formData)
                 axios({
                     method:"put",
-                    url:SERVER.URL+"/user/image",
+                    url:SERVER.URL+"/user/update",
                     data:{
                         id:this.id,
                         email:this.email,
                         password:this.password,
-                        uid:this.nickName,
-                        profile:this.profile
+                        uid:this.nickName
                     }
                 }).then((res)=>{
                     if(res.data.status){
