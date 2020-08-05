@@ -20,14 +20,14 @@
                       prepend-icon="mdi-emoticon-cool-outline"
                       type="text"
                       :counter="10"
-                      :rules="nameRules"
+                      :rules="rules.nameRules"
                       required
                     ></v-text-field>
                     <v-text-field
                       v-model="email"
                       id="email"
                       label="이메일을 입력해주세요"
-                      :rules="emailRules"
+                      :rules="rules.emailRules"
                       required
                       name="email"
                       prepend-icon="mdi-email"
