@@ -12,21 +12,30 @@
             <v-list-item-title class="headline">제목 :  {{ subject }}</v-list-item-title>
             <v-row justify="space-around"  class="child-flex">
             <div class="ml-3"><small>작성날짜: {{this.created}}</small></div>
-                <div v-if="this.likestatus">
+                <div>
+                    <div v-if="this.likestatus">
                     <v-btn icon color="#DC143C" v-on:click="likePost(id)" >
                         <v-icon>mdi-heart</v-icon>
                     </v-btn>
-                </div>
-                <div v-if="!this.likestatus">
-                    <v-btn icon color="black" v-on:click="likePost(id)">
-                        <v-icon>mdi-heart</v-icon>
-                    </v-btn>
+                    </div>
+                    <div v-else>
+                        <v-btn icon color="black" v-on:click="likePost(id)">
+                            <v-icon>mdi-heart</v-icon>
+                        </v-btn>
+                    </div>
                 </div>
                 <div>
-                <v-btn icon v:on="userdetail()">
-                    <v-icon>mdi-account</v-icon>
-                </v-btn>
-                <small>{{uid}}</small>
+                    <div v-if="(this.uid)===this.$store.state.login_user">
+                    <v-btn  v-on:click=updatePost(id)>
+                        <v-icon>mdi-playlist-edit</v-icon>글 수정하기
+                    </v-btn>
+                    </div>
+                    <div v-else>
+                    <v-btn icon v:on="userdetail()">
+                        <v-icon>mdi-account</v-icon>
+                    </v-btn>
+                    <small>{{uid}}</small>
+                    </div>                
                 </div>
             </v-row>
             </v-list-item-content>
@@ -87,25 +96,19 @@ export default {
             this.getComments();
         },
         methods: {
-
             moveList(){
                 this.$router.push("/");
-            },
-           
-            
+            },            
             likePost(postId){
                 axios({
                     method: "GET",
-                    url : SERVER.URL +"/like/"+postId+"/"+this.$store.state.login_user,
-                    
+                    url : SERVER.URL +"/like/"+postId+"/"+this.$store.state.login_user,                    
                 }).then(
-                        this.likestatus = !this.likestatus
-                        
+                        this.likestatus = !this.likestatus                        
                     )
             },            
             userdetail(){
-                console.log(SERVER.URL);
-                
+                console.log(SERVER.URL);                
                 //this.$router.push("/user/detail/"+this.uid);
                 axios({
                 method:"get",
@@ -114,10 +117,8 @@ export default {
                         if(res.data.status){
                             this.password = res.data.object.password;
                         }else{
-
                         }
                     })
-
             },
             getComments(uid){
                 axios({
@@ -128,11 +129,16 @@ export default {
                         if(res.data){
                             console.log(this.uid);
                             console.log(res.data);
-                            this.comments = res.data;
-                            
+                            this.comments = res.data;                            
                         }
                     })
-
+            },
+            updatePost(postId) {
+                // axios.get(SERVER.URL + "/post/update/"+ postId)
+                // .then(res => {
+                this.$router.push({ name: "POSTUPDATE", postId })
+                // })
+                // .catch(err => console.log(err.response.data))
             }
 
         },

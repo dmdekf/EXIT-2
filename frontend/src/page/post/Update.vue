@@ -51,6 +51,7 @@
 import axios from 'axios';
 import SERVER from "@/api/api";
 export default {
+    name:"postUpdate",
     props:{
         id:{
             type:Number,
@@ -62,7 +63,6 @@ export default {
                 subject: '',
                 content: '',
                 created: '',
-                likestatus:false,
             }
         },
         methods: {
@@ -111,15 +111,6 @@ export default {
                     this.$router.push("/");
                 })
             },
-            likePost(postId){
-                axios({
-                    method: "GET",
-                    url : SERVER.URL +"/like/"+postId+"/"+this.$store.state.login_user,
-                    
-                }).then(
-                        this.likestatus = !this.likestatus
-                    )
-            }
             
         },
         created() {
@@ -130,7 +121,6 @@ export default {
                     this.subject = res.data.subject;
                     this.content = res.data.content;
                     this.created = res.data.created;
-                    this.likestatus = res.data.ilike  
                 })
                 .catch((err) => console.error(err));
                 
