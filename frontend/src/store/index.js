@@ -8,28 +8,52 @@ import router from "@/router";
 import SERVER from "@/api/api";
 import constants from '../lib/constants'
 Vue.use(Vuex);
-
-
 export default new Vuex.Store({
   state: {
     // auth
-    authToken: null,
-    // articles
+    token: "",
+    user_email: "",
+    status: "",
+    login_user:"",
   },
   getters: {
     // auth
-    loginStatus: state => !!state.authToken,
-    // auth, articles
-    config: state => ({ headers: { Authorization: `Token ${state.authToken}` } })
+    info: state => ({
+      status: state.status,
+      token: state.token,
+    }),
+    isLoggedIn: state => !!state.token,
+    
+    config: state => ({ headers: { Authorization: `Token ${state.token}` } })
   },
   mutations: {
+    
     // auth
     SET_TOKEN(state, { token }) {
-      state.authToken = token
-      localStorage.authToken = token
-    }
+      state.token = token
+    },
+    SET_EMAIL(state, { user_email }) {
+      state.user_email = user_email
+    },
+    SET_STATUS(state, { status }) {
+      state.status = status
+    },
+      SET_USER(state, { login_user }) {
+      state.login_user = login_user
+    },
+
+
   },
   actions: {
+    postAuthData({ commit }, info) {
+      axios.post(SERVER.URL + info.location, info.data)
+        .then(res => {
+          commit('SET_TOKEN', res.headers["jwt-auth-token"])
+          router.push({ name: 'Home' })
+        })
+        .catch(err => console.log(err.response.data))
+    },
+
     // auth
     signup({ commit }, signupData) {
       axios({
@@ -55,28 +79,42 @@ export default new Vuex.Store({
       .catch(err => console.log(err.response.data))
       alert("회원가입에 실패했습니다.");
     },
-    login({ commit }, loginData) {      
-      axios({
-        method: "get",
-        url:
-          SERVER.URL+"/account/login?email=" +
-          loginData.email +
-          "&password=" +
-          loginData.password
+    login({ commit, getters }, loginData) { 
+      console.log(loginData)
+      axios.post(
+        SERVER.URL + "/user/signin",{
+        email:loginData.email, password:loginData.password
       })
-      .then(res => {
-        commit('SET_TOKEN', res.data.userkey)
-        alert("로그인에 성공했습니다.");
-        router.push({ name: constants.URL_TYPE.POST.MAIN })
-      })
-      .catch(err => console.log(err.response.data))
-      alert("로그인에 실패했습니다.");
+        // console.log(res.data)
+        .then((res) => {
+          console.log(res.data.status)
+          // console.dir(res.headers["jwt-auth-token"]);
+          if (res.data.status) {
+            commit('SET_TOKEN', { token: res.headers["jwt-auth-token"] })
+            commit('SET_EMAIL', { user_email: res.data.data.email })
+            commit('SET_USER', { login_user: res.data.data.uid })
+            commit('SET_STATUS', { status: res.data.status })
+            alert(state.login_user+"님 로그인 되었습니다.");
+          } else {
+            commit('SET_MESSAGE', "로그인해주세요.")
+            alert("입력 정보를 확인하세요.");
+          }
+        })
+        .catch(e => {
+          
+          console.log(e.response)
+          getters.info = e.response
+        });
+      router.push({ name: "MAIN" })
     },
-    logout({ getters, commit }) {
-      commit('SET_TOKEN', null)  
-        cookies.remove('auth-token')  
-        router.push({ name: constants.URL_TYPE.POST.MAIN })
+
+    logout({ commit }) {
+      commit('SET_TOKEN', { token: null })
+      commit('SET_EMAIL', { user_email: null })
+      commit('SET_USER', { login_user: null})
+      commit('SET_STATUS', { status: null })  
+      
+      router.push({ name: "MAIN" })
     }
   },
 })
-

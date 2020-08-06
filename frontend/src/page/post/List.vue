@@ -55,10 +55,9 @@ import InfiniteLoading from 'vue-infinite-loading';
 import '../../assets/css/post.scss';
 import axios from "axios";
 import SERVER from "@/api/api";
-const storage = window.sessionStorage;
 
 export default {
-    name:"Post",
+    name:"MAIN",
     data: () => {
         return {
             posts:[],
@@ -76,7 +75,7 @@ export default {
     
     methods: {
         getPosts() {
-            this.nickName = storage.getItem("login_user");
+            this.nickName = this.$store.state.login_user;
             axios.get(SERVER.URL+"/feature/board/list/")
             .then((res)=>{
                     if(res.data) {
@@ -87,7 +86,7 @@ export default {
         },
         showDetail(id){
             axios
-                .get(SERVER.URL +"/feature/board/detail/"+storage.getItem("login_user")+"/"+id)
+                .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+id)
                 .then((res) => {
                     this.$router.push(`/post/detail/${id}`);
                 })

@@ -50,6 +50,7 @@ public class UserController {
 		ResponseEntity response = null;
 		final BasicResponse result = new BasicResponse();
 		Optional<User> user = userDao.findUserByUid(uid);
+		System.out.println(user.toString());
 		if (user.isPresent()) {
 			result.status = true;
 			result.data = "success";
@@ -57,12 +58,12 @@ public class UserController {
 			System.out.println(user.get());
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 
-		} else {
+		} else { 
 			result.status = false;
 			result.data = "find Error";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
-
+ 
 		return response;
 	}
 

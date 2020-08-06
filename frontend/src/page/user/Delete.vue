@@ -6,25 +6,21 @@
 
 <script>
 import axios from 'axios';
-const storage = window.sessionStorage;
+import { mapActions } from 'vuex'
 import SERVER from "@/api/api";
 export default {
     created() {
-        this.uid = storage.getItem("login_user");
+        this.uid = this.$store.state.login_user
         console.log(this.uid);
         axios({
             method:"delete",
             url:SERVER.URL+"/user/delete/"+this.uid,
 
         }).then((res)=>{
-            let msg = "삭제 처시 문제가 발생했습니다.";
+            let msg = "삭제 중 문제가 발생했습니다.";
             if(res.data.status){
                 msg = "삭제가 완료되었습니다.";
-                storage.setItem("jwt-auth-token","");
-                storage.setItem("login_user","");
-                storage.setItem("user_email","");
-                storage.setItem("user_password","");
-                storage.clear();
+                this.logout()
                 this.$router.push("/");
             }else{
 
@@ -37,7 +33,10 @@ export default {
         return {
             uid:''
         };
-    }
+    },
+    methods: {
+        ...mapActions(['logout'])
+    },
 }
 </script>
 

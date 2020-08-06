@@ -1,11 +1,9 @@
 
 <template>
   <div id="app">
-    <v-app id="inspire">
-      <v-main>
-        <v-container class="fill-height" fluid>
-          <v-row align="center" justify="center">
-            <v-col cols="12" sm="8" md="4">
+  <v-app id="inspire">
+    <v-row align="center">
+            <v-col cols="12" sm="8" md="8">
               <v-card class="elevation-12">
                 <v-toolbar color="primary" dark flat>
                   <v-toolbar-title>글 작성</v-toolbar-title>
@@ -22,14 +20,14 @@
                       :counter="10"
                       required
                     ></v-text-field>
-                    <v-text-field
+                    <v-textarea
                       v-model="content"
                       id="content"
                       label="내용을 입력해주세요"
                       required
                       name="content"
                       type="text"
-                    ></v-text-field>
+                    ></v-textarea>
                   </v-form>
                 </v-card-text>
                 <v-card-actions>
@@ -40,8 +38,6 @@
               </v-card>
             </v-col>
           </v-row>
-        </v-container>
-      </v-main>
     </v-app>
   </div>
 </template>
@@ -52,7 +48,6 @@ import SERVER from "@/api/api";
 import constants from "../../lib/constants";
 import axios from "axios";
 import { required, rules, valid } from "vuelidate/lib/validators";
-const storage = window.sessionStorage;
 
 export default {
   components: {},
@@ -62,8 +57,8 @@ export default {
       this.$router.push("/");
     },
     writePost() {
-    this.email=storage.getItem("user_email");
-    this.uid=storage.getItem("login_user");
+    this.email=this.$store.state.user_email
+    this.uid=this.$store.state.login_user
       axios({
         method: "post",
         url: SERVER.URL+"/feature/board/write/",

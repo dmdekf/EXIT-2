@@ -94,11 +94,11 @@ export default {
   methods: {
     showDetail(id){
             axios
-                .get(SERVER.URL+"/feature/board/list/detail/{id}?id="+id)
+                .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+id)
                 .then((res) => {
                     this.$router.push(`/post/detail/${id}`);
                 })
-                .catch((err) => console.error(err)); 
+                .catch((err) => console.error(err));
         },
     sendData() {
       axios
