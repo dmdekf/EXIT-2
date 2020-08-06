@@ -39,4 +39,10 @@ CREATE TABLE tb_comment (
     update_time DATETIME DEFAULT NULL ,
     delete_time DATETIME DEFAULT NULL ,
     PRIMARY KEY (idx)
-);
+)charset=utf8;
+
+create table pimg ( 
+    uid varchar(8) not null,
+    uimage varchar(3000),
+    primary key (uid) 
+)charset=utf8;
