@@ -83,7 +83,7 @@
 
 <script>
 import "../../assets/css/user.scss";
-
+import SERVER from "@/api/api";
 import constants from "../../lib/constants";
 import axios from "axios";
 import { required, rules, valid } from "vuelidate/lib/validators";
@@ -98,7 +98,7 @@ export default {
     signup() {
       axios({
         method: "post",
-        url: "http://i3a501.p.ssafy.io:8080/account/signup",
+        url: SERVER.URL+"/account/signup",
         data: {
           email: this.email,
           password: this.password,
