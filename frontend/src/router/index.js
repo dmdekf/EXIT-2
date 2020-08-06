@@ -94,15 +94,10 @@ const routes = [
     component: postDetail
   },
   {
-    path: "/post/update",
+    path: "/post/update/:id",
+    props: ({params}) => ({id:Number.parseInt(params.id)}),
     name: "POSTUPDATE",
     component: postUpdate
-  },
-  {
-    path: "/post/detail/:id",
-    props: ({params}) => ({id:Number.parseInt(params.id)}),
-    name: "POSTDETAIL",
-    component: postDetail
   },
 
 ];

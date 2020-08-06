@@ -58,10 +58,10 @@ export default {
         window.removeEventListener('resize', this.onResize, { passive: true })
       }
     },
-    mounted () {
-      this.onResize()
-      window.addEventListener('resize', this.onResize, { passive: true })
-    },
+    // mounted () {
+    //   this.onResize()
+    //   window.addEventListener('resize', this.onResize, { passive: true })
+    // },
   methods: {
     
     moveDetail() {
