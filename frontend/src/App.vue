@@ -4,7 +4,7 @@
     <v-app id="inspire">
       <v-app-bar
       id="header"
-      elevate-on-scroll
+        elevate-on-scroll
         absolute
         color="teal lighten-3"
         dark

@@ -11,7 +11,8 @@ export default new Vuex.Store({
     token: "",
     user_email: "",
     status: "",
-    login_user:"",
+    login_user: "",
+    comments:[],
   },
   getters: {
     // auth

@@ -7,11 +7,11 @@
         <v-card-title class="lime">
             <v-list-item>
             <v-list-item-content>
-            <v-list-item-subtitle><small>#{{id}}</small></v-list-item-subtitle>
-            
-            <v-list-item-title class="headline">제목 :  {{ subject }}</v-list-item-title>
+            <v-list-item-subtitle><small>#{{id}}번 글</small></v-list-item-subtitle>
+            <v-list-item-title class="headline my-2">제목 :  {{ subject }}</v-list-item-title>
+            <hr/>
             <v-row justify="space-around"  class="child-flex">
-            <div class="ml-3"><small>작성날짜: {{this.created}}</small></div>
+            <div class="ml-3"><small>작성날짜: {{ moment(created).locale('ko-kr').format("LLLL")}}</small></div>
                 <div>
                     <div v-if="this.likestatus">
                     <v-btn icon color="#DC143C" v-on:click="likePost(id)" >
@@ -41,16 +41,21 @@
             </v-list-item-content>
             </v-list-item>
         </v-card-title>
-        <v-card-text>
-            {{content}}
+        <v-card min-height="300">
+        <v-card-text >
+            <div v-html="content">{{content}}</div>
+            
         </v-card-text>
+        </v-card>
         <hr>
          <div v-for="(comment, idx) in comments" :key="idx">
+             
                     <a style="color: black">
                         <div class="contents"> 
-                        <v-row>
+                        <v-row class="ml-3">
                             <v-col>
                                 #{{comment.idx}}번 댓글 
+                                {{ moment(comment.insertTime).locale('ko-kr').startOf('hour').fromNow()}}
                                 <v-icon>mdi-account-edit-outline</v-icon>{{comment.writer}}<br>
                                 {{comment.content}}
                             </v-col>
@@ -77,10 +82,6 @@ export default {
             type:Number,
             required:true,
         },
-        uid:{
-            type:String,
-            required:true,
-        }
     },
     data: () => {
             return {
@@ -88,7 +89,6 @@ export default {
                 content: '',
                 created: '',
                 likestatus:false,
-                uid:'',
                 comments:[]
             }
         },
@@ -122,14 +122,13 @@ export default {
             getComments(uid){
                 axios({
                 method:"get",
-                url:SERVER.URL+"/feature/board/detail/"+this.uid+"/"+this.id+"/comments",
+                url:SERVER.URL+"/feature/comment/detail/"+this.$store.state.login_user+"/"+this.id+"/comments",
                     }).then((res)=>{
                         if(res.data){
-                            console.log(this.uid);
                             console.log(res.data);
                             this.comments = res.data;                            
                         }
-                    })
+                    }).catch((err) => console.error(err));
             },
             updatePost(postId) {
                 this.$router.push({ name: "POSTUPDATE", postId })
@@ -141,7 +140,8 @@ export default {
                 .then((res) => {
                     console.log(res.data);
                     this.subject = res.data.subject;
-                    this.content = res.data.content;
+                    const linecontent = res.data.content.replace(/(?:\r\n|\r|\n)/g, '<br />')
+                    this.content = linecontent;
                     this.created = res.data.created;
                     this.likestatus = res.data.ilike
                     this.uid = res.data.uid

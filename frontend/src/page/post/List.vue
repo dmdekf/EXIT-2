@@ -25,9 +25,10 @@
                             </h3>
                             <hr/> 
                             <p class="content">{{post.content}}</p>
-                            <span class="date" >{{ moment(post.created).locale('ko-kr').format("LLLL")}}
-                                </span>  <br/>
-                            <span class="comment"><v-icon>mdi-comment-multiple-outline</v-icon>  {{post.cnt}}</span>
+
+                            <small class="date">{{ moment(post.created).locale('ko-kr').format("LLLL")}}</small>
+                            
+                            <div class="comment mt-1"><v-icon>mdi-comment-multiple-outline</v-icon>  {{post.cnt}}</div>
                         </div> 
                     </a>
                 </div>
@@ -83,12 +84,7 @@ export default {
             .catch((err) => console.error(err));
         },
         showDetail(id){
-            axios
-                .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+id)
-                .then((res) => {
-                    this.$router.push(`/post/detail/${id}`);
-                })
-                .catch((err) => console.error(err));
+            this.$router.push(`/post/detail/${id}`);
         },
         writePost(){
             this.$router.push("/post/write");
