@@ -109,7 +109,6 @@ export default {
             },            
             userdetail(){
                 console.log(SERVER.URL);                
-                //this.$router.push("/user/detail/"+this.uid);
                 axios({
                 method:"get",
                 url:SERVER.URL+"/user/detail/"+this.uid,
@@ -123,7 +122,6 @@ export default {
             getComments(uid){
                 axios({
                 method:"get",
-                //console.log()
                 url:SERVER.URL+"/feature/board/detail/"+this.uid+"/"+this.id+"/comments",
                     }).then((res)=>{
                         if(res.data){
@@ -134,13 +132,8 @@ export default {
                     })
             },
             updatePost(postId) {
-                // axios.get(SERVER.URL + "/post/update/"+ postId)
-                // .then(res => {
                 this.$router.push({ name: "POSTUPDATE", postId })
-                // })
-                // .catch(err => console.log(err.response.data))
             }
-
         },
         created() {
             axios
@@ -152,17 +145,9 @@ export default {
                     this.created = res.data.created;
                     this.likestatus = res.data.ilike
                     this.uid = res.data.uid
-                    console.log("UID"+this.uid)  
                 })
                 .catch((err) => console.error(err));
-                
-            
         },
-        
 }
 </script>
-
-<style>
-
-</style>
 

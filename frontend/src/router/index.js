@@ -1,8 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-import store from "../store/index"
-import constants from "../lib/constants";
-
+import store from "../store/index";
 // 유저
 import Loginvutify from "../page/user/Loginvuetify.vue";
 import Joinvuetify from "../page/user/Joinvuetify.vue";
@@ -23,12 +21,13 @@ import Search from "../views/search/Search.vue";
 Vue.use(Router);
 
 const routes = [
-  // 포스트
+  //포스트리스트 = 메인페이지
   {
     path: "/",
     name: 'MAIN',
     component: List,
   },
+  // 유저
   {
     path: "/user/jointest",
     name: 'SIGNUP',
@@ -39,7 +38,6 @@ const routes = [
     name: 'LOGIN',
     component: Loginvutify,
   },
-  // 로그인/가입
   {
     path: "/user/detail",
     name: "USERDETAIL",
@@ -70,13 +68,13 @@ const routes = [
     name: 'Logout',
     component: Logout,
   },
-
   //검색
   {
     path: "/search",
     name: "SEARCH",
     component: Search,
   },
+  //포스트
   {
     path: "/post/write",
     name: "WRITE",
@@ -99,7 +97,6 @@ const routes = [
     name: "POSTUPDATE",
     component: postUpdate
   },
-
 ];
 
 const router = new Router({
@@ -113,7 +110,6 @@ router.beforeEach((to, from, next) => {
   const authPages = ["LOGIN", "SIGNUP"]; // Login 되어있으면 안됨
   const authRequired = !publicPages.includes(to.name); // 로그인 해야 함.
   const unauthRequired = authPages.includes(to.name); // 로그인 해서는 안됨
-  // const isLoggedIn = !!this.$store.state.status
  
   if (unauthRequired && store.state.status) {
     next("/");
