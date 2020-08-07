@@ -33,4 +33,6 @@ public class Comment {
 	private Date insertTime;
 	private Date updateTime;
 	private Date deleteTime;
+	
+	
 }

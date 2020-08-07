@@ -48,8 +48,10 @@ public List<Comment> detailComment(@PathVariable String uid, @PathVariable Strin
 @PostMapping("list/detail/comments/{id}/write")
 public Comment writeComment(@RequestBody Comment comment ,@PathVariable("id") int id) {
     //board = new Board(0, "test", "test", null, 0, "unknown", 300);
-    comment.setBoard_idx(id);
-    return commentDao.save(comment);
+    
+	comment.setBoardIdx(id);
+    
+	return commentDao.save(comment);
 }
 
 @ApiOperation(value = "게시글번호에 해당하는 게시글의 정보를 삭제한다.", response = String.class)    
