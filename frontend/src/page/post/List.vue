@@ -25,7 +25,8 @@
                             </h3>
                             <hr/> 
                             <p class="content">{{post.content}}</p>
-                            <span class="date">{{post.created}}</span>  <br/>
+                            <span class="date" >{{ moment(post.created).locale('ko-kr').format("LLLL")}}
+                                </span>  <br/>
                             <span class="comment"><v-icon>mdi-comment-multiple-outline</v-icon>  {{post.cnt}}</span>
                         </div> 
                     </a>
