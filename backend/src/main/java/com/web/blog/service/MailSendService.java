@@ -63,7 +63,7 @@ public class MailSendService {
 
 		String htmlStr = "<h2>안녕하세요 MS :p ssafy 입니다!</h2><br><br>" 
 				+ "<h3>" + uid + "님</h3>" + "<p>인증하기 버튼을 누르시면 로그인을 하실 수 있습니다 : " 
-				+ "<a href='http://localhost:3000/account/key_alter?uid="+ uid +"&userkey="+key+"'>인증하기</a></p>"
+				+ "<a href='http://i3a501.p.ssafy.io:8080/account/key_alter?uid="+ uid +"&userkey="+key+"'>인증하기</a></p>"
 				+ "(혹시 잘못 전달된 메일이라면 이 이메일을 무시하셔도 됩니다)";
 		try {
 			MimeMessage message = new MimeMessage(session);

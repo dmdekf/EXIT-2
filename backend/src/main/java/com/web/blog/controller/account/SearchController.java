@@ -37,7 +37,14 @@ public class SearchController {
         ResponseEntity response = null;
         List<Board> list = new ArrayList<Board>();
         if(select.equals("all")) {
-        	// 고민중
+        	List<Board> board =dao.findAll();
+        	if(board!=null) {
+        		for(Board b : board) {
+        			if(b.getSubject().contains(keyword) || b.getContent().contains(keyword)|| b.getUid().contains(keyword)|| b.getTag().contains(keyword)) {
+        				list.add(b);
+        			}
+        		}
+        	}
         }else if(select.equals("user")) {
         	list = dao.findBoardByUidLike("%"+keyword+"%");
         }else if(select.equals("title")) {
@@ -48,9 +55,11 @@ public class SearchController {
         }else if(select.equals("tag")) {
         	list = dao.findBoardByTag(keyword);
         }
+        
         final BasicResponse result = new BasicResponse();
         result.status = true;
 		result.data = "success";
+		list.sort((a,b)->b.getId()-a.getId());
 		result.object = list;
 		response = new ResponseEntity<>(result, HttpStatus.OK);
         for(Board b : list) {

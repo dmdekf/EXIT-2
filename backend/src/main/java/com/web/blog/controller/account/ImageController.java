@@ -83,10 +83,7 @@ public class ImageController {
 			result.data = "can't find image";
 			response = new ResponseEntity<>(result,HttpStatus.BAD_REQUEST);
 		}
-		
 		return response;
 	}
-	
-
 	
 }
