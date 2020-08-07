@@ -77,5 +77,7 @@ export default {
 </script>
 
 <style>
-
+.middle {
+    margin-top: 20px;
+}
 </style>

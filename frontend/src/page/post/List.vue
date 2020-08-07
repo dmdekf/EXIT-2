@@ -1,8 +1,8 @@
 <template>
 <v-app id="inspire">
-    <v-main>
+    <v-main class="mx-10px"
+>
     <div class="post">
-        <div class="wrapB">
             <section class="post-list" >
             <div v-for="(post, uid) in list" :key="uid">
                 <div class="post-card" v-if="post.id" v-on:click="showDetail(post.id)" >
@@ -31,23 +31,21 @@
                     </a>
                 </div>
             </div>
-            <infinite-loading @infinite="infiniteHandler" slot="append" spinner="waveDots"></infinite-loading>
-            </section>
             <div class="tag-list-wrap justify-center">
             <v-btn class="mx-8 my-2" v-on:click="scrollToTop" color="#ffb367"><v-icon>mdi-arrow-collapse-up</v-icon></v-btn>
                 <hr/>
                 <div class="tag-list">
                     <v-btn class="mx-2 mt-1" dark color="indigo" v-on:click="writePost">
                         <v-icon dark>mdi-pencil</v-icon>
-                        글 올리기</v-btn>
+                        글 올리기
+                    </v-btn>
                 </div>
             </div>
+            <infinite-loading @infinite="infiniteHandler" slot="append" spinner="waveDots"></infinite-loading>
+            </section>
         </div>
-    </div>
-    
     </v-main>
   </v-app>
-
 </template>
  
 <script>
@@ -80,7 +78,6 @@ export default {
             .then((res)=>{
                     if(res.data) {
                         this.posts = res.data}
-                        console.log(this.posts)
             })
             .catch((err) => console.error(err));
         },
@@ -91,7 +88,6 @@ export default {
                     this.$router.push(`/post/detail/${id}`);
                 })
                 .catch((err) => console.error(err));
-            
         },
         writePost(){
             this.$router.push("/post/write");
@@ -115,7 +111,6 @@ export default {
             setTimeout(() => {
                 if(this.posts[this.limit]) {
                     this.list = this.list.concat(this.posts[this.limit])
-                    console.log(this.list)
                     $state.loaded();
                     this.limit+=1
                 } else {
@@ -123,14 +118,14 @@ export default {
                 }
             }, 500 )
             this.getPhotos();
-    },
+        },
     },
 }
 </script>
+
 <style scoped>
 .tag-list-wrap[data-v-fbaed234] {
     position: fixed;
-    left: 90%;
     width: max-content;
     align-items: center;
     padding: 0;

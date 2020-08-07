@@ -2,7 +2,7 @@
   <div>
     <v-container fluid >
       <v-row align="center">
-        <v-col cols="12" sm="6">
+        <v-col cols="12" sm="6" id="select">
           <v-select
             dense
             solo
@@ -29,21 +29,19 @@
         @keypress.enter="sendData()"
       ></v-text-field>
     </div>
-      <v-container fluid >
-        <v-row align="center">
-          <v-col v-show="posts.length" cols="12" class="mx-8" >
-            <SearchList :posts="posts"/>
-            <v-card v-if="posts"
-              class="mx-auto mt-12"
-            >
-            <v-system-bar>검색 결과</v-system-bar>
+    <v-container fluid >
+      <v-row align="center">
+        <v-col v-show="posts.length" cols="12" class="mx-8" >
+          <SearchList :posts="posts"/>
+          <v-card v-if="posts"
+            class="mx-auto mt-12"
+          >
             <v-toolbar
-              flat
-              color="transparent"
+              color="#5C6BC0"
+              dark
             >
-              
+            검색 결과
             </v-toolbar>
-
             <v-list three-line>
               <!-- 누나 여기 키 뭐로해야하지?.? for문이 틀렸다고해서 대충 틀은 잡아놨는데 실수한걸까봐-->
               <v-list-item
@@ -52,23 +50,21 @@
                 @click="showDetail(post.id)"
                 :key="id"
               >
-            <v-list-item-content>
-            <span
-              class="text-uppercase font-weight-regular caption"
-              v-text="post.title"
-            ></span>
-
-            <div v-text="post.content"></div>
-            <hr/>
-            글쓴이 : <div v-text="post.uid"></div>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-card> 
-      
-            </v-col>
-          </v-row>
-        </v-container>
+                <v-list-item-content>
+                <span
+                  class="text-uppercase font-weight-regular caption"
+                  v-text="post.title"
+                ></span>
+                <div v-text="post.content"></div>
+                <hr/>
+                <div> 글쓴이 :<span>{{post.uid}}</span></div>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card> 
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -93,21 +89,21 @@ export default {
   },
   methods: {
     showDetail(id){
-            axios
-                .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+id)
-                .then((res) => {
-                    this.$router.push(`/post/detail/${id}`);
-                })
-                .catch((err) => console.error(err));
-        },
+      axios
+        .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+id)
+        .then((res) => {
+            this.$router.push(`/post/detail/${id}`);
+        })
+        .catch((err) => console.error(err));
+    },
     sendData() {
       axios
-          .get(
-            SERVER.URL +
-              SERVER.ROUTES.searchpost +
-              this.searchData.selected +
-              "/" +
-            this.searchData.word)
+        .get(
+          SERVER.URL +
+            SERVER.ROUTES.searchpost +
+            this.searchData.selected +
+            "/" +
+          this.searchData.word)
         .then((res) => {
           console.log(typeof(res.data.object))
             this.posts = res.data.object
@@ -115,12 +111,12 @@ export default {
             // this.posts = Object.keys(this.posts)
         })
         .catch((err) => console.error(err));
-        },
-       },
+    },
+  },
 };
 </script>
 <style>
-.v-text-field--outlined > .v-input__control {
-    margin: 0 12px;
+#select {
+  margin-left: 20px;
 }
 </style>
