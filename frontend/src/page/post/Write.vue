@@ -2,8 +2,8 @@
 <template>
   <div id="app">
   <v-app id="inspire">
-    <v-row align="center">
-            <v-col cols="12" sm="8" md="8">
+    <v-row>
+            <v-col>
               <v-card class="elevation-12">
                 <v-toolbar color="primary" dark flat>
                   <v-toolbar-title>글 작성</v-toolbar-title>
@@ -108,3 +108,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+div.row {
+  align-self: center;
+  width: 100%;
+  margin-top: 20px;
+}
+</style>
