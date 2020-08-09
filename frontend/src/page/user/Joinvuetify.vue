@@ -61,7 +61,7 @@
                     ></v-text-field>
                     <v-checkbox
                       v-model="checkbox"
-                      :rules="[(v) => !!v || 'You must agree to continue!']"
+                      :rules="[v => !!v || 'You must agree to continue!']"
                       label="약관에 동의하십니까?"
                       required
                     ></v-checkbox>
@@ -122,6 +122,7 @@ export default {
       show: false,
       show1: false,
       email: "",
+      checkbox: false,
       rules: {
         nameRules: [
           (v) => !!v || "Name is required",

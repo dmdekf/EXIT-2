@@ -59,6 +59,7 @@ export default {
     writePost() {
     this.email=this.$store.state.user_email
     this.uid=this.$store.state.login_user
+    
       axios({
         method: "post",
         url: SERVER.URL+"/feature/board/write/",
