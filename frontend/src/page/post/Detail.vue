@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div>
-                    <div v-if="(this.uid)===this.$store.state.login_user">
+                    <div v-if="(uid)===this.$store.state.login_user">
                     <v-btn  v-on:click=updatePost(id)>
                         <v-icon>mdi-playlist-edit</v-icon>글 수정하기
                     </v-btn>
@@ -53,13 +53,14 @@
             <v-form
                 ref="form"
                 lazy-validation
+                onsubmit="return false" 
             >
             <v-text-field v-model="inputComment"
                 ref="forminput"
                 :counter="100"
                 label="댓글 달기"
                 :rules="rules" hide-details="auto"
-                @keypress.enter="createComment"
+                @keypress.enter="createComment(id)"
             >
                 <template v-slot:prepend>
                     <v-btn icon color="green" @click="reset">
@@ -67,7 +68,7 @@
                     </v-btn>
                 </template>
                 <template v-slot:append>
-                    <v-btn class="mx-2 my-1" icon color="primary"  @click="createComment">
+                    <v-btn id="createbtn" class="mx-2 my-1" icon color="primary"  @click="createComment(id)">
                         <v-icon>mdi-plus</v-icon>
                     </v-btn>
                 </template>
@@ -78,17 +79,16 @@
             <div class="contents"> 
             <v-row justify="space-between" class="ma-2" >
                 <div>
-                    #{{comment.idx}}번 댓글 
-                    {{ moment(comment.insertTime).locale('ko-kr').startOf('hour').fromNow()}}
+                    #{{comment.idx}} 
+                    <small>{{ moment(comment.insertTime).locale('ko-kr').startOf('hour').fromNow()}}</small>
                 </div>
                 <div>
-                    <div v-if="(comment.writer)===this.$store.state.login_user">
-                        <v-btn  v-on:click="deleteComment(comment.idx)">
-                            <v-icon>mdi-playlist-edit</v-icon>글 수정하기
+                    <div v-if="(comment.writer)===login_user">
+                        <v-btn  v-on:click="deleteComment(comment.idx)" icon color="red">
+                            <v-icon>mdi-trash-can-outline</v-icon>삭제
                         </v-btn>
                     </div>
                     <div v-else>
-                        작성자:
                         <v-btn icon>
                         <v-icon>mdi-account-outline</v-icon></v-btn>
                         {{comment.writer}}
@@ -131,9 +131,12 @@ export default {
             rules: [
                 value => !!value || '내용을 입력해 주세요',
                 value => (value && value.length >= 2) || '2글자 이상 입력해 주세요',
+                value => (value && value.length < 100 ) || '글자수가 초과되었습니다.',
+
             ],
             inputComment:'',
-            uid:'',
+            uid:'',//글작성자
+            login_user:'',
         }
     },
     mounted(){
@@ -177,14 +180,14 @@ export default {
         updatePost(postId) {
             this.$router.push({ name: "POSTUPDATE", postId })
         },
-        createComment() {
+        createComment(postId) {
             axios({
                 method: "post",
-                url: SERVER.URL+"/feature/comment/list/detail/comments/"+this.id+"/write",
+                url: SERVER.URL+"/feature/comment/list/detail/comments/"+postId+"/write",
                 data: {
-                        boardIdx:this.id,
-                        content:inputComment,
-                        writer:this.$store.state.login_user
+                        boardIdx:postId,
+                        content:this.inputComment,
+                        writer:this.login_user
                     },
             })
             .then((res) => { 
@@ -196,7 +199,14 @@ export default {
             this.$refs.forminput.reset()
             },
         deleteComment(commentidx) {
-
+            axios({
+                method: "DELETE",
+                url: SERVER.URL+"DELETE /feature/comment/list/detail/comments/"+commentidx,
+            })
+            .then((res) => { 
+                alert("댓글 삭제 성공~");
+            })
+            .catch((err) => console.log(err.response.data));
         },
     },
     created() {
@@ -210,6 +220,7 @@ export default {
                 this.created = res.data.created;
                 this.likestatus = res.data.ilike
                 this.uid = res.data.uid
+                this.login_user = this.$store.state.login_user
             })
             .catch((err) => console.error(err));
     },
