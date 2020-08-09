@@ -1,9 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
+
 import axios from "axios";
+import cookies from 'js-cookie'
 
 import router from "@/router";
 import SERVER from "@/api/api";
+import constants from '../lib/constants'
 Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
@@ -11,8 +14,7 @@ export default new Vuex.Store({
     token: "",
     user_email: "",
     status: "",
-    login_user: "",
-    comments:[],
+    login_user:"",
   },
   getters: {
     // auth

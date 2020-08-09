@@ -31,7 +31,16 @@
           </v-btn>
         </div>
       </v-app-bar>
-        <router-view class="container mt-10 mx-10px"/>
+
+      <!-- <v-show=messages>
+      <v-for=message in messages>
+      <div if=message.tags class="alert alert-message.tags alert-dismissable fade show">{{ message }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      </div>
+      </v-for>
+      </v-if> -->
+
+        <router-view class="container my-10 mx-10px"/>
         <v-footer
           id="footer"
           app
@@ -87,6 +96,9 @@ td,th {
 a { 
   text-decoration:none;
   }
+#footer {
+  opacity: 80%;
+}
 #footer a {
   color:black; 
 }

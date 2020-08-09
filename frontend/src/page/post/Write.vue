@@ -45,7 +45,6 @@
 <script>
 import "../../assets/css/user.scss";
 import SERVER from "@/api/api";
-import constants from "../../lib/constants";
 import axios from "axios";
 import { required, rules, valid } from "vuelidate/lib/validators";
 
@@ -89,20 +88,9 @@ export default {
       alert: true,
       subject: '',
       content: '',
-      rules: {
-        nameRules: [
-          (v) => !!v || "Name is required",
-          (v) =>
-            (v && v.length <= 10) || "Name must be less than 10 characters",
-        ],
-        emailRules: [
-          (v) => !!v || "E-mail is required",
-          (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-        ],
-        email:'',
-        hit:'',
-        uid:''
-      },
+      email:'',
+      hit:'',
+      uid:''
     };
   },
   computed: {

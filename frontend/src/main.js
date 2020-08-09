@@ -5,8 +5,6 @@ import vuetify from "./plugins/vuetify";
 import store from "./store";
 import VueSession from 'vue-session';
 import InfiniteLoading from 'vue-infinite-loading';
-// import VueMomentJS from './plugins/vue-momentjs'
-// import moment from './plugins/moment-timezone'
 import moment from 'moment'
 
 Vue.prototype.moment = moment
@@ -17,7 +15,6 @@ new Vue({
   vuetify,
   VueSession,
   InfiniteLoading,
-  // VueMomentJS,
   moment,
   render: (h) => h(App),
 }).$mount("#app");
