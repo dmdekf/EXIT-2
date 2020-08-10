@@ -34,7 +34,7 @@ public List<Comment> detailComment(@PathVariable String uid, @PathVariable Strin
     ArrayList<Comment> rlist = new ArrayList<>();
     System.out.println(list.size());
     for (int i = 0; i < list.size(); i++) {
-        if(list.get(i).getBoardIdx().equals(id)) {
+        if(list.get(i).getBoardIdx() == Integer.parseInt(id)) {
             System.out.println(list.get(i).toString());
             rlist.add(list.get(i));
         } 
