@@ -25,8 +25,10 @@
                             </h3>
                             <hr/> 
                             <p class="content">{{post.content}}</p>
-                            <span class="date">{{post.created}}</span>  <br/>
-                            <span class="comment"><v-icon>mdi-comment-multiple-outline</v-icon>  {{post.cnt}}</span>
+
+                            <small class="date">{{ moment(post.created).locale('ko-kr').format("LLLL")}}</small>
+                            
+                            <div class="comment mt-1"><v-icon>mdi-comment-multiple-outline</v-icon>  {{post.cnt}}</div>
                         </div> 
                     </a>
                 </div>
@@ -72,26 +74,6 @@ export default {
     },
     
     methods: {
-        getPosts() {
-            this.nickName = this.$store.state.login_user;
-            axios.get(SERVER.URL+"/feature/board/list/")
-            .then((res)=>{
-                    if(res.data) {
-                        this.posts = res.data}
-            })
-            .catch((err) => console.error(err));
-        },
-        showDetail(id){
-            axios
-                .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+id)
-                .then((res) => {
-                    this.$router.push(`/post/detail/${id}`);
-                })
-                .catch((err) => console.error(err));
-        },
-        writePost(){
-            this.$router.push("/post/write");
-        },
         getPhotos: function () {
         axios
             .get("https://jsonplaceholder.typicode.com/photos")
@@ -103,6 +85,22 @@ export default {
         getcolor(postnum) {
             let result = this.photos[postnum+3].thumbnailUrl
             return result
+        },
+        getPosts() {
+            this.nickName = this.$store.state.login_user;
+            axios.get(SERVER.URL+"/feature/board/list/")
+            .then((res)=>{
+                    if(res.data) {
+                        this.posts = res.data}
+            })
+            .catch((err) => console.error(err));
+            this.getPhotos()
+        },
+        showDetail(id){
+            this.$router.push(`/post/detail/${id}`);
+        },
+        writePost(){
+            this.$router.push("/post/write");
         },
         scrollToTop: function () {
         scroll(0, 0);

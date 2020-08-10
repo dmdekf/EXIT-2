@@ -106,7 +106,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ["LOGIN", "SIGNUP", "MAIN","POSTDETAIL","SEARCH"]; // Login 안해도 됨
+  const publicPages = ["LOGIN", "SIGNUP", "MAIN","SEARCH"]; // Login 안해도 됨
   const authPages = ["LOGIN", "SIGNUP"]; // Login 되어있으면 안됨
   const authRequired = !publicPages.includes(to.name); // 로그인 해야 함.
   const unauthRequired = authPages.includes(to.name); // 로그인 해서는 안됨

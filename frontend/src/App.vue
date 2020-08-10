@@ -4,7 +4,7 @@
     <v-app id="inspire">
       <v-app-bar
       id="header"
-      elevate-on-scroll
+        elevate-on-scroll
         absolute
         color="teal lighten-3"
         dark
@@ -31,7 +31,29 @@
           </v-btn>
         </div>
       </v-app-bar>
-        <router-view class="container mt-10 mx-10px"/>
+
+      <!-- <v-show=messages>
+      <v-for=message in messages>
+      <div if=message.tags class="alert alert-message.tags alert-dismissable fade show">{{ message }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      </div>
+      </v-for>
+      </v-if> -->
+
+        <router-view class="container my-10 mx-10px"/>
+        <v-footer
+          id="footer"
+          app
+          padless
+        >
+          <v-col
+            class="text-center"
+            cols="12"
+          >
+              <small>&copy; {{ new Date().getFullYear() }},EXIT<strong>
+            made by <a href="https://github.com/gyw8526">@gyw8526</a> <a href="https://github.com/dmdekf">@dmdekf</a> <a href="https://lab.ssafy.com/twoposition">@twoposition</a> <a href="https://lab.ssafy.com/twoposition">@wjsgudwls89</a></strong></small>
+          </v-col>
+      </v-footer>
     </v-app>
   </div>
  </div> 
@@ -39,7 +61,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import constants from "./lib/constants";
 import axios from "axios";
 
 export default {
@@ -62,15 +83,23 @@ export default {
   position: fixed;
 }
 table {
-    border-collapse: collapse;
-    width: 100%;
-    word-break: break-all;
+  border-collapse: collapse;
+  width: 100%;
+  word-break: break-all;
 }
 th {
     width: 50px;
 }
-td,
-th {
+td,th {
     border: 1px solid black;
+}
+a { 
+  text-decoration:none;
+  }
+#footer {
+  opacity: 80%;
+}
+#footer a {
+  color:black; 
 }
 </style>
