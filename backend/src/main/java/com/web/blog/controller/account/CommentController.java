@@ -37,7 +37,7 @@ public List<Comment> detailComment(@PathVariable String uid, @PathVariable Strin
         if(list.get(i).getBoardIdx() == Integer.parseInt(id)) {
             System.out.println(list.get(i).toString());
             rlist.add(new Comment(list.get(i).getIdx(), list.get(i).getBoardIdx(), list.get(i).getContent(), list.get(i).getWriter(), null, null, null, null));
-        }
+        } 
     }
     System.out.println(rlist.size() + " 댓글개수");
     return rlist;

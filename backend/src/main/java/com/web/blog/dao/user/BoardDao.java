@@ -14,6 +14,6 @@ public interface BoardDao extends JpaRepository<Board, Integer> {
 	List<Board> findBoardByUidLike(String uid);
 	List<Board> findBoardByTag(String tag);
 	Optional<Board> findById(int id);
-	Optional<Board> deleteById(int id); 
+	Optional<Board> deleteById(int id);  
 }
 
