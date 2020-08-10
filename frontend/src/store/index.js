@@ -18,7 +18,7 @@ export default new Vuex.Store({
   },
   plugins: [createPersistedState()],
   getters: {
-    // auth 
+    // auth
     info: state => ({
       status: state.status,
       token: state.token,

@@ -65,10 +65,11 @@ public class BoardController {
 	@GetMapping("list")
 	public List<Post> getBoardList() throws Exception {
 		List<Board> list = boardDao.findAll();
+		System.out.println(list.size());
 		List<Post> plist = new ArrayList<Post>();
 		for(Board b : list){
 			int lnt = heartDao.findHeartByBid(b.getId()+"").size();
-			int cnt = commentDao.findByBoardIdx(b.getId()+"").size();
+			//int cnt = commentDao.findByBoardIdx(b.getId()+"").size();
 			plist.add(new Post(b,lnt, 0, false));
 		}
 		plist.sort((a,b)->b.getId()-a.getId());
@@ -79,7 +80,7 @@ public class BoardController {
    @GetMapping("/detail/{uid}/{id}")
    public Object detailBoard2(@PathVariable String uid, @PathVariable String id ) {
       System.out.println(id);
-      System.out.println("좋아요 포함 ");
+      System.out.println("좋아요 포함 "); 
       System.out.println(uid);
       if(uid==null)return "로그인하세요";
       Optional<Board> board = boardDao.findById(Integer.parseInt(id));

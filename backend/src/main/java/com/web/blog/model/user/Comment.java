@@ -16,13 +16,13 @@ import lombok.ToString;
 @Entity (name="tb_comment")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Comment {
 	@Id
 	private int idx;
 	
-	private int boardIdx;
+	private String boardIdx;
 	
 	private String content;
 	
