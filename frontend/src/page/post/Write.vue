@@ -45,7 +45,6 @@
 <script>
 import "../../assets/css/user.scss";
 import SERVER from "@/api/api";
-import constants from "../../lib/constants";
 import axios from "axios";
 import { required, rules, valid } from "vuelidate/lib/validators";
 
@@ -59,6 +58,7 @@ export default {
     writePost() {
     this.email=this.$store.state.user_email
     this.uid=this.$store.state.login_user
+    
       axios({
         method: "post",
         url: SERVER.URL+"/feature/board/write/",
@@ -88,20 +88,9 @@ export default {
       alert: true,
       subject: '',
       content: '',
-      rules: {
-        nameRules: [
-          (v) => !!v || "Name is required",
-          (v) =>
-            (v && v.length <= 10) || "Name must be less than 10 characters",
-        ],
-        emailRules: [
-          (v) => !!v || "E-mail is required",
-          (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-        ],
-        email:'',
-        hit:'',
-        uid:''
-      },
+      email:'',
+      hit:'',
+      uid:''
     };
   },
   computed: {

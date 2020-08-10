@@ -5,14 +5,16 @@ import vuetify from "./plugins/vuetify";
 import store from "./store";
 import VueSession from 'vue-session';
 import InfiniteLoading from 'vue-infinite-loading';
-import VueMoment from "vue-moment";
+import moment from 'moment'
+
+Vue.prototype.moment = moment
 /* eslint-disable no-new */
 new Vue({
   router,
   store,
-  VueMoment,
-  VueSession,
   vuetify,
+  VueSession,
   InfiniteLoading,
+  moment,
   render: (h) => h(App),
 }).$mount("#app");
