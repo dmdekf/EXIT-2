@@ -34,7 +34,7 @@ public List<Comment> detailComment(@PathVariable String uid, @PathVariable Strin
     ArrayList<Comment> rlist = new ArrayList<>();
     System.out.println(list.size());
     for (int i = 0; i < list.size(); i++) {
-        if(list.get(i).getBoardIdx() == Integer.parseInt(id)) {
+        if(list.get(i).getBoardIdx() == Integer.parseInt(id)) { 
             System.out.println(list.get(i).toString());
             rlist.add(list.get(i));
         } 
@@ -43,7 +43,7 @@ public List<Comment> detailComment(@PathVariable String uid, @PathVariable Strin
     return rlist;
 }
 
-
+ 
 @ApiOperation(value = "새로운 댓글 정보를 입력한다. 그리고 DB입력 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
 @PostMapping("list/detail/comments/{id}/write")
 public Comment writeComment(@RequestBody Comment comment ,@PathVariable("id") int id) {
