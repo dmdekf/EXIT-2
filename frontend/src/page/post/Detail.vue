@@ -2,9 +2,9 @@
 <div id="app">
     <v-app id="inspire">
     <v-window>
-        <v-window-item>
+        <v-window-item class="my-6">
         <v-card flat>
-        <v-card-title class="lime">
+        <v-card-title class="blue lighten-5">
             <v-list-item>
             <v-list-item-content>
             <v-list-item-subtitle><small>#{{id}}번 글</small></v-list-item-subtitle>
@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div>
-                    <div v-if="(this.uid)===this.$store.state.login_user">
+                    <div v-if="(uid)===this.$store.state.login_user">
                     <v-btn  v-on:click=updatePost(id)>
                         <v-icon>mdi-playlist-edit</v-icon>글 수정하기
                     </v-btn>
@@ -48,24 +48,61 @@
         </v-card-text>
         </v-card>
         <hr>
+        
+        <div>
+            <v-form
+                ref="form"
+                lazy-validation
+                onsubmit="return false" 
+            >
+            <v-text-field v-model="inputComment"
+                ref="forminput"
+                :counter="100"
+                label="댓글 달기"
+                :rules="rules" hide-details="auto"
+                @keypress.enter="createComment(id)"
+            >
+                <template v-slot:prepend>
+                    <v-btn icon color="green" @click="reset">
+                    <v-icon>mdi-cached</v-icon>
+                    </v-btn>
+                </template>
+                <template v-slot:append>
+                    <v-btn id="createbtn" class="mx-2 my-1" icon color="primary"  @click="createComment(id)">
+                        <v-icon>mdi-plus</v-icon>
+                    </v-btn>
+                </template>
+            </v-text-field>
+            </v-form>
+        </div>
          <div v-for="(comment, idx) in comments" :key="idx">
-             
-                    <a style="color: black">
-                        <div class="contents"> 
-                        <v-row class="ml-3">
-                            <v-col>
-                                #{{comment.idx}}번 댓글 
-                                {{ moment(comment.insertTime).locale('ko-kr').startOf('hour').fromNow()}}
-                                <v-icon>mdi-account-edit-outline</v-icon>{{comment.writer}}<br>
-                                {{comment.content}}
-                            </v-col>
-                        </v-row>
-                            
-                            <hr/> 
-                        </div> 
-                    </a>
-            </div>
-    </v-card>
+            <div class="contents"> 
+            <v-row justify="space-between" class="ma-2" >
+                <div>
+                    #{{comment.idx}} 
+                    <small>{{ moment(comment.insertTime).locale('ko-kr').startOf('hour').fromNow()}}</small>
+                </div>
+                <div>
+                    <div v-if="(comment.writer)===login_user">
+                        <v-btn  v-on:click="deleteComment(comment.idx)" icon color="red">
+                            <v-icon>mdi-trash-can-outline</v-icon>삭제
+                        </v-btn>
+                    </div>
+                    <div v-else>
+                        <v-btn icon>
+                        <v-icon>mdi-account-outline</v-icon></v-btn>
+                        {{comment.writer}}
+                    </div>
+                </div>
+            </v-row>
+            <v-row class="ma-4">
+                {{comment.content}}
+            </v-row>
+                
+                <hr/> 
+            </div> 
+        </div>
+        </v-card>
     </v-window-item>
     </v-window>
 </v-app>
@@ -76,6 +113,7 @@
 <script>
 import axios from 'axios';
 import SERVER from "@/api/api";
+import { required, rules } from "vuelidate/lib/validators";
 export default {
     props:{
         id:{
@@ -84,70 +122,108 @@ export default {
         },
     },
     data: () => {
-            return {
-                subject: '',
-                content: '',
-                created: '',
-                likestatus:false,
-                comments:[]
-            }
-        },
-        mounted(){
-            this.getComments();
-        },
-        methods: {
-            moveList(){
-                this.$router.push("/");
-            },            
-            likePost(postId){
-                axios({
-                    method: "GET",
-                    url : SERVER.URL +"/like/"+postId+"/"+this.$store.state.login_user,                    
-                }).then(
-                        this.likestatus = !this.likestatus                        
-                    )
-            },            
-            userdetail(){
-                console.log(SERVER.URL);                
-                axios({
-                method:"get",
-                url:SERVER.URL+"/user/detail/"+this.uid,
-                    }).then((res)=>{
-                        if(res.data.status){
-                            this.password = res.data.object.password;
-                        }else{
-                        }
-                    })
-            },
-            getComments(uid){
-                axios({
-                method:"get",
-                url:SERVER.URL+"/feature/comment/detail/"+this.$store.state.login_user+"/"+this.id+"/comments",
-                    }).then((res)=>{
-                        if(res.data){
-                            console.log(res.data);
-                            this.comments = res.data;                            
-                        }
-                    }).catch((err) => console.error(err));
-            },
-            updatePost(postId) {
-                this.$router.push({ name: "POSTUPDATE", postId })
-            }
-        },
-        created() {
-            axios
-                .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+this.id)
-                .then((res) => {
-                    console.log(res.data);
-                    this.subject = res.data.subject;
-                    const linecontent = res.data.content.replace(/(?:\r\n|\r|\n)/g, '<br />')
-                    this.content = linecontent;
-                    this.created = res.data.created;
-                    this.likestatus = res.data.ilike
-                    this.uid = res.data.uid
+        return {
+            subject: '',
+            content: '',
+            created: '',
+            likestatus:false,
+            comments:[],
+            rules: [
+                value => !!value || '내용을 입력해 주세요',
+                value => (value && value.length >= 2) || '2글자 이상 입력해 주세요',
+                value => (value && value.length < 100 ) || '글자수가 초과되었습니다.',
+
+            ],
+            inputComment:'',
+            uid:'',//글작성자
+            login_user:'',
+        }
+    },
+    mounted(){
+        this.getComments();
+    },
+    methods: {
+        moveList(){
+            this.$router.push("/");
+        },            
+        likePost(postId){
+            axios({
+                method: "GET",
+                url : SERVER.URL +"/like/"+postId+"/"+this.$store.state.login_user,                    
+            }).then(
+                    this.likestatus = !this.likestatus                        
+                )
+        },            
+        userdetail(){
+            console.log(SERVER.URL);                
+            axios({
+            method:"get",
+            url:SERVER.URL+"/user/detail/"+this.uid,
+                }).then((res)=>{
+                    if(res.data.status){
+                        this.password = res.data.object.password;
+                    }else{
+                    }
                 })
-                .catch((err) => console.error(err));
         },
+        getComments(){
+            axios({
+            method:"get",
+            url:SERVER.URL+"/feature/comment/detail/"+this.$store.state.login_user+"/"+this.id+"/comments",
+                }).then((res)=>{
+                    if(res.data){
+                        console.log(res.data);
+                        this.comments = res.data;                            
+                    }
+                }).catch((err) => console.error(err));
+        },
+        updatePost(postId) {
+            this.$router.push({ name: "POSTUPDATE", postId })
+        },
+        createComment(postId) {
+            axios({
+                method: "post",
+                url: SERVER.URL+"/feature/comment/list/detail/comments/"+postId+"/write",
+                data: {
+                        boardIdx:postId,
+                        content:this.inputComment,
+                        writer:this.login_user
+                    },
+            })
+            .then((res) => { 
+                alert("댓글 작성 성공~");
+            })
+            .catch((err) => console.log(err.response.data));
+        },
+        reset () {
+            this.$refs.forminput.reset()
+            },
+        deleteComment(commentidx) {
+            axios({
+                method: "DELETE",
+                url: SERVER.URL+"DELETE /feature/comment/list/detail/comments/"+commentidx,
+            })
+            .then((res) => { 
+                alert("댓글 삭제 성공~");
+            })
+            .catch((err) => console.log(err.response.data));
+        },
+    },
+    created() {
+        axios
+            .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+this.id)
+            .then((res) => {
+                console.log(res.data);
+                this.subject = res.data.subject;
+                const linecontent = res.data.content.replace(/(?:\r\n|\r|\n)/g, '<br />')
+                this.content = linecontent;
+                this.created = res.data.created;
+                this.likestatus = res.data.ilike
+                this.uid = res.data.uid
+                this.login_user = this.$store.state.login_user
+            })
+            .catch((err) => console.error(err));
+    },
 }
 </script>
 

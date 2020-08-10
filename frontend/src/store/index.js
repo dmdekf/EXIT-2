@@ -1,9 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
+
 import axios from "axios";
+import Cookies from 'js-cookie'
 
 import router from "@/router";
 import SERVER from "@/api/api";
+import createPersistedState from 'vuex-persistedstate';
 Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
@@ -11,9 +14,18 @@ export default new Vuex.Store({
     token: "",
     user_email: "",
     status: "",
-    login_user: "",
-    comments:[],
+    login_user:"",
   },
+  // modules: { Token: this.state.token },
+  plugins: [createPersistedState({
+    storage: {
+      // paths: [Token],
+      getItem: key => Cookies.get(key),
+      setItem: (key, value) => Cookies.set(key, value, { expires: 3, secure: true }),
+      removeItem: key => Cookies.remove(key)
+      // window.sessionStorage
+    }
+  })],
   getters: {
     // auth
     info: state => ({
@@ -22,7 +34,7 @@ export default new Vuex.Store({
     }),
     isLoggedIn: state => !!state.token,
     
-    config: state => ({ headers: { Authorization: `Token ${state.token}` } })
+    config: state => ({ headers: { Authorization: `Bearer ${state.token}` } })
   },
   mutations: {
     
@@ -77,21 +89,26 @@ export default new Vuex.Store({
       .catch(err => console.log(err.response.data))
       alert("회원가입에 실패했습니다.");
     },
-    login({ commit, getters }, loginData) { 
+    login({ commit, getters }, loginData) {
       console.log(loginData)
-      axios.post(
-        SERVER.URL + "/user/signin",{
-        email:loginData.email, password:loginData.password
-      })
+      axios
+        ({
+          method: 'post',
+          url: SERVER.URL + "/user/signin",
+          data: {
+          email: loginData.email, password: loginData.password
+        }
+    })
         // console.log(res.data)
         .then((res) => {
           console.log(res.data.status)
-          // console.dir(res.headers["jwt-auth-token"]);
+          console.dir(res.headers["jwt-auth-token"]);
           if (res.data.status) {
             commit('SET_TOKEN', { token: res.headers["jwt-auth-token"] })
             commit('SET_EMAIL', { user_email: res.data.data.email })
             commit('SET_USER', { login_user: res.data.data.uid })
             commit('SET_STATUS', { status: res.data.status })
+            getters.config
             alert(state.login_user+"님 로그인 되었습니다.");
           } else {
             commit('SET_MESSAGE', "로그인해주세요.")
@@ -100,8 +117,8 @@ export default new Vuex.Store({
         })
         .catch(e => {
           
-          console.log(e.response)
-          getters.info = e.response
+          // console.log(e.response.data)
+          // getters.info = e.response
         });
       router.push({ name: "MAIN" })
     },
