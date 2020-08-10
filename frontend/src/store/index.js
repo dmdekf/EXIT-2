@@ -16,16 +16,7 @@ export default new Vuex.Store({
     status: "",
     login_user:"",
   },
-  // modules: { Token: this.state.token },
-  plugins: [createPersistedState({
-    storage: {
-      // paths: [Token],
-      getItem: key => Cookies.get(key),
-      setItem: (key, value) => Cookies.set(key, value, { expires: 3, secure: true }),
-      removeItem: key => Cookies.remove(key)
-      // window.sessionStorage
-    }
-  })],
+  plugins: [createPersistedState()],
   getters: {
     // auth
     info: state => ({
