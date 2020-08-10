@@ -1,5 +1,6 @@
 package com.web.blog.controller.account;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -158,23 +159,23 @@ public class AccountController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 	@GetMapping("/account/key_alter")
-	@ApiOperation(value="이메일 인증 완료")
-	public Object keyAlterConfirm(@RequestParam String uid,@RequestParam String userkey) {
-		Optional<User> userOpt = userDao.findUserByUidAndUserkey(uid, userkey);
+    @ApiOperation(value="이메일 인증 완료")
+    public void keyAlterConfirm(HttpServletResponse httpServletResponse,@RequestParam String uid,@RequestParam String userkey) throws IOException {
+        Optional<User> userOpt = userDao.findUserByUidAndUserkey(uid, userkey);
 
-		ResponseEntity response = null;
-		if (userOpt.isPresent()) {
-			User user = userOpt.get();
-			user.setUserkey("Y");
-			userDao.save(user);
-			final BasicResponse result = new BasicResponse(); 
-			result.status = true;
-			result.data = "success";
-			response = new ResponseEntity<>(result, HttpStatus.OK);
-		} else {
-			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-
-		return response;
+    ResponseEntity response = null;
+    if (userOpt.isPresent()) {
+        User user = userOpt.get();
+        user.setUserkey("Y");
+        userDao.save(user);
+        final BasicResponse result = new BasicResponse(); 
+        result.status = true;
+        result.data = "success";
+        response = new ResponseEntity<>(result, HttpStatus.OK);
+    } else {
+        response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+    System.out.println("인증완료");
+    httpServletResponse.sendRedirect("http://i3a501.p.ssafy.io/");
 	}
 }

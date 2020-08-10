@@ -34,5 +34,5 @@ public class Comment {
 	private Date updateTime;
 	private Date deleteTime;
 	
-	
+	 
 }

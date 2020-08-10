@@ -34,9 +34,9 @@ public List<Comment> detailComment(@PathVariable String uid, @PathVariable Strin
     ArrayList<Comment> rlist = new ArrayList<>();
     System.out.println(list.size());
     for (int i = 0; i < list.size(); i++) {
-        if(list.get(i).getBoard_idx() == Integer.parseInt(id)) {
+        if(list.get(i).getBoardIdx().equals(id)) {
             System.out.println(list.get(i).toString());
-            rlist.add(new Comment(list.get(i).getIdx(), list.get(i).getBoard_idx(), list.get(i).getContent(), list.get(i).getWriter()));
+            rlist.add(list.get(i));
         } 
     }
     System.out.println(rlist.size() + " 댓글개수");
@@ -48,10 +48,8 @@ public List<Comment> detailComment(@PathVariable String uid, @PathVariable Strin
 @PostMapping("list/detail/comments/{id}/write")
 public Comment writeComment(@RequestBody Comment comment ,@PathVariable("id") int id) {
     //board = new Board(0, "test", "test", null, 0, "unknown", 300);
-    
-	comment.setBoardIdx(id);
-    
-	return commentDao.save(comment);
+//    comment.setBoardIdx(id);
+    return commentDao.save(comment);
 }
 
 @ApiOperation(value = "게시글번호에 해당하는 게시글의 정보를 삭제한다.", response = String.class)    
