@@ -22,7 +22,7 @@ public class Comment {
 	@Id
 	private int idx;
 	
-	private String boardIdx;
+	private int boardIdx;
 	
 	private String content;
 	
