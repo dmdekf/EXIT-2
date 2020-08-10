@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.dao.user.BoardDao;
-import com.web.blog.dao.user.CommentDao;
 import com.web.blog.dao.user.HeartDao;
 import com.web.blog.model.BasicResponse;
 import com.web.blog.model.user.Board;
@@ -34,8 +33,6 @@ public class BoardController {
    BoardDao boardDao;
    @Autowired
    HeartDao heartDao;
-   @Autowired
-   CommentDao commentDao;
    
    
    
@@ -68,7 +65,7 @@ public class BoardController {
 		List<Post> plist = new ArrayList<Post>();
 		for(Board b : list){
 			int lnt = heartDao.findHeartByBid(b.getId()+"").size();
-			int cnt = commentDao.findByBoardIdx(b.getId()+"").size();
+			int cnt = 0;
 			plist.add(new Post(b,lnt, 0, false));
 		}
 		plist.sort((a,b)->b.getId()-a.getId());
@@ -90,7 +87,7 @@ public class BoardController {
          System.out.println(lnt);
          boolean ilike = heartDao.findHeartByBidAndUid(id, uid).isPresent();
          System.out.println(ilike);
-         int cnt = commentDao.findByBoardIdx(id).size();
+         int cnt =0;
          System.out.println(cnt);
          return new Post(board.get(), lnt, cnt, heartDao.findHeartByBidAndUid(id, uid).isPresent());
 
@@ -107,7 +104,7 @@ public class BoardController {
          // String uid = "test"; // 여기 수정 필요
          int lnt = heartDao.findHeartByBid(id).size();
         // System.out.println(lnt);
-         int cnt = commentDao.findByBoardIdx(id).size();
+         int cnt = 0;
          return new Post(board.get(), lnt, cnt, false);
 
       }
