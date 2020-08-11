@@ -75,13 +75,14 @@
             </v-text-field>
             </v-form>
         </div>
-         <div v-for="(comment, idx) in comments" :key="idx">
+         <div v-for="(comment, idx) in reverseComments" :key="idx">
             <div class="contents"> 
-                <v-row justify="space-between" class="ma-2" >
-                    <div>
-                            #{{comment.uid}} 
-                        <small>{{ moment(comment.insertTime).locale('ko-kr').startOf('hour').fromNow()}}</small>
-                    </div>
+            <v-row justify="space-between" class="ma-2" >
+                <div>
+                    <small>{{ moment(comment.insertTime).locale('ko-kr').startOf('day').fromNow()}}</small>
+                </div>
+                <div>
+                    
                     <div>
                         <div v-if="(comment.writer)===login_user">
                             <v-btn  v-on:click="deleteComment(comment.idx)" icon color="red">
@@ -94,6 +95,7 @@
                             {{comment.writer}}
                         </div>
                     </div>
+                </div>
                 </v-row>
                 <v-row class="ma-4">
                     {{comment.content}}
@@ -144,6 +146,11 @@ export default {
     mounted(){
         this.getComments();
     },
+    computed:{
+        reverseComments() {
+            return this.comments.slice().reverse()
+        }
+    },
     methods: {
         moveList(){
             this.$router.push("/");
@@ -193,7 +200,9 @@ export default {
                     },
             })
             .then((res) => { 
-                alert("댓글 작성 성공~ ");
+                console.log(res.data)
+                alert("댓글 작성 성공~");
+                this.comments.push(res.data)
             })
             .catch((err) => console.log(err.response.data))
         },
@@ -201,6 +210,7 @@ export default {
             this.$refs.forminput.reset()
             },
         deleteComment(commentidx) {
+            console.log(commentidx)
             axios({
                 method: "DELETE",
                 url: SERVER.URL+"/feature/comment/list/detail/comments/"+commentidx,

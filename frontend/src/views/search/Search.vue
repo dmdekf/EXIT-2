@@ -33,7 +33,7 @@
       <v-row align="center">
         <v-col v-show="posts.length" cols="12" class="mx-8" >
           <SearchList :posts="posts"/>
-          <v-card v-if="posts"
+          <v-card 
             class="mx-auto mt-12"
           >
             <v-toolbar
@@ -42,7 +42,7 @@
             >
             검색 결과
             </v-toolbar>
-            <v-list three-line>
+            <v-list three-line >
               <!-- 누나 여기 키 뭐로해야하지?.? for문이 틀렸다고해서 대충 틀은 잡아놨는데 실수한걸까봐-->
               <v-list-item
                 v-for="(post,id) in posts" 
@@ -58,6 +58,27 @@
                 <div v-text="post.content"></div>
                 <hr/>
                 <div> 글쓴이 :<span>{{post.uid}}</span></div>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card> 
+        </v-col>
+        <v-col v-show="!posts" cols="12" class="mx-8" >
+          <v-card 
+            class="mx-auto mt-12"
+          >
+            <v-toolbar
+              color="#5C6BC0"
+              dark
+            >
+            검색 결과
+            </v-toolbar>
+            <v-list three-line >
+              <!-- 누나 여기 키 뭐로해야하지?.? for문이 틀렸다고해서 대충 틀은 잡아놨는데 실수한걸까봐-->
+              <v-list-item
+              >
+                <v-list-item-content>
+                조건에 맞는 글이 없습니다.
                 </v-list-item-content>
               </v-list-item>
             </v-list>
@@ -105,10 +126,14 @@ export default {
             "/" +
           this.searchData.word)
         .then((res) => {
-          console.log(typeof(res.data.object))
+          console.log(res.data)
+          if (res.data.object.length==0) {
+            this.posts = ''
+            console.log(this.posts)
+          } else {    
             this.posts = res.data.object
-            console.log(this.posts[0].id)
-            // this.posts = Object.keys(this.posts)
+            console.log(this.posts)
+          }
         })
         .catch((err) => console.error(err));
     },
