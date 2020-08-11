@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.dao.user.CommentDao;
+import com.web.blog.model.user.Board;
 import com.web.blog.model.user.Comment;
 
 import io.swagger.annotations.ApiOperation;
@@ -49,6 +50,7 @@ public List<Comment> detailComment(@PathVariable String uid, @PathVariable Strin
 public Comment writeComment(@RequestBody Comment comment ,@PathVariable("id") int id) {
     //board = new Board(0, "test", "test", null, 0, "unknown", 300);
 //    comment.setBoardIdx(id);
+	System.out.println(comment.toString());
     return commentDao.save(comment);
 }
 
@@ -56,6 +58,6 @@ public Comment writeComment(@RequestBody Comment comment ,@PathVariable("id") in
 @DeleteMapping("list/detail/comments/{idx}")
 public Optional<Comment> deleteComment(@PathVariable("idx") int idx) {
     commentDao.deleteById(idx);
-    return null;
-}
+    return null; 
+} 
 }
