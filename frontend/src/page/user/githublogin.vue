@@ -42,9 +42,10 @@ export default {
             }
               })
             .then((res) => {
-                console.log(res.data);
+                
             })
             .catch(function(err) {
+              //백단 서버에 api 로 토큰과 이메일 데이터를 넘겨주고 로그인 된 페이지로 이동하기.
                 console.log(err)
             })
         })
