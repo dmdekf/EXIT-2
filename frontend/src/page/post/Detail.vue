@@ -213,10 +213,7 @@ export default {
             })
                          .then((res) => { 
             this.comments.splice(idx, 1)
-                // var index = this.comments.idx.indexOf(commentidx)
-                // console.log(index)
-                
-                alert("댓글 삭제 성공~");
+            alert("댓글 삭제 성공~");
             })
             .catch((err) => console.log(err));
         },

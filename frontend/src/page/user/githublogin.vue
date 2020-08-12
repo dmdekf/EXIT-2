@@ -28,7 +28,6 @@ export default {
           params: {'client_id': client_id, 'client_secret': client_secret,'code':this.code},
         })
         .then((res) => {
-          console.log("token:" + res.data.access_token)
           this.token=res.data.access_token
           axios({
             method:"GET",
@@ -38,9 +37,7 @@ export default {
             }
               })
           .then((res)=> {
-            console.log(res.data[0].email)
             var email = res.data[0].email
-            console.log(email)
             this.sociallogin(email)
         })
         })
