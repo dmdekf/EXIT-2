@@ -17,6 +17,7 @@ export default {
         }
     },
     methods:{
+      ...mapActions(['login']),
       postcode() {
         const client_id="16f1cfdb3ceb66705b57"
         const client_secret="3bf8ef26e7773919295eff93163d2ec9ccf9342a"
@@ -41,16 +42,17 @@ export default {
               "Authorization" : 'token '+this.token
             }
               })
-            .then((res) => {
-                
-            })
-            .catch(function(err) {
-              //백단 서버에 api 로 토큰과 이메일 데이터를 넘겨주고 로그인 된 페이지로 이동하기.
-                console.log(err)
-            })
+          })
+        .then((res) => {
+            console.log(res.data[0].email)
+            this.sociallogin(res.data[0].email)
         })
+        .catch(function(err) {
+          //백단 서버에 api 로 토큰과 이메일 데이터를 넘겨주고 로그인 된 페이지로 이동하기.
+            console.log(err)
+        })
+        }
         
-    }
     },
     created() {
       this.code = this.$route.query.code

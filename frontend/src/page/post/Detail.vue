@@ -78,8 +78,8 @@
          <div v-for="(comment, idx) in reverseComments" :key="idx">
             <div class="contents"> 
             <v-row justify="space-between" class="ma-2" >
-                <div>
-                    <small>{{ moment(comment.insertTime).locale('ko-kr').startOf('day').fromNow()}}</small>
+                <div>#{{idx}}
+                    <small>{{ moment(comment.insertTime).locale('ko-kr').fromNow()}}</small>
                 </div>
                 <div>
                     <div v-if="(comment.writer)===login_user">
@@ -143,7 +143,7 @@ export default {
     },
     computed:{
         reverseComments() {
-            return this.comments.slice().reverse()
+            // return this.comments.slice().reverse()
         }
     },
     methods: {
@@ -208,12 +208,15 @@ export default {
             console.log(commentidx)
             axios({
                 method: "DELETE",
-                url: SERVER.URL+"DELETE /feature/comment/list/detail/comments/"+commentidx,
+                url: SERVER.URL+"/feature/comment/list/detail/comments/"+commentidx,
             })
             .then((res) => { 
+                // var index = this.comments.idx.indexOf(commentidx)
+                // console.log(index)
+                this.comments.idx(commentidx,1)
                 alert("댓글 삭제 성공~");
             })
-            .catch((err) => console.log(err.response.data));
+            .catch((err) => console.log(err));
         },
     },
     created() {
