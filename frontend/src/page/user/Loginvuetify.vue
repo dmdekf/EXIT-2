@@ -38,10 +38,10 @@
               <div class="contents"> 
               <!-- <v-layout align-center justify-center class="ma-3 contents"> -->
                 <v-row class="ma-3">
-                <v-btn block class="grey lighten-2 mb-3" v-on:click="gitlogin"><v-icon>mdi-github</v-icon> | Signin with GitHub </v-btn>
+                <v-btn block class="grey lighten-2 mb-3" v-on:click="gitlogin" ><v-icon>mdi-github</v-icon> | Signin with GitHub </v-btn>
                 </v-row>
                 <v-row class="ma-3">
-                <v-btn block class="orange accent-4 mb-3" v-on:click="gitlablogin"><v-icon>mdi-gitlab</v-icon>  GitLab</v-btn>
+                <v-btn block class="orange accent-4 mb-3" v-on:click="gitlablogin"><v-icon>mdi-gitlab</v-icon> | Signin with GitLab</v-btn>
                 </v-row>
               <!-- </v-layout> -->
               </div>
@@ -58,8 +58,11 @@
 import axios from 'axios';
 import SERVER from "@/api/api";
 import { mapActions } from 'vuex'
+const client_id="16f1cfdb3ceb66705b57"
+const gitapi = "https://github.com/login/oauth/auhorize?client_id="+client_id+"?redirect_uri=http://192.168.0.9:3000/user/logintest/callback"
+      
 export default {
-  data() {
+data() {
     return {
       loginData: {
         email: null,
@@ -70,10 +73,18 @@ export default {
   methods: {
     ...mapActions(['login']),
     gitlablogin() {},
+   
     gitlogin() {
+      const client_id="16f1cfdb3ceb66705b57"
+      const gitapi = "https://github.com/login/oauth/authorize?client_id="+client_id+"&redirect_uri=http://localhost:3000/user/logintest/callback&scope=user:email"
+     
+      window.location.href=gitapi
+    
+    },
+    gitlogin0() {
       // axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'localhost:3000'
       const client_id="16f1cfdb3ceb66705b57"
-      const gitapi = "https://github.com/login/oauth/authorize?client_id="+client_id+"?redirect_uri=http://192.168.0.9:3000/user/logintest/callback"
+      const gitapi = "https://github.com/login/oauth/authorize?client_id="+client_id+"&redirect_uri=http://localhost:3000/user/logintest/callback&scope=user:email"
       console.log(gitapi)
       axios(
         {
@@ -86,10 +97,9 @@ export default {
       .catch(function(err) {
           console.log(err)
       })
-    }
     },
-  }
-
+  } 
+}
 </script>
 
 <style lang="scss" scoped>
