@@ -1,6 +1,7 @@
 package com.web.blog.controller.account;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,7 @@ public Comment writeComment(@RequestBody Comment comment ,@PathVariable("id") in
     //board = new Board(0, "test", "test", null, 0, "unknown", 300);
 //    comment.setBoardIdx(id);
 	System.out.println(comment.toString());
+	comment.setInsertTime(new Date());
     return commentDao.save(comment);
 }
 
