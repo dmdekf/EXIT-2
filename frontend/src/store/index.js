@@ -111,15 +111,15 @@ export default new Vuex.Store({
         });
       router.push({ name: "MAIN" })
     },
-    sociallogin({ commit, getters }, loginData) {
-      console.log(loginData)
+    sociallogin({ commit, getters }, gitemail) {
+      console.log(gitemail)
       axios
         ({
           method: 'post',
           url: SERVER.URL + "/user/socialsignin",
           data: {
-          email: loginData.email
-        }
+            email: gitemail
+          }
     })
         // console.log(res.data)
         .then((res) => {
