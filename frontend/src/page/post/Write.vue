@@ -5,156 +5,157 @@
         <v-col>
           <v-card class="elevation-12">
             <v-toolbar color="primary" dark flat>
-              <v-toolbar-title>글 작성</v-toolbar-title>
+                  <v-toolbar-title>글 작성</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
+            <v-card-text> 
+            <v-form ref="form" onsubmit="return false;">
+              <v-text-field
+                v-model="subject"
+                id="subject"
+                label="제목을 입력해주세요"
+                name="subject"
+                type="text"
+                :counter="10"
+                required
+              ></v-text-field>      
 
-            <v-card-text>
-              <v-form ref="form">
-                <v-text-field
-                  v-model="subject"
-                  id="subject"
-                  name="subject"
-                  type="text"
-                  :counter="10"
-                  required
-                ></v-text-field>
-                
-      <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
-        <div class="menubar">
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.bold() }"
-            @click="commands.bold"
-          >
-          <img class="icon" src="../../assets/img/icon/bold.svg" alt="">
-          </button>
+            <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+            <div class="menubar">
+              <button
+                class="menubar__button"
+                :class="{ 'is-active': isActive.bold() }"
+                @click="commands.bold"
+              >
+              <img class="icon" src="../../assets/img/icon/bold.svg" alt="">
+              </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.italic() }"
-            @click="commands.italic"
-          >
-            <img class="icon" src="../../assets/img/icon/italic.svg" alt="">
-          </button>
+              <button
+                class="menubar__button"
+                :class="{ 'is-active': isActive.italic() }"
+                @click="commands.italic"
+              >
+                <img class="icon" src="../../assets/img/icon/italic.svg" alt="">
+              </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.strike() }"
-            @click="commands.strike"
-          >
-          <img class="icon" src="../../assets/img/icon/strike.svg" alt="">
-          </button>
+              <button
+                class="menubar__button"
+                :class="{ 'is-active': isActive.strike() }"
+                @click="commands.strike"
+              >
+              <img class="icon" src="../../assets/img/icon/strike.svg" alt="">
+              </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.underline() }"
-            @click="commands.underline"
-          >
-            <img class="icon" src="../../assets/img/icon/underline.svg" alt="">
-          </button>
+              <button
+                class="menubar__button"
+                :class="{ 'is-active': isActive.underline() }"
+                @click="commands.underline"
+              >
+                <img class="icon" src="../../assets/img/icon/underline.svg" alt="">
+              </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.code() }"
-            @click="commands.code"
-          >
-            <img class="icon" src="../../assets/img/icon/code.svg" alt="">
-          </button>
+              <button
+                class="menubar__button"
+                :class="{ 'is-active': isActive.code() }"
+                @click="commands.code"
+              >
+                <img class="icon" src="../../assets/img/icon/code.svg" alt="">
+              </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.paragraph() }"
-            @click="commands.paragraph"
-          >
-          <img class="icon" src="../../assets/img/icon/paragraph.svg" alt="">
-          </button>
+              <button
+                class="menubar__button"
+                :class="{ 'is-active': isActive.paragraph() }"
+                @click="commands.paragraph"
+              >
+              <img class="icon" src="../../assets/img/icon/paragraph.svg" alt="">
+              </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-            @click="commands.heading({ level: 1 })"
-          >
-            H1
-          </button>
+              <button
+                class="menubar__button"
+                :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+                @click="commands.heading({ level: 1 })"
+              >
+                H1
+              </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-            @click="commands.heading({ level: 2 })"
-          >
-            H2
-          </button>
+              <button
+                class="menubar__button"
+                :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+                @click="commands.heading({ level: 2 })"
+              >
+                H2
+              </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-            @click="commands.heading({ level: 3 })"
-          >
-            H3
-          </button>
+              <button
+                class="menubar__button"
+                :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+                @click="commands.heading({ level: 3 })"
+              >
+                H3
+              </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.bullet_list() }"
-            @click="commands.bullet_list"
-          >
-            <img class="icon" src="../../assets/img/icon/ul.svg" alt="">
-          </button>
+              <button
+                class="menubar__button"
+                :class="{ 'is-active': isActive.bullet_list() }"
+                @click="commands.bullet_list"
+              >
+                <img class="icon" src="../../assets/img/icon/ul.svg" alt="">
+              </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.ordered_list() }"
-            @click="commands.ordered_list"
-          >
-            <img class="icon" src="../../assets/img/icon/ol.svg" alt="">
-          </button>
+              <button
+                class="menubar__button"
+                :class="{ 'is-active': isActive.ordered_list() }"
+                @click="commands.ordered_list"
+              >
+                <img class="icon" src="../../assets/img/icon/ol.svg" alt="">
+              </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.blockquote() }"
-            @click="commands.blockquote"
-          >
-            <img class="icon" src="../../assets/img/icon/quote.svg" alt="">
-          </button>
+              <button
+                class="menubar__button"
+                :class="{ 'is-active': isActive.blockquote() }"
+                @click="commands.blockquote"
+              >
+                <img class="icon" src="../../assets/img/icon/quote.svg" alt="">
+              </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.code_block() }"
-            @click="commands.code_block"
-          >
-            <img class="icon" src="../../assets/img/icon/code.svg" alt="">
-          </button>
+              <button
+                class="menubar__button"
+                :class="{ 'is-active': isActive.code_block() }"
+                @click="commands.code_block"
+              >
+                <img class="icon" src="../../assets/img/icon/code.svg" alt="">
+              </button>
 
-          <button
-            class="menubar__button"
-            @click="commands.horizontal_rule"
-          >
-          <img class="icon" src="../../assets/img/icon/hr.svg" alt="">
-          </button>
+              <button
+                class="menubar__button"
+                @click="commands.horizontal_rule"
+              >
+              <img class="icon" src="../../assets/img/icon/hr.svg" alt="">
+              </button>
 
-          <button
-            class="menubar__button"
-            @click="commands.undo"
-          >
-            <img class="icon" src="../../assets/img/icon/undo.svg" alt="">
-          </button>
+              <button
+                class="menubar__button"
+                @click="commands.undo"
+              >
+                <img class="icon" src="../../assets/img/icon/undo.svg" alt="">
+              </button>
 
-          <button
-            class="menubar__button"
-            @click="commands.redo"
-          >
-            <img class="icon" src="../../assets/img/icon/redo.svg" alt="">
-          </button>
+              <button
+                class="menubar__button"
+                @click="commands.redo"
+              >
+                <img class="icon" src="../../assets/img/icon/redo.svg" alt="">
+              </button>
 
-        </div>
-      </editor-menu-bar>
-      
-      <editor-content class="editor__content" :editor="editor" />
-        
-      </v-form>
-      </v-card-text>
-      <v-card-actions>
+                </div>
+              </editor-menu-bar>
+              <editor-content class="editor__content" 
+                :editor="editor"
+                />
+                <p>{{content}}</p>
+            </v-form>
+            </v-card-text>
+      <v-card-actions> 
                   <v-spacer></v-spacer>
                   <v-btn color="primary" v-on:click="writePost">글올리기</v-btn>
                   <v-btn color="lime" v-on:click="moveList">메인화면</v-btn>
@@ -213,10 +214,9 @@ export default {
         url: SERVER.URL+"/feature/board/write/",
         data: {
           subject:this.subject,
-          content:this.editor.content,
+          content:this.content,
           email:this.email,
           uid:this.uid,
-          editor: null,
         },
       })
         .then((res) => { 
@@ -230,6 +230,28 @@ export default {
         })
         .catch((err) => console.log(err.response.data));
     },
+    clearContent() {
+      this.editor.clearContent(true)
+      this.editor.focus()
+    },
+    setContent() {
+      // you can pass a json document
+      this.editor.setContent({
+        type: 'doc',
+        content: [{
+          type: 'paragraph',
+          content: [
+            {
+              type: 'text',
+              text: 'This is some inserted text. ',
+            },
+          ],
+        }],
+      }, true)
+      // HTML string is also supported
+      // this.editor.setContent('<p>This is some inserted text. </p>')
+      this.editor.focus()
+    },
   },
 
   watch: {},
@@ -240,7 +262,15 @@ export default {
       email:'',
       hit:'',
       uid:'',
-      editor: new Editor({
+      content: '',
+      editor:null,
+    }
+  },
+  beforeDestroy() {
+    this.editor.destroy()
+  },
+  mounted(){
+    this. editor = new Editor({
         extensions: [
           new Blockquote(),
           new BulletList(),
@@ -277,17 +307,16 @@ export default {
             </li>
           </ul>
           <blockquote>
-            It's amazing 👏
+            It's amazing
             <br />
             – mom
           </blockquote>
         `,
-      }),
-    }
-  },
-  beforeDestroy() {
-    this.editor.destroy()
-  },
+        onUpdate: ({ getHTML }) => {
+          this.content = getHTML()
+        },
+    })
+  }
 }
 </script>
 <style lang="scss" scope>
