@@ -205,13 +205,14 @@ export default {
             this.$refs.forminput.reset()
             },
         deleteComment(index,commentidx) {
-            console.log(commentidx)
+            console.log(index, commentidx)
+            var idx = this.comments.length-index-1
             axios({
                 method: "DELETE",
                 url: SERVER.URL+"/feature/comment/list/detail/comments/"+commentidx,
             })
                          .then((res) => { 
-            this.comments.splice(index, 1, "삭제된 댓글입니다.")
+            this.comments.splice(idx, 1)
                 // var index = this.comments.idx.indexOf(commentidx)
                 // console.log(index)
                 
