@@ -75,15 +75,15 @@
             </v-text-field>
             </v-form>
         </div>
-         <div v-for="(comment, idx) in reverseComments" :key="idx">
+         <div v-for="(comment, index) in reverseComments" :key="index">
             <div class="contents"> 
             <v-row justify="space-between" class="ma-2" >
-                <div>#{{idx}}
+                <div># {{reverseComments.length-index}}번째 댓글
                     <small>{{ moment(comment.insertTime).locale('ko-kr').fromNow()}}</small>
                 </div>
                 <div>
                     <div v-if="(comment.writer)===login_user">
-                        <v-btn  v-on:click="deleteComment(comment.idx)" icon color="red">
+                        <v-btn  v-on:click="deleteComment(index,comment.idx)" icon color="red">
                             <v-icon>mdi-trash-can-outline</v-icon>삭제
                         </v-btn>
                     </div>
@@ -143,7 +143,7 @@ export default {
     },
     computed:{
         reverseComments() {
-            // return this.comments.slice().reverse()
+            return this.comments.slice().reverse()
         }
     },
     methods: {
@@ -204,16 +204,17 @@ export default {
         reset () {
             this.$refs.forminput.reset()
             },
-        deleteComment(commentidx) {
+        deleteComment(index,commentidx) {
             console.log(commentidx)
             axios({
                 method: "DELETE",
                 url: SERVER.URL+"/feature/comment/list/detail/comments/"+commentidx,
             })
-            .then((res) => { 
+                         .then((res) => { 
+            this.comments.splice(index, 1, "삭제된 댓글입니다.")
                 // var index = this.comments.idx.indexOf(commentidx)
                 // console.log(index)
-                this.comments.idx(commentidx,1)
+                
                 alert("댓글 삭제 성공~");
             })
             .catch((err) => console.log(err));
@@ -234,6 +235,9 @@ export default {
             })
             .catch((err) => console.error(err));
     },
+    beforeUpdate() {
+
+    }
 }
 </script>
 
