@@ -35,6 +35,17 @@
                 <v-btn color="primary" v-on:click="login(loginData)">로그인</v-btn>
                 <v-btn color="primary" to="/user/jointest">회원가입</v-btn>
               </v-card-actions>
+              <div class="contents"> 
+              <!-- <v-layout align-center justify-center class="ma-3 contents"> -->
+                <v-row class="ma-3">
+                <v-btn block class="grey lighten-2 mb-3" v-on:click="gitlogin"><v-icon>mdi-github</v-icon> | Signin with GitHub </v-btn>
+                </v-row>
+                <v-row class="ma-3">
+                <v-btn block class="orange accent-4 mb-3" v-on:click="gitlablogin"><v-icon>mdi-gitlab</v-icon>  GitLab</v-btn>
+                </v-row>
+              <!-- </v-layout> -->
+              </div>
+              
             </v-card>
           </v-col>
         </v-row>
@@ -44,8 +55,9 @@
 </template>
 
 <script>
+import axios from 'axios';
+import SERVER from "@/api/api";
 import { mapActions } from 'vuex'
-
 export default {
   data() {
     return {
@@ -56,10 +68,30 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['login'])
+    ...mapActions(['login']),
+    gitlablogin() {},
+    gitlogin() {
+      // axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'localhost:3000'
+      const client_id="16f1cfdb3ceb66705b57"
+      const gitapi = "https://github.com/login/oauth/authorize?client_id="+client_id+"?redirect_uri=http://192.168.0.9:3000/user/logintest/callback"
+      console.log(gitapi)
+      axios(
+        {
+          method:"get",
+          url:gitapi,
+        })
+      .then(function(res) {
+          window.location.href = res.data;
+      })
+      .catch(function(err) {
+          console.log(err)
+      })
+    }
+    },
   }
-};
+
 </script>
 
-<style>
+<style lang="scss" scoped>
+*{ text-transform: none !important; }
 </style>
