@@ -41,7 +41,7 @@
                 <v-btn block class="grey lighten-2 mb-3" v-on:click="gitlogin" ><v-icon>mdi-github</v-icon> | Signin with GitHub </v-btn>
                 </v-row>
                 <v-row class="ma-3">
-                <v-btn block class="orange accent-4 mb-3" v-on:click="gitlablogin"><v-icon>mdi-gitlab</v-icon> | Signin with GitLab</v-btn>
+                <v-btn block class="yellow accent-4 mb-3" v-on:click="kakaologin"><v-icon>mdi-message</v-icon> | Signin with Kakao </v-btn>
                 </v-row>
               <!-- </v-layout> -->
               </div>
@@ -72,7 +72,12 @@ data() {
   },
   methods: {
     ...mapActions(['login']),
-    gitlablogin() {},
+    kakaologin() {
+      const client_id="b360d9e7af9bd0e8769148f4b9d5af1b"
+      const kakaoapi = "https://kauth.kakao.com/oauth/authorize?client_id="+client_id+"&redirect_uri=http://localhost:3000/user/logintest/kakao/callback&response_type=code"
+     
+      window.location.href=kakaoapi
+    },
     gitlogin() {
       const client_id="16f1cfdb3ceb66705b57"
       const gitapi = "https://github.com/login/oauth/authorize?client_id="+client_id+"&redirect_uri=http://localhost:3000/user/logintest/callback&scope=user:email"

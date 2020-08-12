@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h1>Github Logging in...</h1>
+      <h1 class="display-1">Sosial Github Logging in...</h1>
   </div>
 </template>
 

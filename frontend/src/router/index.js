@@ -3,6 +3,7 @@ import Router from "vue-router";
 import store from "../store/index";
 //소셜 콜백
 import Github from "../page/user/githublogin.vue"
+import Kakao from "../page/user/kakaologin.vue"
 // 유저
 import Loginvutify from "../page/user/Loginvuetify.vue";
 import Joinvuetify from "../page/user/Joinvuetify.vue";
@@ -34,6 +35,11 @@ const routes = [
     path: "/user/logintest/callback",
     name: 'githublogin',
     component: Github,
+  },
+  {
+    path: "/user/logintest/kakao/callback",
+    name: 'kakaologin',
+    component: Kakao,
   },
   // 유저
   {
@@ -114,7 +120,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ["LOGIN", "SIGNUP", "MAIN","SEARCH", "githublogin"]; // Login 안해도 됨
+  const publicPages = ["LOGIN", "SIGNUP", "MAIN","SEARCH", "githublogin",'kakaologin']; // Login 안해도 됨
   const authPages = ["LOGIN", "SIGNUP"]; // Login 되어있으면 안됨
   const authRequired = !publicPages.includes(to.name); // 로그인 해야 함.
   const unauthRequired = authPages.includes(to.name); // 로그인 해서는 안됨
