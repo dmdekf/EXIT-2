@@ -69,8 +69,9 @@ public class BoardController {
 		List<Post> plist = new ArrayList<Post>();
 		for(Board b : list){
 			int lnt = heartDao.findHeartByBid(b.getId()+"").size();
-			//int cnt = commentDao.findByBoardIdx(b.getId()+"").size();
-			plist.add(new Post(b,lnt, 0, false));
+			int cnt = commentDao.findByBoardIdx(b.getId()+"").size();
+			System.out.println(cnt);
+			plist.add(new Post(b,lnt, cnt, false));
 		}
 		plist.sort((a,b)->b.getId()-a.getId());
 		return plist;
@@ -109,6 +110,7 @@ public class BoardController {
          int lnt = heartDao.findHeartByBid(id).size();
         // System.out.println(lnt);
          int cnt = commentDao.findByBoardIdx(id).size();
+         
          return new Post(board.get(), lnt, cnt, false);
 
       }

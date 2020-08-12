@@ -46,3 +46,12 @@ create table pimg (
     uimage varchar(3000),
     primary key (uid) 
 )charset=utf8;
+
+create table upload_file(
+    id INT NOT NULL AUTO_INCREMENT ,
+    file_name VARCHAR(255) NOT NULL UNIQUE,
+    insert_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+    size BIGINT(20) DEFAULT '0',
+    mime_type VARCHAR(255) DEFAULT '',
+    PRIMARY KEY (id)
+)charset=utf8;
