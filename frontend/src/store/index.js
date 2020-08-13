@@ -25,7 +25,7 @@ export default new Vuex.Store({
     }),
     isLoggedIn: state => !!state.token,
     
-    config: state => ({ headers: { Authorization: `Bearer ${state.token}` } })
+    // config: state => ({ headers: { Authorization: `Bearer ${state.token}` } })
   },
   mutations: {
     
@@ -98,6 +98,7 @@ export default new Vuex.Store({
             commit('SET_USER', { login_user: res.data.data.uid })
             commit('SET_STATUS', { status: res.data.status })
             getters.config
+            console.log(state.token)
             alert(state.login_user+"님 로그인 되었습니다.");
           } else {
             commit('SET_MESSAGE', "로그인해주세요.")
@@ -111,14 +112,14 @@ export default new Vuex.Store({
         });
       router.push({ name: "MAIN" })
     },
-    sociallogin({ commit, getters }, gitemail) {
-      console.log(gitemail)
+    sociallogin({ commit, getters }, email) {
+      console.log(email)
       axios
         ({
           method: 'post',
           url: SERVER.URL + "/user/socialsignin",
           data: {
-            email: gitemail
+            email: email
           }
     })
         // console.log(res.data)
@@ -136,19 +137,39 @@ export default new Vuex.Store({
             alert("입력 정보를 확인하세요.");
           }
         })
-        .catch(e => {
-          
-          console.log(e.response.data)
-          alert(e.response.data.data+ "입력 정보를 확인하세요.");
-        });
-      router.push({ name: "MAIN" })
+        .catch(function (error) {
+          if (error.response) {
+            // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            alert(error.response.data.data+ "입력 정보를 확인하세요.");
+          }
+          else if (error.request) {
+            // 요청이 이루어 졌으나 응답을 받지 못했습니다.
+            // `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는
+            // Node.js의 http.ClientRequest 인스턴스입니다.
+            console.log(error.request);
+            alert(error.request+ "입력 정보를 확인하세요.");
+          }
+          else {
+            // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
+            console.log('Error', );
+            alert(error.message+ "입력 정보를 확인하세요.");
+          }
+        })
+        .then(
+          router.push({ name: "MAIN" })
+        )
+      
     },
     logout({ commit }) {
-      commit('SET_TOKEN', { token: null })
-      commit('SET_EMAIL', { user_email: null })
-      commit('SET_USER', { login_user: null})
-      commit('SET_STATUS', { status: null })  
-      
+      console.log(state.token)
+      commit('SET_TOKEN', { token: "" })
+      commit('SET_EMAIL', { user_email: "" })
+      commit('SET_USER', { login_user: ""})
+      commit('SET_STATUS', { status: "" }) 
+      console.log(state.token)
       router.push({ name: "MAIN" })
     }
   },

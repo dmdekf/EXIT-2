@@ -11,6 +11,7 @@ export default {
         ...mapActions(['logout'])
     },
     created() {
+        this.$store.replaceState(null)
         this.logout()
     }
 }

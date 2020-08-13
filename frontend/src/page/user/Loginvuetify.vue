@@ -71,12 +71,15 @@ data() {
     ...mapActions(['login']),
     kakaologin() {
       const client_id=process.env.VUE_APP_KAKAO
-      const kakaoapi = "https://kauth.kakao.com/oauth/authorize?client_id="+client_id+"&redirect_uri=http://i3a501.p.ssafy.io/user/logintest/kakao/callback&response_type=code"
+            // const redirect_uri="http://i3a501.p.ssafy.io/user/logintest/kakao/callback"
+      const redirect_uri="http://localhost:3000/user/logintest/kakao/callback"
+      const kakaoapi = "https://kauth.kakao.com/oauth/authorize?client_id="+client_id+"&redirect_uri="+redirect_uri+"&response_type=code"
      
       window.location.href=kakaoapi
     },
     gitlogin() {
       const client_id=process.env.VUE_APP_GIT
+
       const gitapi = "https://github.com/login/oauth/authorize?client_id="+client_id+"&redirect_uri=http://i3a501.p.ssafy.io/user/logintest/callback&scope=user:email"
      
       window.location.href=gitapi
