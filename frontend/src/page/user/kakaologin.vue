@@ -51,7 +51,7 @@ export default {
       ...mapActions(['sociallogin']),
       postcode() {
         const client_id=process.env.VUE_APP_KAKAO
-        const redirect_uri="http://localhost:3000/user/logintest/kakao/callback"
+        const redirect_uri="http://i3a501.p.ssafy.io:3000/user/logintest/kakao/callback"
         axios({
           method:"POST",
           url:'https://kauth.kakao.com/oauth/token?',
