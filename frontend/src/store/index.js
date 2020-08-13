@@ -129,17 +129,17 @@ export default new Vuex.Store({
             commit('SET_TOKEN', { token: res.headers["jwt-auth-token"] })
             commit('SET_EMAIL', { user_email: res.data.data.email })
             commit('SET_USER', { login_user: res.data.data.uid })
-            commit('SET_STATUS', { status: "True" })
+            commit('SET_STATUS', { status: res.data.data.status })
             getters.config
             alert(state.login_user+"님 로그인 되었습니다.");
           } else {
-            commit('SET_MESSAGE', "로그인해주세요.")
             alert("입력 정보를 확인하세요.");
           }
         })
         .catch(e => {
           
           console.log(e.response.data)
+          alert(e.response.data.data+ "입력 정보를 확인하세요.");
         });
       router.push({ name: "MAIN" })
     },

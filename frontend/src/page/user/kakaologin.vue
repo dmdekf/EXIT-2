@@ -16,12 +16,12 @@
             cols="12"
           >
           <div class="text-h2"> 
-            Github Logging in...
+            Kakao Logging in...
           </div>
           </v-col>
           <v-col cols="6">
             <v-progress-linear
-              color="grey lighten-2"
+              color="yellow accent-4"
               indeterminate
               rounded
               height="6"
@@ -34,52 +34,61 @@
   </div>
 </template>
 
-<script>
+<script >
 import axios from 'axios';
 import SERVER from "@/api/api";
 import { mapActions } from 'vuex'
 export default {
-    name:"Github",
+    name:"Kakao",
     data: () => {
         return {
             code:"",
-            token:""
+            token:"",
+            refresh_token:""
         }
     },
     methods:{
       ...mapActions(['sociallogin']),
       postcode() {
-        const client_id=process.env.VUE_APP_GIT
-        const client_secret=process.env.VUE_APP_GITSECERET
+        const client_id=process.env.VUE_APP_KAKAO
+        const redirect_uri="http://i3a501.p.ssafy.io:3000/user/logintest/kakao/callback"
         axios({
           method:"POST",
-          url:'https://github.com/login/oauth/access_token?',
-          headers: {'Accept': 'application/json'},
-          params: {'client_id': client_id, 'client_secret': client_secret,'code':this.code},
+          url:'https://kauth.kakao.com/oauth/token?',
+          headers: {'content-type':'application/x-www-form-urlencoded; charset=utf-8'},
+          params: {"grant_type":"authorization_code",'client_id': client_id, 'redirect_uri': redirect_uri,'code':this.code},
         })
-        .then((res) => {
+        .then(async (res) => {
+          console.log(res.data.access_token)
           this.token=res.data.access_token
-          axios({
+          this.refresh_token=res.data.refresh_token
+          console.log(this.token)
+          if (this.token) {
+          await axios({
             method:"GET",
-            url:"https://api.github.com/user/public_emails",
+            url:"https://cors-anywhere.herokuapp.com/https://kapi.kakao.com/v2/user/me",
             headers:{
-              "Authorization" : 'token '+this.token
-            }
-              })
+              "Authorization":'bearer ' + this.token,
+              "Content-type": 'application/x-www-form-urlencoded;charset=utf-8'
+            },
+          })
           .then((res)=> {
-            var email = res.data[0].email
+            var email = res.data.kakao_account.email
             this.sociallogin(email)
-        })
+          })
+          .catch(function(err) {
+            console.log(err.response.data)
+            alert(err.response.data)
+          })
+          }
         })
         .catch(function(err) {
-          //백단 서버에 api 로 토큰과 이메일 데이터를 넘겨주고 로그인 된 페이지로 이동하기.
-            console.log(err)
+            console.log(err.response.data)
         })
-      }
-    },
+        },        
+      },
     created() {
       this.code = this.$route.query.code
-      console.log(this.code)
     },
     beforeMount() {
       this.postcode()

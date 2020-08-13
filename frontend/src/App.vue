@@ -9,8 +9,9 @@
         color="teal lighten-3"
         dark
       > 
-        <v-btn text to="/"><v-toolbar-title color="green">
-          비상구</v-toolbar-title>
+      <v-icon class="mr-2" large>mdi-code-tags</v-icon>
+        <v-btn color="#3DBB3D" to="/"><v-toolbar-title color="white">
+          EXIT</v-toolbar-title>
         </v-btn>
         <v-spacer></v-spacer>
         <div v-if="isLoggedIn">
