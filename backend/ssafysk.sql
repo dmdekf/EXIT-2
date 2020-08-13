@@ -46,3 +46,9 @@ create table pimg (
     uimage varchar(3000),
     primary key (uid) 
 )charset=utf8;
+
+create table taglist (
+    bid int(11) unsigned not null,
+    tag varchar(128) not null, 
+    primary key (bid, tag)
+)charset=utf8;

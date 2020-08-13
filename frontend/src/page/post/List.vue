@@ -91,7 +91,9 @@ export default {
             axios.get(SERVER.URL+"/feature/board/list/")
             .then((res)=>{
                     if(res.data) {
-                        this.posts = res.data}
+                        this.posts = res.data;
+                        
+                    }
             })
             .catch((err) => console.error(err));
             this.getPhotos()

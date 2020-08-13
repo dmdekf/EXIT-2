@@ -18,7 +18,7 @@ import List from "../page/post/List.vue";
 import Write from "../page/post/Write.vue";
 import WriteComplete from "../page/post/WriteComplete.vue";
 import postDetail from "../page/post/Detail.vue";
-import postUpdate from "../page/post/Update.vue"
+import postUpdate from "../page/post/Update.vue";
 //검색
 import Search from "../views/search/Search.vue";
 Vue.use(Router);

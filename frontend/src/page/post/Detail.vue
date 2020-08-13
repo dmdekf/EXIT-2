@@ -93,10 +93,10 @@
                         {{comment.writer}}
                     </div>
                 </div>
-            </v-row>
-            <v-row class="ma-4">
-                {{comment.content}}
-            </v-row>
+                </v-row>
+                <v-row class="ma-4">
+                    {{comment.content}}
+                </v-row>
                 
                 <hr/> 
             </div> 
@@ -136,6 +136,8 @@ export default {
             inputComment:'',
             uid:'',//글작성자
             login_user:'',
+            boardIdx:"",
+            idx:"",
         }
     },
     mounted(){
@@ -177,7 +179,7 @@ export default {
                 }).then((res)=>{
                     if(res.data){
                         console.log(res.data);
-                        this.comments = res.data;                            
+                        this.comments = res.data;
                     }
                 }).catch((err) => console.error(err));
         },
@@ -190,8 +192,8 @@ export default {
                 url: SERVER.URL+"/feature/comment/list/detail/comments/"+postId+"/write",
                 data: {
                         boardIdx:postId,
-                        content:this.inputComment,
-                        writer:this.login_user
+                       content:this.inputComment,
+                        writer:this.login_user,
                     },
             })
             .then((res) => { 
@@ -199,7 +201,7 @@ export default {
                 alert("댓글 작성 성공~");
                 this.comments.push(res.data)
             })
-            .catch((err) => console.log(err.response.data));
+            .catch((err) => console.log(err.response.data))
         },
         reset () {
             this.$refs.forminput.reset()
