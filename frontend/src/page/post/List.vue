@@ -24,7 +24,7 @@
                                 {{post.subject}}
                             </h3>
                             <hr/> 
-                            <p v-html="contentList">{{getContent(post.id)}}</p>
+                            <p v-html=post.content class="content">{{post.content}}</p>
 
                             <small class="date">{{ moment(post.created).locale('ko-kr').format("LLLL")}}</small>
                             
