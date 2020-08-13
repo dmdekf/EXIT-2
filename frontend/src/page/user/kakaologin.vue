@@ -1,6 +1,36 @@
 <template>
   <div>
-      <h1 class="display-1">Sosial Kakao Logging in...</h1>
+    <v-app id="inspire">
+    <v-card
+      class="mx-auto my-10"
+      max-width="1000px"
+    >
+      <v-container style="height: 600px;">
+        <v-row
+          class="fill-height"
+          align-content="center"
+          justify="center"
+        >
+          <v-col
+            class="subtitle-1 text-center mb-5"
+            cols="12"
+          >
+          <div class="text-h2"> 
+            Kakao Logging in...
+          </div>
+          </v-col>
+          <v-col cols="6">
+            <v-progress-linear
+              color="yellow accent-4"
+              indeterminate
+              rounded
+              height="6"
+            ></v-progress-linear>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
+  </v-app>
   </div>
 </template>
 
@@ -8,7 +38,6 @@
 import axios from 'axios';
 import SERVER from "@/api/api";
 import { mapActions } from 'vuex'
-
 export default {
     name:"Kakao",
     data: () => {
@@ -21,7 +50,7 @@ export default {
     methods:{
       ...mapActions(['sociallogin']),
       postcode() {
-        const client_id="b360d9e7af9bd0e8769148f4b9d5af1b"
+        const client_id=process.env.VUE_APP_KAKAO
         const redirect_uri="http://localhost:3000/user/logintest/kakao/callback"
         axios({
           method:"POST",
@@ -40,33 +69,26 @@ export default {
             url:"https://cors-anywhere.herokuapp.com/https://kapi.kakao.com/v2/user/me",
             headers:{
               "Authorization":'bearer ' + this.token,
-              "Access-Control-Allow-Origin": 'http://localhost:3000',
-              "Access-Control-Allow-Headers" : '*',
               "Content-type": 'application/x-www-form-urlencoded;charset=utf-8'
             },
           })
           .then((res)=> {
-              console.log(res.data.kakao_account.email)
             var email = res.data.kakao_account.email
             this.sociallogin(email)
           })
           .catch(function(err) {
-          //백단 서버에 api 로 토큰과 이메일 데이터를 넘겨주고 로그인 된 페이지로 이동하기.
             console.log(err.response.data)
             alert(err.response.data)
           })
           }
         })
         .catch(function(err) {
-          //백단 서버에 api 로 토큰과 이메일 데이터를 넘겨주고 로그인 된 페이지로 이동하기.
             console.log(err.response.data)
         })
-        }
-        
+        },        
       },
     created() {
       this.code = this.$route.query.code
-      console.log(this.code)
     },
     beforeMount() {
       this.postcode()

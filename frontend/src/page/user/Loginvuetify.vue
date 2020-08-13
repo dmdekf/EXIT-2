@@ -58,10 +58,6 @@
 import axios from 'axios';
 import SERVER from "@/api/api";
 import { mapActions } from 'vuex'
-const client_id="16f1cfdb3ceb66705b57"
-const redirect_uri="http://localhost:3000/user/logintest/callback"
-const gitapi = "https://github.com/login/oauth/auhorize?client_id="+client_id+"?redirect_uri=http://localhost:3000/user/logintest/callback"
-      
 export default {
 data() {
     return {
@@ -74,13 +70,13 @@ data() {
   methods: {
     ...mapActions(['login']),
     kakaologin() {
-      const client_id="b360d9e7af9bd0e8769148f4b9d5af1b"
+      const client_id=process.env.VUE_APP_KAKAO
       const kakaoapi = "https://kauth.kakao.com/oauth/authorize?client_id="+client_id+"&redirect_uri=http://localhost:3000/user/logintest/kakao/callback&response_type=code"
      
       window.location.href=kakaoapi
     },
     gitlogin() {
-      const client_id="16f1cfdb3ceb66705b57"
+      const client_id=process.env.VUE_APP_GIT
       const gitapi = "https://github.com/login/oauth/authorize?client_id="+client_id+"&redirect_uri=http://localhost:3000/user/logintest/callback&scope=user:email"
      
       window.location.href=gitapi
