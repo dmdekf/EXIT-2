@@ -52,3 +52,11 @@ create table taglist (
     tag varchar(128) not null, 
     primary key (bid, tag)
 )charset=utf8;
+
+create table bimg(
+id int(11) unsigned NOT NULL AUTO_INCREMENT,
+bid int(11) unsigned NOT NULL,
+uimage varchar(3000) NOT NULL,
+primary key(id)
+)charset=utf8;
+
