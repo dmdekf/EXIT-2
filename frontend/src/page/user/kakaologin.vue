@@ -4,10 +4,11 @@
   </div>
 </template>
 
-<script>
+<script >
 import axios from 'axios';
 import SERVER from "@/api/api";
 import { mapActions } from 'vuex'
+
 export default {
     name:"Kakao",
     data: () => {
@@ -28,35 +29,41 @@ export default {
           headers: {'content-type':'application/x-www-form-urlencoded; charset=utf-8'},
           params: {"grant_type":"authorization_code",'client_id': client_id, 'redirect_uri': redirect_uri,'code':this.code},
         })
-        .then((res) => {
-            console.log(res.data.access_token)
+        .then(async (res) => {
+          console.log(res.data.access_token)
           this.token=res.data.access_token
           this.refresh_token=res.data.refresh_token
           console.log(this.token)
-          axios({
+          if (this.token) {
+          await axios({
             method:"GET",
-            url:"https://kapi.kakao.com/v2/user/me",
+            url:"https://cors-anywhere.herokuapp.com/https://kapi.kakao.com/v2/user/me",
             headers:{
-              "Authorization":"Bearer " + this.token
+              "Authorization":'bearer ' + this.token,
+              "Access-Control-Allow-Origin": 'http://localhost:3000',
+              "Access-Control-Allow-Headers" : '*',
+              "Content-type": 'application/x-www-form-urlencoded;charset=utf-8'
             },
-              })
-              console.log("DDDD"+this.token)
+          })
           .then((res)=> {
-              console.log(res)
-            // var email = res.data[0].email
-            // this.sociallogin(email)
+              console.log(res.data.kakao_account.email)
+            var email = res.data.kakao_account.email
+            this.sociallogin(email)
+          })
           .catch(function(err) {
           //백단 서버에 api 로 토큰과 이메일 데이터를 넘겨주고 로그인 된 페이지로 이동하기.
-            console.log(err.data)
-        })
-        })
+            console.log(err.response.data)
+            alert(err.response.data)
+          })
+          }
         })
         .catch(function(err) {
           //백단 서버에 api 로 토큰과 이메일 데이터를 넘겨주고 로그인 된 페이지로 이동하기.
-            console.log(err.data)
+            console.log(err.response.data)
         })
-      }
-    },
+        }
+        
+      },
     created() {
       this.code = this.$route.query.code
       console.log(this.code)

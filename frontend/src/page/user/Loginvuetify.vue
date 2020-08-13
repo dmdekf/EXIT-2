@@ -59,7 +59,8 @@ import axios from 'axios';
 import SERVER from "@/api/api";
 import { mapActions } from 'vuex'
 const client_id="16f1cfdb3ceb66705b57"
-const gitapi = "https://github.com/login/oauth/auhorize?client_id="+client_id+"?redirect_uri=http://192.168.0.9:3000/user/logintest/callback"
+const redirect_uri="http://localhost:3000/user/logintest/callback"
+const gitapi = "https://github.com/login/oauth/auhorize?client_id="+client_id+"?redirect_uri=http://localhost:3000/user/logintest/callback"
       
 export default {
 data() {
