@@ -24,7 +24,7 @@
                                 {{post.subject}}
                             </h3>
                             <hr/> 
-                            <div class="content" >{{post.content}}</div>
+                            <p class="content">{{post.content.replace(/(<([^>]+)>|{})/ig,"")}}</p>
 
                             <small class="date">{{ moment(post.created).locale('ko-kr').format("LLLL")}}</small>
                             
@@ -64,19 +64,14 @@ export default {
             list:[],
             photos: [],
             limit:0,
-            contentList:"",
         }
     },
     components:{
         InfiniteLoading,
     },
-    create(){
-        
-    },
     mounted(){
         this.getPosts()
     },
-    
     methods: {
         getPhotos: function () {
         axios
@@ -122,18 +117,6 @@ export default {
                 }
             }, 500 )
             this.getPhotos();
-        },
-        getContent(boardNum){
-            axios
-            .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+boardNum)
-            .then((res) => {
-                console.log(res.data);
-                let linecontent = res.data.content.replace(/(?:\r\n|\r|\n)/g, '<br />')
-                this.contentList = linecontent.replace(/(<([^>]+)>|{})/ig,"");
-                
-                return this.contentList;
-            })
-            .catch((err) => console.error(err));
         }
     },
 }
