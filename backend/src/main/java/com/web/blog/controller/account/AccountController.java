@@ -138,6 +138,43 @@ public class AccountController {
 		}
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
+	
+	@PostMapping("/user/socialsignin")
+	public ResponseEntity<Map<String, Object>> socialsignin(@RequestBody String email, HttpServletResponse res) {
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = null;
+		System.out.println(email); 
+		String email2 = email.substring(email.indexOf("+")+1).trim();
+		System.out.println(email2);
+		String uid = email2.substring(0,email2.indexOf("@"));
+		uid = uid.length()>8?uid.substring(0, 9):uid;
+		System.out.println(uid);
+		Optional<User> u = userDao.findUserByUidOrEmail(uid, email2);
+		if(u.isPresent()) {
+			String token = jwtService.create(u.get());
+			res.setHeader("jwt-auth-token", token);
+			resultMap.put("status", true);
+			resultMap.put("data", u.get());
+			status = HttpStatus.ACCEPTED;
+		}else {
+			User user = new User(uid,null, email2, null,"Y");
+			try {
+				userDao.save(user);
+				String token = jwtService.create(user);
+				res.setHeader("jwt-auth-token", token);
+				resultMap.put("status", true);
+				resultMap.put("data", user);
+				status = HttpStatus.ACCEPTED;
+			}catch(Exception e) {
+				resultMap.put("status", false);
+				resultMap.put("data", "중복된 메일입니다. ");
+				status = HttpStatus.BAD_REQUEST;
+			}
+			
+		}
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
+	}
+	
 	@PostMapping("/user/info")
 	public ResponseEntity<Map<String, Object>> getInfo(HttpServletRequest req, @RequestBody User user) {
 		Map<String, Object> resultMap = new HashMap<>();

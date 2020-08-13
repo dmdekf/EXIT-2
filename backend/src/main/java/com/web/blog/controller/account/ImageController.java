@@ -52,10 +52,11 @@ public class ImageController {
 			return response;
 		}
 		try {
-			file.transferTo(new File("c:/img/"+uid+file.getOriginalFilename()));
-			pimgDao.save(new Pimg(uid,"c:/img"+uid+file.getOriginalFilename()));
+			file.transferTo(new File("C:\\Users\\multicampus\\Desktop\\s03p13a501\\frontend\\src\\assets\\img\\pimg\\"+uid+file.getOriginalFilename()));
+			Pimg p = pimgDao.save(new Pimg(uid,uid+file.getOriginalFilename()));
 			result.status = true;
 			result.data = "success";
+			//result.object = p;
 			response = new ResponseEntity<>(result,HttpStatus.OK);
 		}catch(Exception e) {
 			System.out.println("에러");

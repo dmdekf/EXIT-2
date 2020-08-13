@@ -1,6 +1,7 @@
 package com.web.blog.controller.account;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.dao.user.CommentDao;
-import com.web.blog.model.user.Board;
 import com.web.blog.model.user.Comment;
 
 import io.swagger.annotations.ApiOperation;
@@ -51,7 +51,11 @@ public Comment writeComment(@RequestBody Comment comment ,@PathVariable("id") in
     //board = new Board(0, "test", "test", null, 0, "unknown", 300);
 //    comment.setBoardIdx(id);
 	System.out.println(comment.toString());
-    return commentDao.save(comment);
+	comment.setDeleteYn("N");
+	comment.setInsertTime(new Date());
+	Comment com = commentDao.save(comment);
+	System.out.println(com);
+    return com;
 }
 
 @ApiOperation(value = "게시글번호에 해당하는 게시글의 정보를 삭제한다.", response = String.class)    
