@@ -24,7 +24,7 @@
                                 {{post.subject}}
                             </h3>
                             <hr/> 
-                            <p v-html=post.content class="content">{{post.content}}</p>
+                            <div class="content" >{{post.content}}</div>
 
                             <small class="date">{{ moment(post.created).locale('ko-kr').format("LLLL")}}</small>
                             
@@ -64,7 +64,7 @@ export default {
             list:[],
             photos: [],
             limit:0,
-            contentList:'',
+            contentList:"",
         }
     },
     components:{
@@ -128,11 +128,9 @@ export default {
             .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+boardNum)
             .then((res) => {
                 console.log(res.data);
-                const linecontent = res.data.content.replace(/(?:\r\n|\r|\n)/g, '<br />')
+                let linecontent = res.data.content.replace(/(?:\r\n|\r|\n)/g, '<br />')
+                this.contentList = linecontent.replace(/(<([^>]+)>|{})/ig,"");
                 
-                linecontent = "<div v-html="+linecontent+"></div>"
-                this.contentList = linecontent
-
                 return this.contentList;
             })
             .catch((err) => console.error(err));
