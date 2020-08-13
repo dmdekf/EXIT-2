@@ -24,7 +24,7 @@
                                 {{post.subject}}
                             </h3>
                             <hr/> 
-                            <p class="content">{{post.content}}</p>
+                            <p v-html="contentList">{{getContent(post.id)}}</p>
 
                             <small class="date">{{ moment(post.created).locale('ko-kr').format("LLLL")}}</small>
                             
@@ -64,10 +64,14 @@ export default {
             list:[],
             photos: [],
             limit:0,
+            contentList:'',
         }
     },
     components:{
         InfiniteLoading,
+    },
+    create(){
+        
     },
     mounted(){
         this.getPosts()
@@ -119,6 +123,20 @@ export default {
             }, 500 )
             this.getPhotos();
         },
+        getContent(boardNum){
+            axios
+            .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+boardNum)
+            .then((res) => {
+                console.log(res.data);
+                const linecontent = res.data.content.replace(/(?:\r\n|\r|\n)/g, '<br />')
+                
+                linecontent = "<div v-html="+linecontent+"></div>"
+                this.contentList = linecontent
+
+                return this.contentList;
+            })
+            .catch((err) => console.error(err));
+        }
     },
 }
 </script>
