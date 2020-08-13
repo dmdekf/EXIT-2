@@ -73,31 +73,12 @@ data() {
   methods: {
     ...mapActions(['login']),
     gitlablogin() {},
-   
     gitlogin() {
       const client_id="16f1cfdb3ceb66705b57"
       const gitapi = "https://github.com/login/oauth/authorize?client_id="+client_id+"&redirect_uri=http://localhost:3000/user/logintest/callback&scope=user:email"
      
       window.location.href=gitapi
-    
-    },
-    gitlogin0() {
-      // axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'localhost:3000'
-      const client_id="16f1cfdb3ceb66705b57"
-      const gitapi = "https://github.com/login/oauth/authorize?client_id="+client_id+"&redirect_uri=http://localhost:3000/user/logintest/callback&scope=user:email"
-      console.log(gitapi)
-      axios(
-        {
-          method:"get",
-          url:gitapi,
-        })
-      .then(function(res) {
-          window.location.href = res.data;
-      })
-      .catch(function(err) {
-          console.log(err)
-      })
-    },
+    },  
   } 
 }
 </script>

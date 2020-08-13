@@ -51,11 +51,16 @@ public Comment writeComment(@RequestBody Comment comment ,@PathVariable("id") in
     //board = new Board(0, "test", "test", null, 0, "unknown", 300);
 //    comment.setBoardIdx(id);
 	System.out.println(comment.toString());
+<<<<<<< HEAD
 	comment.setDeleteYn("N");
 	comment.setInsertTime(new Date());
 	Comment com = commentDao.save(comment);
 	System.out.println(com);
     return com;
+=======
+	comment.setInsertTime(new Date());
+    return commentDao.save(comment);
+>>>>>>> 8bb95985d721cea6cfa72973c8321ee1aa52f42d
 }
 
 @ApiOperation(value = "게시글번호에 해당하는 게시글의 정보를 삭제한다.", response = String.class)    

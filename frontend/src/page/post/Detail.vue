@@ -75,25 +75,22 @@
             </v-text-field>
             </v-form>
         </div>
-         <div v-for="(comment, idx) in reverseComments" :key="idx">
+         <div v-for="(comment, index) in reverseComments" :key="index">
             <div class="contents"> 
             <v-row justify="space-between" class="ma-2" >
-                <div>
-                    <small>{{ moment(comment.insertTime).locale('ko-kr').startOf('day').fromNow()}}</small>
+                <div># {{reverseComments.length-index}}번째 댓글
+                    <small>{{ moment(comment.insertTime).locale('ko-kr').fromNow()}}</small>
                 </div>
                 <div>
-                    
-                    <div>
-                        <div v-if="(comment.writer)===login_user">
-                            <v-btn  v-on:click="deleteComment(comment.idx)" icon color="red">
-                                <v-icon>mdi-trash-can-outline</v-icon>삭제
-                            </v-btn>
-                        </div>
-                        <div v-else>
-                            <v-btn icon>
-                            <v-icon>mdi-account-outline</v-icon></v-btn>
-                            {{comment.writer}}
-                        </div>
+                    <div v-if="(comment.writer)===login_user">
+                        <v-btn  v-on:click="deleteComment(index,comment.idx)" icon color="red">
+                            <v-icon>mdi-trash-can-outline</v-icon>삭제
+                        </v-btn>
+                    </div>
+                    <div v-else>
+                        <v-btn icon>
+                        <v-icon>mdi-account-outline</v-icon></v-btn>
+                        {{comment.writer}}
                     </div>
                 </div>
                 </v-row>
@@ -209,16 +206,18 @@ export default {
         reset () {
             this.$refs.forminput.reset()
             },
-        deleteComment(commentidx) {
-            console.log(commentidx)
+        deleteComment(index,commentidx) {
+            console.log(index, commentidx)
+            var idx = this.comments.length-index-1
             axios({
                 method: "DELETE",
                 url: SERVER.URL+"/feature/comment/list/detail/comments/"+commentidx,
             })
-            .then((res) => {
-                alert("댓글 삭제 성공~");
+                         .then((res) => { 
+            this.comments.splice(idx, 1)
+            alert("댓글 삭제 성공~");
             })
-            .catch((err) => console.log(err.response.data));
+            .catch((err) => console.log(err));
         },
     },
     created() {
@@ -236,6 +235,9 @@ export default {
             })
             .catch((err) => console.error(err));
     },
+    beforeUpdate() {
+
+    }
 }
 </script>
 

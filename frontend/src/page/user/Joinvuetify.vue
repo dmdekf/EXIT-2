@@ -36,7 +36,7 @@
 
                     <v-text-field
                       v-model="password"
-                      :rules="[rules.required, rules.min]"
+                      :rules="[rules.required]"
                       :type="show ? 'text' : 'password'"
                       name="password"
                       label="비밀번호를 입력해 주세요"
@@ -49,7 +49,6 @@
                       v-model="passwordConfirm"
                       :rules="[
                         rules.required,
-                        rules.min,
                         passwordConfirmationRule,
                       ]"
                       :type="show1 ? 'text' : 'password'"
@@ -125,13 +124,13 @@ export default {
       checkbox: false,
       rules: {
         nameRules: [
-          (v) => !!v || "Name is required",
+          (v) => !!v || "닉네임을 입력해 주세요.",
           (v) =>
-            (v && v.length <= 10) || "Name must be less than 10 characters",
+            (v && v.length <= 10) || "닉네임은 10글자 이하여야 합니다.",
         ],
         emailRules: [
           (v) => !!v || "E-mail is required",
-          (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+          (v) => /.+@.+\..+/.test(v) || "E-mail 형식을 맞춰주세요.",
         ],
       },
       nickName: "",

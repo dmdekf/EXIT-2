@@ -64,7 +64,7 @@ import { mapState, mapGetters } from 'vuex'
 import axios from "axios";
 
 export default {
-  naem: 'App',
+  name: 'App',
   computed: {
     ...mapGetters(['isLoggedIn']),
   },
