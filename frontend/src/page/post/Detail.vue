@@ -26,7 +26,7 @@
                 </div>
                 <div>
                     <div v-if="(uid)===this.$store.state.login_user">
-                    <v-btn  v-on:click=updatePost(id)>
+                    <v-btn  v-on:click="updatePost(id)">
                         <v-icon>mdi-playlist-edit</v-icon>글 수정하기
                     </v-btn>
                     </div>
@@ -44,9 +44,14 @@
         <v-card min-height="300">
         <v-card-text >
             <div v-html="content">{{content}}</div>
-            
+        </v-card-text>
+        <v-card-text>
+            <span v-for="(tagl, idx) in tags" :key="idx">
+                <strong><span class="mr-2">#{{tagl.tag}}</span></strong>
+            </span>
         </v-card-text>
         </v-card>
+        
         <hr>
         
         <div>
@@ -99,6 +104,7 @@
                 </v-row>
                 
                 <hr/> 
+
             </div> 
         </div>
         </v-card>
@@ -126,6 +132,8 @@ export default {
             content: '',
             created: '',
             likestatus:false,
+            tags:[],
+            taglist:[],
             comments:[],
             rules: [
                 value => !!value || '내용을 입력해 주세요',
@@ -142,6 +150,7 @@ export default {
     },
     mounted(){
         this.getComments();
+        this.getTags();
     },
     computed:{
         reverseComments() {
@@ -171,6 +180,18 @@ export default {
                     }else{
                     }
                 })
+        },
+        getTags(){
+            axios({
+            method:"get",
+            url:SERVER.URL+"/searchBoard/"+this.id,
+                }).then((res)=>{
+                    if(res.data){
+                        console.log(res.data);
+                        this.tags = res.data.object;
+                        this.taglist = this.tags.tag;
+                    }
+                }).catch((err) => console.error(err));
         },
         getComments(){
             axios({
@@ -232,6 +253,7 @@ export default {
                 this.likestatus = res.data.ilike
                 this.uid = res.data.uid
                 this.login_user = this.$store.state.login_user
+                this.tags = res.data.object.tag;
             })
             .catch((err) => console.error(err));
     },
@@ -240,4 +262,3 @@ export default {
     }
 }
 </script>
-

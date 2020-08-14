@@ -32,7 +32,7 @@ public class TagController {
 	BoardDao boardDao;
 
 	@ApiOperation(value = "태그 입력 반환한다.", response = List.class)
-	@GetMapping("/tag/{bid}/{tag}")
+	@GetMapping("/insert/tag/{bid}/{tag}")
 	public Object like(@PathVariable int bid, @PathVariable String tag) throws Exception {
 
 		Optional<Board> board = boardDao.findById(bid);
@@ -56,9 +56,9 @@ public class TagController {
 		}
 		return response;
 	}
-
+ 
 	@ApiOperation(value = "tag 지우기", response = List.class)
-	@DeleteMapping("/tag/{bid}/{tag}")
+	@DeleteMapping("/delete/tag/{bid}/{tag}")
 	public Object countLike(@PathVariable int bid, @PathVariable String tag) throws Exception {
 		Optional<Taglist> t = tagDao.findById(new TagPK(bid, tag));
 		ResponseEntity response = null;

@@ -3,7 +3,7 @@
     <v-app id="inspire">
       <v-row>
         <v-col>
-          <v-card class="elevation-12">
+          <v-card class="elevation-12" >
             <v-toolbar color="primary" dark flat>
                   <v-toolbar-title>글 작성</v-toolbar-title>
               <v-spacer></v-spacer>
@@ -152,7 +152,9 @@
               <editor-content class="editor__content" 
                 :editor="editor"
                 />
-                <p>{{content}}</p>
+                <!-- <p>{{content}}</p> -->
+
+                <!-- Input hashtag -->
             </v-form>
             </v-card-text>
       <v-card-actions> 
@@ -200,7 +202,8 @@ export default {
     EditorMenuBar,
     Icon,
   },
-  created() {},
+  created() {
+  },
   methods: {
     moveList() {
       this.$router.push("/");
@@ -217,6 +220,7 @@ export default {
           content:this.content,
           email:this.email,
           uid:this.uid,
+          tag:this.tag,
         },
       })
         .then((res) => { 
@@ -253,7 +257,6 @@ export default {
       this.editor.focus()
     },
   },
-
   watch: {},
   data() {
     return {
@@ -263,13 +266,16 @@ export default {
       hit:'',
       uid:'',
       content: '',
+      tag:'',
       editor:null,
+      tags:[],
     }
   },
   beforeDestroy() {
     this.editor.destroy()
   },
   mounted(){
+
     this. editor = new Editor({
         extensions: [
           new Blockquote(),
@@ -291,32 +297,13 @@ export default {
           new History(),
         ],
         content: `
-          <h2>
-            Hi there,
-          </h2>
-          <p>
-            this is a very <em>basic</em> example of tiptap.
-          </p>
-          <pre><code>body { display: none; }</code></pre>
-          <ul>
-            <li>
-              A regular list
-            </li>
-            <li>
-              With regular items
-            </li>
-          </ul>
-          <blockquote>
-            It's amazing
-            <br />
-            – mom
-          </blockquote>
+          <h3>Write here!<h3>
         `,
         onUpdate: ({ getHTML }) => {
           this.content = getHTML()
         },
     })
-  }
+  },
 }
 </script>
 <style lang="scss" scope>
@@ -367,5 +354,22 @@ symbol {
     display: none;
   }
 }
-  
+.tag-editor, .tag-input, .tag-list {
+  padding: 10px;
+  margin: 20px;
+  border: 1px dashed red;
+}
+
+.tag-editor {
+  display: flex;
+  flex-direction: column;
+}
+
+.tag-input {
+  border-color: blue;
+}
+
+.tag-list {
+  border-color: green;
+}
 </style>

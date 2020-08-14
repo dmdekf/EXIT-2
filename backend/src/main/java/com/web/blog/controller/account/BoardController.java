@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.blog.dao.user.BoardDao;
 import com.web.blog.dao.user.CommentDao;
 import com.web.blog.dao.user.HeartDao;
+import com.web.blog.dao.user.TagDao;
 import com.web.blog.model.BasicResponse;
 import com.web.blog.model.user.Board;
 import com.web.blog.model.user.Post;
+import com.web.blog.model.user.Taglist;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -36,7 +38,8 @@ public class BoardController {
    HeartDao heartDao;
    @Autowired
    CommentDao commentDao;
-   
+   @Autowired
+   TagDao tagDao;
    
    
    @ApiOperation(value="수정하기", response = BoardController.class)
@@ -93,7 +96,14 @@ public class BoardController {
          System.out.println(ilike);
          int cnt = commentDao.findByBoardIdx(id).size();
          System.out.println(cnt);
-         return new Post(board.get(), lnt, cnt, heartDao.findHeartByBidAndUid(id, uid).isPresent());
+         System.out.println();
+         Post pp = new Post(board.get(), lnt, cnt, heartDao.findHeartByBidAndUid(id, uid).isPresent());
+         StringBuilder sb = new StringBuilder();
+         for(Taglist t : tagDao.findByBid(board.get().getId())) {
+        	 sb.append("#").append(t.getTag()).append(" ");
+         }
+         pp.setTag(sb.toString());
+         return pp;
 
       }
       return new Post(0,"삭제된 Board","",null,"","","",0,0,0,false);
@@ -101,7 +111,7 @@ public class BoardController {
 
    @ApiOperation(value = "게시글번호에 해당하는 게시글의 정보를 반환한다.", response = BoardController.class)
    @GetMapping("/list/{id}")
-   public Object detailBoard(@PathVariable String id) {
+   public Object detailBoard(@PathVariable String id) { 
       System.out.println(id);
       Optional<Board> board = boardDao.findById(Integer.parseInt(id));
       if (board.isPresent()) {

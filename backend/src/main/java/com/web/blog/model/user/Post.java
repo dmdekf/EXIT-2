@@ -106,9 +106,9 @@ public class Post {
 		this.subject = board.getSubject();
 		this.content = board.getContent();
 		this.created = board.getCreated();
-		this.uid = board.getUid();
+		this.uid = board.getUid(); 
 		this.email = board.getEmail();
-		this.tag = board.getEmail();
+		this.tag = board.getTag();
 		this.hit = board.getHit();
 		this.lnt = lnt;
 		this.cnt = cnt;
