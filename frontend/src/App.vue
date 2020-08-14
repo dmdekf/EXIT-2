@@ -80,6 +80,7 @@ export default {
       this.$router.push("/search");
     },
     },
+    
 };
 </script>
 <style scoped>
