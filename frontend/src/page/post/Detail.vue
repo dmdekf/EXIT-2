@@ -1,7 +1,17 @@
 <template>
 <div id="app">
     <v-app id="inspire">
-    <v-window>
+        <!-- <v-alert
+        v-show=alert
+        dismissible
+        text
+        fade
+        color="success"
+        v-bind="attrs"
+        >
+        댓글 작성이 성공했습니다.
+        </v-alert> -->
+        <v-window>
         <v-window-item class="my-6">
         <v-card flat>
         <v-card-title class="blue lighten-5">
@@ -52,6 +62,7 @@
         <div>
             <v-form
                 ref="form"
+                v-model="valid"
                 lazy-validation
                 onsubmit="return false" 
             >
@@ -59,6 +70,7 @@
                 ref="forminput"
                 :counter="100"
                 label="댓글 달기"
+                lazy-validation
                 :rules="rules" hide-details="auto"
                 @keypress.enter="createComment(id)"
             >
@@ -112,7 +124,8 @@
 <script>
 import axios from 'axios';
 import SERVER from "@/api/api";
-import { required, rules } from "vuelidate/lib/validators";
+import { mapState, mapActions } from 'vuex'
+import { required, rules, valid } from "vuelidate/lib/validators";
 export default {
     props:{
         id:{
@@ -144,11 +157,13 @@ export default {
         this.getComments();
     },
     computed:{
+        ...mapState(['msg', 'col']),
         reverseComments() {
             return this.comments.slice().reverse()
         }
     },
     methods: {
+        ...mapActions(['showAlert']),
         moveList(){
             this.$router.push("/");
         },            
@@ -186,22 +201,42 @@ export default {
         updatePost(postId) {
             this.$router.push({ name: "POSTUPDATE", postId })
         },
+        
         createComment(postId) {
             axios({
                 method: "post",
                 url: SERVER.URL+"/feature/comment/list/detail/comments/"+postId+"/write",
                 data: {
                         boardIdx:postId,
-                       content:this.inputComment,
+                        content:this.inputComment,
                         writer:this.login_user,
                     },
             })
             .then((res) => { 
                 console.log(res.data)
-                alert("댓글 작성 성공~");
+                this.showAlert(3)
                 this.comments.push(res.data)
             })
-            .catch((err) => console.log(err.response.data))
+            .catch(function (error) {
+            if (error.response) {
+            // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+            else if (error.request) {
+            // 요청이 이루어 졌으나 응답을 받지 못했습니다.
+            // `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는
+            // Node.js의 http.ClientRequest 인스턴스입니다.
+            console.log(error.request);
+            alert(error.request+ "입력 정보를 확인하세요.");
+            }
+            else {
+            // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
+            console.log('Error', );
+            alert(error.message+ "입력 정보를 확인하세요.");
+            }
+        })          
         },
         reset () {
             this.$refs.forminput.reset()
@@ -209,13 +244,13 @@ export default {
         deleteComment(index,commentidx) {
             console.log(index, commentidx)
             var idx = this.comments.length-index-1
+            this.showAlert(1)
             axios({
                 method: "DELETE",
                 url: SERVER.URL+"/feature/comment/list/detail/comments/"+commentidx,
             })
-                         .then((res) => { 
+                            .then((res) => { 
             this.comments.splice(idx, 1)
-            alert("댓글 삭제 성공~");
             })
             .catch((err) => console.log(err));
         },
@@ -235,9 +270,6 @@ export default {
             })
             .catch((err) => console.error(err));
     },
-    beforeUpdate() {
-
-    }
 }
 </script>
 

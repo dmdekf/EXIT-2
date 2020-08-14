@@ -1,7 +1,9 @@
 <template>
 <div>
+  
   <div id="app">
     <v-app id="inspire">
+        
       <v-app-bar
       id="header"
         elevate-on-scroll
@@ -32,16 +34,16 @@
           </v-btn>
         </div>
       </v-app-bar>
-
-      <!-- <v-show=messages>
-      <v-for=message in messages>
-      <div if=message.tags class="alert alert-message.tags alert-dismissable fade show">{{ message }}
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      </div>
-      </v-for>
-      </v-if> -->
-
-        <router-view class="container my-10 mx-10px"/>
+      <v-alert
+        v-show="this.$store.state.alert.on"
+        dismissible
+        text
+        fade
+        :color="col"
+        >
+        {{msg}}
+        </v-alert>
+        <router-view class="container  mx-10px"/>
         <v-footer
           id="footer"
           app
@@ -61,13 +63,14 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import axios from "axios";
-
+let cols = ""
 export default {
   name: 'App',
   computed: {
-    ...mapGetters(['isLoggedIn']),
+    ...mapGetters(['msg', 'col']),
+    ...mapGetters(['isLoggedIn'])
   },
   methods: {
     moveDetail() {
@@ -76,12 +79,16 @@ export default {
     moveSearch(){
       this.$router.push("/search");
     },
-  },
+    },
 };
 </script>
 <style scoped>
+.v-alert {
+  transform: initial;
+  margin-bottom: 0;
+}
 #header {
-  position: fixed;
+  position: sticky;
 }
 table {
   border-collapse: collapse;

@@ -22,17 +22,142 @@
                       :counter="10"
                       required
                     >{{subject}}</v-text-field>
-                    <v-textarea
-                      v-model="content"
-                      id="content"
-                      label="content"
-                      required
-                      name="content"
-                      type="text"
-                    >{{content}}</v-textarea>
-                  </v-form>
-                </v-card-text>
-                <v-card-actions>
+                    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+                    <div class="menubar">
+                      <button
+                        class="menubar__button"
+                        :class="{ 'is-active': isActive.bold() }"
+                        @click="commands.bold"
+                      >
+                      <img class="icon" src="../../assets/img/icon/bold.svg" alt="">
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        :class="{ 'is-active': isActive.italic() }"
+                        @click="commands.italic"
+                      >
+                        <img class="icon" src="../../assets/img/icon/italic.svg" alt="">
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        :class="{ 'is-active': isActive.strike() }"
+                        @click="commands.strike"
+                      >
+                      <img class="icon" src="../../assets/img/icon/strike.svg" alt="">
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        :class="{ 'is-active': isActive.underline() }"
+                        @click="commands.underline"
+                      >
+                        <img class="icon" src="../../assets/img/icon/underline.svg" alt="">
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        :class="{ 'is-active': isActive.code() }"
+                        @click="commands.code"
+                      >
+                        <img class="icon" src="../../assets/img/icon/code.svg" alt="">
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        :class="{ 'is-active': isActive.paragraph() }"
+                        @click="commands.paragraph"
+                      >
+                      <img class="icon" src="../../assets/img/icon/paragraph.svg" alt="">
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+                        @click="commands.heading({ level: 1 })"
+                      >
+                        H1
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+                        @click="commands.heading({ level: 2 })"
+                      >
+                        H2
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+                        @click="commands.heading({ level: 3 })"
+                      >
+                        H3
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        :class="{ 'is-active': isActive.bullet_list() }"
+                        @click="commands.bullet_list"
+                      >
+                        <img class="icon" src="../../assets/img/icon/ul.svg" alt="">
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        :class="{ 'is-active': isActive.ordered_list() }"
+                        @click="commands.ordered_list"
+                      >
+                        <img class="icon" src="../../assets/img/icon/ol.svg" alt="">
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        :class="{ 'is-active': isActive.blockquote() }"
+                        @click="commands.blockquote"
+                      >
+                        <img class="icon" src="../../assets/img/icon/quote.svg" alt="">
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        :class="{ 'is-active': isActive.code_block() }"
+                        @click="commands.code_block"
+                      >
+                        <img class="icon" src="../../assets/img/icon/code.svg" alt="">
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        @click="commands.horizontal_rule"
+                      >
+                      <img class="icon" src="../../assets/img/icon/hr.svg" alt="">
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        @click="commands.undo"
+                      >
+                        <img class="icon" src="../../assets/img/icon/undo.svg" alt="">
+                      </button>
+
+                      <button
+                        class="menubar__button"
+                        @click="commands.redo"
+                      >
+                        <img class="icon" src="../../assets/img/icon/redo.svg" alt="">
+                      </button>
+
+                        </div>
+                      </editor-menu-bar>
+                      <editor-content class="editor__content" 
+                        :editor="editor"
+                        />
+                        <p>{{content}}</p>
+                    </v-form>
+                  </v-card-text>
+                  <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="lime" v-on:click="moveList">메인화면</v-btn>
                   <v-btn color="primary" v-on:click="moveUpdate()">수정하기</v-btn>
@@ -50,7 +175,35 @@
 <script>
 import axios from 'axios';
 import SERVER from "@/api/api";
+import { mapActions } from 'vuex'
+import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
+import Icon from '../../assets/img/menubar/index.vue'
+import {
+  Blockquote,
+  CodeBlock,
+  HardBreak,
+  Heading,
+  HorizontalRule,
+  OrderedList,
+  BulletList,
+  ListItem,
+  TodoItem,
+  TodoList,
+  Bold,
+  Code,
+  Italic,
+  Link,
+  Strike,
+  Underline,
+  History,
+} from 'tiptap-extensions'
+let contents=""
 export default {
+  components: {
+    EditorContent,
+    EditorMenuBar,
+    Icon,
+  },
     name:"postUpdate",
     props:{
       id:{
@@ -61,11 +214,12 @@ export default {
     data: () => {
       return {
           subject: '',
-          content: '',
           created: '',
-      }
+          content: '',
+          }
     },
     methods: {
+      ...mapActions(['showAlert']),
       moveList(){
           this.$router.push("/");
       },
@@ -82,11 +236,12 @@ export default {
         }).then((res)=>{
             var msg ;
             if(res.data.status){
-                msg = "수정이 완료되었습니다.";
+                this.showAlert(6)
                 this.$router.push("/");
+            } else {
+              this.showAlert(2)
             }
-            alert(msg);
-            this.$router.push("/");
+            
         })
       },
       deletePost(postId){
@@ -104,8 +259,30 @@ export default {
             this.$router.push("/");
         })
       },
+      clearContent() {
+      this.editor.clearContent(true)
+      this.editor.focus()
     },
-    created() {
+    setContent() {
+      // you can pass a json document
+      this.editor.setContent({
+        type: 'doc',
+        content: [{
+          type: 'paragraph',
+          content: [
+            {
+              type: 'text',
+              text: 'This is some inserted text. ',
+            },
+          ],
+        }],
+      }, true)
+      // HTML string is also supported
+      // this.editor.setContent('<p>This is some inserted text. </p>')
+      this.editor.focus()
+    },
+  },
+  created() {
       axios
           .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+this.id)
           .then((res) => {
@@ -114,7 +291,61 @@ export default {
               this.content = res.data.content;
               this.created = res.data.created;
           })
+          .then(()=>{
+            contents = this.content
+          })
           .catch((err) => console.error(err));
-    },
+    
+  },
+  watch: {},
+  data() {
+    return {
+      alert: true,
+      subject: '',
+      email:'',
+      hit:'',
+      uid:'',
+      content: '',
+      editor:null,
+    }
+  },
+  
+  mounted(){
+    this.editor = new Editor({
+        extensions: [
+          new Blockquote(),
+          new BulletList(),
+          new CodeBlock(),
+          new HardBreak(),
+          new Heading({ levels: [1, 2, 3] }),
+          new HorizontalRule(),
+          new ListItem(),
+          new OrderedList(),
+          new TodoItem(),
+          new TodoList(),
+          new Link(),
+          new Bold(),
+          new Code(),
+          new Italic(),
+          new Strike(),
+          new Underline(),
+          new History(),
+        ],
+        content: contents,
+        contents:"",
+        onUpdate: ({ getHTML }) => {
+          this.content = getHTML()
+          console.log(this.editor.content)
+          console.log(contents)
+        },
+    })
+    
+          console.log(this.editor.content)
+          console.log(contents)
+  },
+    
+  beforeDestroy() {
+    this.editor.destroy()
+  },
 }
 </script>
