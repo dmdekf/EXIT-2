@@ -14,7 +14,18 @@ export default new Vuex.Store({
     token: "",
     user_email: "",
     status: "",
-    login_user:"",
+    login_user: "",
+    alert: {
+      on: false,
+      1: { 0: "red", 1: "삭제되었습니다." },
+      2: { 0: "warning", 1: "입력정보를 확인하세요" },
+      3: { 0: "success", 1: "작성이 완료되었습니다." },
+      4: { 0: "success", 1: "로그인 되었습니다." },
+      5: { 0: "primary", 1: "로그아웃 되었습니다." },
+      6: { 0: "primary", 1:"수정이 완료되었습니다."},
+      num: 1
+    },
+    auth_token:""
   },
   plugins: [createPersistedState()],
   getters: {
@@ -22,13 +33,20 @@ export default new Vuex.Store({
     info: state => ({
       status: state.status,
       token: state.token,
+      auth_token: state.auth_token
     }),
     isLoggedIn: state => !!state.token,
-    
-    config: state => ({ headers: { Authorization: `Bearer ${state.token}` } })
+    col: state => { return state.alert[state.alert.num][0] },
+    msg: state => { return state.alert[state.alert.num][1] }
   },
   mutations: {
-    
+    SET_ON(state, { num }) {
+      state.alert.on = !state.alert.on
+      state.alert.num = num
+    },
+    SET_AUTHTOKEN(state, { auth_token }) {
+      state.auth_token = auth_token
+    },
     // auth
     SET_TOKEN(state, { token }) {
       state.token = token
@@ -39,11 +57,17 @@ export default new Vuex.Store({
     SET_STATUS(state, { status }) {
       state.status = status
     },
-      SET_USER(state, { login_user }) {
+    SET_USER(state, { login_user }) {
       state.login_user = login_user
     },
   },
   actions: {
+    showAlert({ commit }, n) {
+      commit('SET_ON', { num:n })
+      setTimeout(()=>{
+        commit('SET_ON', { num:3 })
+      },5000)
+    },
     postAuthData({ commit }, info) {
       axios.post(SERVER.URL + info.location, info.data)
         .then(res => {
@@ -74,8 +98,8 @@ export default new Vuex.Store({
             commit('SET_TOKEN', res.data.key)
             this.$router.push("/user/signup");
           }
-      })
-      .catch(err => console.log(err.response.data))
+        })
+        .catch(err => console.log(err.response.data))
       alert("회원가입에 실패했습니다.");
     },
     login({ commit, getters }, loginData) {
@@ -85,9 +109,9 @@ export default new Vuex.Store({
           method: 'post',
           url: SERVER.URL + "/user/signin",
           data: {
-          email: loginData.email, password: loginData.password
-        }
-    })
+            email: loginData.email, password: loginData.password
+          }
+        })
         // console.log(res.data)
         .then((res) => {
           console.log(res.data.status)
@@ -98,10 +122,13 @@ export default new Vuex.Store({
             commit('SET_USER', { login_user: res.data.data.uid })
             commit('SET_STATUS', { status: res.data.status })
             getters.config
-            alert(state.login_user+"님 로그인 되었습니다.");
+            console.log(state.token)
+            // router.push({ name: "MAIN" })
+            this.dispatch("showAlert",4)
+            
+            // alert(state.login_user + "님 로그인 되었습니다.");
           } else {
-            commit('SET_MESSAGE', "로그인해주세요.")
-            alert("입력 정보를 확인하세요.");
+            this.dispatch("showAlert",2)
           }
         })
         .catch(e => {
@@ -109,18 +136,21 @@ export default new Vuex.Store({
           // console.log(e.response.data)
           // getters.info = e.response
         });
+      
+      this.dispatch("showAlert",4)
       router.push({ name: "MAIN" })
     },
-    sociallogin({ commit, getters }, gitemail) {
-      console.log(gitemail)
+    sociallogin({ commit, getters }, email, auth_token) {
+      commit('SET_AUTHTOKEN', { auth_token: auth_token})
+      console.log(email)
       axios
         ({
           method: 'post',
           url: SERVER.URL + "/user/socialsignin",
           data: {
-            email: gitemail
+            email
           }
-    })
+        })
         // console.log(res.data)
         .then((res) => {
           console.log(res.data.status)
@@ -131,25 +161,53 @@ export default new Vuex.Store({
             commit('SET_USER', { login_user: res.data.data.uid })
             commit('SET_STATUS', { status: res.data.data.status })
             getters.config
-            alert(state.login_user+"님 로그인 되었습니다.");
+            this.dispatch("showAlert",4)
+            // alert(state.login_user + "님 로그인 되었습니다.");
           } else {
-            alert("입력 정보를 확인하세요.");
+            this.dispatch("showAlert",2)
+            // alert("입력 정보를 확인하세요.");
           }
         })
-        .catch(e => {
-          
-          console.log(e.response.data)
-          alert(e.response.data.data+ "입력 정보를 확인하세요.");
-        });
-      router.push({ name: "MAIN" })
+        .catch(function (error) {
+          if (error.response) {
+            // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            this.dispatch("showAlert",2)
+            // alert(error.response.data.data + "입력 정보를 확인하세요.");
+          }
+          else if (error.request) {
+            // 요청이 이루어 졌으나 응답을 받지 못했습니다.
+            // `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는
+            // Node.js의 http.ClientRequest 인스턴스입니다.
+            console.log(error.request);
+            this.dispatch("showAlert",2)
+            // alert(error.request + "입력 정보를 확인하세요.");
+          }
+          else {
+            // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
+            console.log('Error',);
+            this.dispatch("showAlert",2)
+            // alert(error.message + "입력 정보를 확인하세요.");
+          }
+        })
+        .then(
+          router.push({ name: "MAIN" })
+        )
+      
     },
     logout({ commit }) {
-      commit('SET_TOKEN', { token: null })
-      commit('SET_EMAIL', { user_email: null })
-      commit('SET_USER', { login_user: null})
-      commit('SET_STATUS', { status: null })  
-      
+      // console.log(state.token)
+      commit('SET_TOKEN', { token: "" })
+      commit('SET_EMAIL', { user_email: "" })
+      commit('SET_USER', { login_user: "" })
+      commit('SET_STATUS', { status: "" })
+      // console.log(state.token)
       router.push({ name: "MAIN" })
-    }
+      this.dispatch("showAlert",5)
+    },
+    
+   
   },
 })

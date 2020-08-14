@@ -175,7 +175,7 @@ import axios from "axios";
 import SERVER from "@/api/api";
 import Icon from '../../assets/img/menubar/index.vue'
 import { required, rules, valid } from "vuelidate/lib/validators";
-
+import { mapActions } from 'vuex'
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
 import {
   Blockquote,
@@ -205,6 +205,7 @@ export default {
   created() {
   },
   methods: {
+    ...mapActions(['showAlert']),
     moveList() {
       this.$router.push("/");
     },
@@ -225,7 +226,7 @@ export default {
       })
         .then((res) => { 
           
-          alert("글쓰기 성공~");
+          this.showAlert(3)
           this.$router.push("/");
 
           if (res.data.status) {

@@ -154,6 +154,7 @@
                       <editor-content class="editor__content" 
                         :editor="editor"
                         />
+                        <p>{{content}}</p>
                     </v-form>
                   </v-card-text>
                   <v-card-actions>
@@ -174,11 +175,11 @@
 <script>
 import axios from 'axios';
 import SERVER from "@/api/api";
-
+import { mapActions } from 'vuex'
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
 import Icon from '../../assets/img/menubar/index.vue'
 import {
-  Blockquote,
+  Blockquote, 
   CodeBlock,
   HardBreak,
   Heading,
@@ -218,6 +219,7 @@ export default {
           }
     },
     methods: {
+      ...mapActions(['showAlert']),
       moveList(){
           this.$router.push("/");
       },
@@ -234,11 +236,12 @@ export default {
         }).then((res)=>{
             var msg ;
             if(res.data.status){
-                msg = "수정이 완료되었습니다.";
+                this.showAlert(6)
                 this.$router.push("/");
+            } else {
+              this.showAlert(2)
             }
-            alert(msg);
-            this.$router.push("/");
+            
         })
       },
       deletePost(postId){
@@ -279,23 +282,7 @@ export default {
       this.editor.focus()
     },
   },
-  
-  watch: {},
-  data() {
-    return {
-      alert: true,
-      subject: '',
-      email:'',
-      hit:'',
-      uid:'',
-      content: '',
-      editor:null,
-    }
-  },
-  beforeDestroy() {
-    this.editor.destroy()
-  },
-    created() {
+  created() {
       axios
           .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+this.id)
           .then((res) => {
@@ -336,12 +323,13 @@ export default {
               //console.log("create this.content: "+this.content)
               //console.log("create contents: "+contents)
           })
+          .then(()=>{
+            contents = this.content
+          })
           .catch((err) => console.error(err));
     
   },
   mounted(){
-    console.log("3 this.content: "+this.content)
-    console.log("3 contents: "+contents)
   },
 }
 </script>

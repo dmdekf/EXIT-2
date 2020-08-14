@@ -33,6 +33,8 @@ public class Post {
 	private int lnt;
 	private int cnt;
 	private boolean ilike;
+	private String bimg;
+	
 	public int getId() {
       return id;
    }
@@ -110,6 +112,36 @@ public class Post {
 		this.email = board.getEmail();
 		this.tag = board.getTag();
 		this.hit = board.getHit();
+		this.lnt = lnt;
+		this.cnt = cnt;
+		this.ilike = ilike;
+	}
+	public Post(Board board, int lnt, int cnt, boolean ilike,String bimg) {
+		super();
+		this.id = board.getId();
+		this.subject = board.getSubject();
+		this.content = board.getContent();
+		this.created = board.getCreated();
+		this.uid = board.getUid();
+		this.email = board.getEmail();
+		this.tag = board.getEmail();
+		this.hit = board.getHit();
+		this.lnt = lnt;
+		this.cnt = cnt;
+		this.ilike = ilike;
+		this.bimg = bimg;
+	}
+	public Post(int id, String subject, String content, Date created, String uid, String email, String tag, int hit,
+			int lnt, int cnt, boolean ilike) {
+		super();
+		this.id = id;
+		this.subject = subject;
+		this.content = content;
+		this.created = created;
+		this.uid = uid;
+		this.email = email;
+		this.tag = tag;
+		this.hit = hit;
 		this.lnt = lnt;
 		this.cnt = cnt;
 		this.ilike = ilike;

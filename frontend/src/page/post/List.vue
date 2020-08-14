@@ -7,7 +7,7 @@
             <div v-for="(post, uid) in list" :key="uid">
                 <div class="post-card" v-if="post.id" v-on:click="showDetail(post.id)" >
                     <a style="color: black">
-                        <img :src="getcolor(post.id)" class="post-img"/>
+                        <img :src="post.bimg=='' ? getcolor(post.id) : require('@/assets/img/bimg/'+post.bimg)" class="post-img"/>
                         <div class="contents">
                         <v-row>
                             <v-col>
@@ -24,6 +24,7 @@
                                 {{post.subject}}
                             </h3>
                             <hr/> 
+                            <!-- <p class="content">{{post.content.replace(/(<([^>]+)>|{})/ig,"")}}</p> -->
                             <p class="content" v-html="post.content">{{post.content}}</p>
                             <small class="date">{{ moment(post.created).locale('ko-kr').format("LLLL")}}</small>
                             
@@ -90,7 +91,7 @@ export default {
             .then((res)=>{
                     if(res.data) {
                         this.posts = res.data;
-                        
+                                              
                     }
             })
             .catch((err) => console.error(err));
