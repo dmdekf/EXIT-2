@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
+ 
 import com.web.blog.dao.user.PimgDao;
 import com.web.blog.dao.user.UserDao;
 import com.web.blog.model.BasicResponse;
@@ -52,12 +52,12 @@ public class ImageController {
          return response;
       }
       try {
-         //file.transferTo(new File("C:\\Users\\multicampus\\Desktop\\s03p13a501\\frontend\\src\\assets\\img\\pimg\\"+uid+file.getOriginalFilename()));
+//         file.transferTo(new File("c:/img/"+uid+file.getOriginalFilename()));
          file.transferTo(new File("/home/ubuntu/pimg/"+uid+file.getOriginalFilename()));
-         Pimg p = pimgDao.save(new Pimg(uid,uid+file.getOriginalFilename()));
+         
+         pimgDao.save(new Pimg(uid,"c:/img"+uid+file.getOriginalFilename()));
          result.status = true;
          result.data = "success";
-         //result.object = p;
          response = new ResponseEntity<>(result,HttpStatus.OK);
       }catch(Exception e) {
          System.out.println("에러");

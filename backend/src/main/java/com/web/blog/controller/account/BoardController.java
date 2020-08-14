@@ -42,7 +42,8 @@ public class BoardController {
    CommentDao commentDao;
    @Autowired
    TagDao tagDao;
-   
+   @Autowired
+   BimgDao bimgDao;
    
    @ApiOperation(value="수정하기", response = BoardController.class)
    @PutMapping("/update")

@@ -18,4 +18,4 @@ public class  Bimg{
 	
 	private int bid;
 	private String uimage;
-}
+} 
