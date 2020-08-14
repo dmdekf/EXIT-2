@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web.blog.dao.user.BimgDao;
 import com.web.blog.dao.user.BoardDao;
 import com.web.blog.dao.user.CommentDao;
 import com.web.blog.dao.user.HeartDao;
 import com.web.blog.model.BasicResponse;
+import com.web.blog.model.user.Bimg;
 import com.web.blog.model.user.Board;
 import com.web.blog.model.user.Post;
 
@@ -30,110 +32,113 @@ import io.swagger.annotations.ApiOperation;
 @CrossOrigin(origins = { "*" })
 @RequestMapping("feature/board")
 public class BoardController {
-   @Autowired
-   BoardDao boardDao;
-   @Autowired
-   HeartDao heartDao;
-   @Autowired
-   CommentDao commentDao;
-   
-   
-   
-   @ApiOperation(value="수정하기", response = BoardController.class)
-   @PutMapping("/update")
-   public Object like(@RequestBody Board request) throws Exception {
-      Optional<Board> board = boardDao.findById(request.getId());
-      ResponseEntity response = null;
-      final BasicResponse result = new BasicResponse();
-      if (board.isPresent()) {
-         Board b = board.get();
-         b.setSubject(request.getSubject());
-         b.setContent(request.getContent());
-         boardDao.save(b);
-         result.status = true;
-         result.data = "success";
-         response = new ResponseEntity<>(result, HttpStatus.OK);
-         return response;
-      }
-      result.status = false;
-      result.data = "fail to Update";
-      response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-      return response;
-   }
-	
+	@Autowired
+	BoardDao boardDao;
+	@Autowired
+	HeartDao heartDao;
+	@Autowired
+	CommentDao commentDao;
+	@Autowired
+	BimgDao bimgDao;
+
+	@ApiOperation(value = "수정하기", response = BoardController.class)
+	@PutMapping("/update")
+	public Object like(@RequestBody Board request) throws Exception {
+		Optional<Board> board = boardDao.findById(request.getId());
+		ResponseEntity response = null;
+		final BasicResponse result = new BasicResponse();
+		if (board.isPresent()) {
+			Board b = board.get();
+			b.setSubject(request.getSubject());
+			b.setContent(request.getContent());
+			boardDao.save(b);
+			result.status = true;
+			result.data = "success";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+		result.status = false;
+		result.data = "fail to Update";
+		response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		return response;
+	}
+
 	@ApiOperation(value = "모든 게시글의 정보를 반환한다.", response = List.class)
 	@GetMapping("list")
 	public List<Post> getBoardList() throws Exception {
+		System.out.println("뭐가 실행이 되는거지? getBoardList()");
 		List<Board> list = boardDao.findAll();
-		System.out.println(list.size());
 		List<Post> plist = new ArrayList<Post>();
-		for(Board b : list){
-			int lnt = heartDao.findHeartByBid(b.getId()+"").size();
-			int cnt = commentDao.findByBoardIdx(b.getId()+"").size();
-			plist.add(new Post(b,lnt, cnt, false));
+		for (Board b : list) {
+			int lnt = heartDao.findHeartByBid(b.getId() + "").size();
+			int cnt = commentDao.findByBoardIdx(b.getId() + "").size();
+			List<Bimg> bi = bimgDao.findByBid(b.getId());
+			String bimg = bi.size()>0?bi.get(0).getUimage():"";
+			plist.add(new Post(b, lnt, cnt, false, bimg));
 		}
-		plist.sort((a,b)->b.getId()-a.getId());
+		plist.sort((a, b) -> b.getId() - a.getId());
 		return plist;
 	}
 
-   @ApiOperation(value = "게시글번호에 해당하는 게시글의 정보를 반환한다.", response = BoardController.class)
-   @GetMapping("/detail/{uid}/{id}")
-   public Object detailBoard2(@PathVariable String uid, @PathVariable String id ) {
-      System.out.println(id);
-      System.out.println("좋아요 포함 "); 
-      System.out.println(uid);
-      if(uid==null)return "로그인하세요";
-      Optional<Board> board = boardDao.findById(Integer.parseInt(id));
-      if (board.isPresent()) {
-         
-         // String uid = "test"; // 여기 수정 필요
-         int lnt = heartDao.findHeartByBid(id).size();
-         System.out.println(lnt);
-         boolean ilike = heartDao.findHeartByBidAndUid(id, uid).isPresent();
-         System.out.println(ilike);
-         int cnt = commentDao.findByBoardIdx(id).size();
-         System.out.println(cnt);
-         return new Post(board.get(), lnt, cnt, heartDao.findHeartByBidAndUid(id, uid).isPresent());
+	@ApiOperation(value = "게시글번호에 해당하는 게시글의 정보를 반환한다.", response = BoardController.class)
+	@GetMapping("/detail/{uid}/{id}")
+	public Object detailBoard2(@PathVariable String uid, @PathVariable String id) {
+		System.out.println(id);
+		System.out.println("좋아요 포함 ");
+		System.out.println(uid);
+		if (uid == null)
+			return "로그인하세요";
+		Optional<Board> board = boardDao.findById(Integer.parseInt(id));
+		if (board.isPresent()) {
 
-      }
-      return new Post(0,"삭제된 Board","",null,"","","",0,0,0,false);
-   }
+			// String uid = "test"; // 여기 수정 필요
+			int lnt = heartDao.findHeartByBid(id).size();
+			System.out.println(lnt);
+			boolean ilike = heartDao.findHeartByBidAndUid(id, uid).isPresent();
+			System.out.println(ilike);
+			int cnt = 0;
+			System.out.println(cnt);
+			List<Bimg> bi = bimgDao.findByBid(board.get().getId());
+			String bimg = bi.size()>0?bi.get(0).getUimage():"";
+			return new Post(board.get(), lnt, cnt, heartDao.findHeartByBidAndUid(id, uid).isPresent(), bimg);
 
-   @ApiOperation(value = "게시글번호에 해당하는 게시글의 정보를 반환한다.", response = BoardController.class)
-   @GetMapping("/list/{id}")
-   public Object detailBoard(@PathVariable String id) {
-      System.out.println(id);
-      Optional<Board> board = boardDao.findById(Integer.parseInt(id));
-      if (board.isPresent()) {
-         // String uid = "test"; // 여기 수정 필요
-         int lnt = heartDao.findHeartByBid(id).size();
-        // System.out.println(lnt);
-         int cnt = commentDao.findByBoardIdx(id).size();
-         return new Post(board.get(), lnt, cnt, false);
+		}
+		return new Post(0, "삭제된 Board", "", null, "", "", "", 0, 0, 0, false);
+	}
 
-      }
-      return new Post(0,"삭제된 Board","",null,"","","",0,0,0,false);
-   }
+	@ApiOperation(value = "게시글번호에 해당하는 게시글의 정보를 반환한다.", response = BoardController.class)
+	@GetMapping("/list/{id}")
+	public Object detailBoard(@PathVariable String id) {
+		System.out.println(id);
+		Optional<Board> board = boardDao.findById(Integer.parseInt(id));
+		if (board.isPresent()) {
+			// String uid = "test"; // 여기 수정 필요
+			int lnt = heartDao.findHeartByBid(id).size();
+			// System.out.println(lnt);
+			int cnt = 0;
+			List<Bimg> bi = bimgDao.findByBid(board.get().getId());
+			String bimg = bi.size()>0?bi.get(0).getUimage():"";
+			return new Post(board.get(), lnt, cnt, false,bimg);
 
-	
+		}
+		return new Post(0, "삭제된 Board", "", null, "", "", "", 0, 0, 0, false);
+	}
+
 	@ApiOperation(value = "새로운 게시글 정보를 입력한다. 그리고 DB입력 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
 	@PostMapping("/write")
 	public Board writeBoard(@RequestBody Board board) {
-		
 
 		return boardDao.save(board);
 	}
-	
-	 
-	 @ApiOperation(value = "게시글번호에 해당하는 게시글의 정보를 삭제한다.", response = String.class)    
-	   @DeleteMapping("delete/{id}")
-	   public Optional<Board> deleteBoard(@PathVariable("id") int id) {
-		   Optional<Board> boardId = boardDao.findById(id);
+
+	@ApiOperation(value = "게시글번호에 해당하는 게시글의 정보를 삭제한다.", response = String.class)
+	@DeleteMapping("delete/{id}")
+	public Optional<Board> deleteBoard(@PathVariable("id") int id) {
+		Optional<Board> boardId = boardDao.findById(id);
 //		   System.out.println(id); 
 //		   System.out.println(boardId);
-	      boardDao.deleteById(id);
-	      return null;
-	   }
-  
+		boardDao.deleteById(id);
+		return null;
+	}
 
 }
