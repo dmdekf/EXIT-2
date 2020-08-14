@@ -72,6 +72,11 @@ export default {
     mounted(){
         this.getPosts()
     },
+    created() {
+      console.log(this.$store.state.status)
+      console.log(this.$store.state.user_email)
+      console.log(this.$store.state.login_user)
+    },
     methods: {
         getPhotos: function () {
         axios
