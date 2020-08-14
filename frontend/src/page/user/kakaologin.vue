@@ -76,7 +76,7 @@ export default {
           .then((res)=> {
             console.log(res.data.kakao_account.email)
             const email = '+'+res.data.kakao_account.email
-            this.sociallogin(email)
+            this.sociallogin(email, this.token)
           })
           .catch(function (error) {
           if (error.response) {
