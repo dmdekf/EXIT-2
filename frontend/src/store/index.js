@@ -15,6 +15,7 @@ export default new Vuex.Store({
     user_email: "",
     status: "",
     login_user: "",
+    auth_token:"",
     alert: {
       on: false,
       1: { 0: "red", 1: "삭제되었습니다." },
@@ -25,7 +26,7 @@ export default new Vuex.Store({
       6: { 0: "primary", 1:"수정이 완료되었습니다."},
       num: 1
     },
-    auth_token:""
+    
   },
   plugins: [createPersistedState()],
   getters: {
@@ -102,7 +103,7 @@ export default new Vuex.Store({
         .catch(err => console.log(err.response.data))
       alert("회원가입에 실패했습니다.");
     },
-    login({ commit, getters }, loginData) {
+    login({ commit, getters,state }, loginData) {
       console.log(loginData)
       axios
         ({
@@ -122,7 +123,6 @@ export default new Vuex.Store({
             commit('SET_USER', { login_user: res.data.data.uid })
             commit('SET_STATUS', { status: res.data.status })
             getters.config
-            console.log(state.token)
             // router.push({ name: "MAIN" })
             this.dispatch("showAlert",4)
             
@@ -140,9 +140,12 @@ export default new Vuex.Store({
       this.dispatch("showAlert",4)
       router.push({ name: "MAIN" })
     },
-    sociallogin({ commit, getters }, email, auth_token) {
-      commit('SET_AUTHTOKEN', { auth_token: auth_token})
-      console.log(email)
+    sociallogin({ commit, getters, state }, loginData) {
+      commit('SET_AUTHTOKEN', { auth_token: loginData.auth_token })
+      console.log(loginData)
+      console.log(state.auth_token)
+      console.log(loginData.email)
+      const email = loginData.email
       axios
         ({
           method: 'post',
@@ -151,20 +154,20 @@ export default new Vuex.Store({
             email
           }
         })
-        // console.log(res.data)
         .then((res) => {
           console.log(res.data.status)
           console.dir(res.headers["jwt-auth-token"]);
+          console.log(res.data)
           if (res.data.status) {
             commit('SET_TOKEN', { token: res.headers["jwt-auth-token"] })
             commit('SET_EMAIL', { user_email: res.data.data.email })
             commit('SET_USER', { login_user: res.data.data.uid })
-            commit('SET_STATUS', { status: res.data.data.status })
+            commit('SET_STATUS', { status: res.data.status })
             getters.config
-            this.dispatch("showAlert",4)
+            
             // alert(state.login_user + "님 로그인 되었습니다.");
           } else {
-            this.dispatch("showAlert",2)
+            this.dispatch("showAlert", 2)
             // alert("입력 정보를 확인하세요.");
           }
         })
@@ -174,7 +177,7 @@ export default new Vuex.Store({
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
-            this.dispatch("showAlert",2)
+            this.dispatch("showAlert", 2)
             // alert(error.response.data.data + "입력 정보를 확인하세요.");
           }
           else if (error.request) {
@@ -182,39 +185,41 @@ export default new Vuex.Store({
             // `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는
             // Node.js의 http.ClientRequest 인스턴스입니다.
             console.log(error.request);
-            this.dispatch("showAlert",2)
+            this.dispatch("showAlert", 2)
             // alert(error.request + "입력 정보를 확인하세요.");
           }
           else {
             // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
             console.log('Error',);
-            this.dispatch("showAlert",2)
+            this.dispatch("showAlert", 2)
             // alert(error.message + "입력 정보를 확인하세요.");
           }
         })
-        .then(
+        .then(() => {
+          this.dispatch("showAlert", 4)
           router.push({ name: "MAIN" })
-        )
+          // console.dir(state.status)
+        })
       
     },
-    logout({ commit }) {
+    logout({ commit, state }) {
       // console.log(state.token)
       commit('SET_TOKEN', { token: "" })
       commit('SET_EMAIL', { user_email: "" })
       commit('SET_USER', { login_user: "" })
       commit('SET_STATUS', { status: "" })
-      if (this.state.auth_token) {
+      if (state.auth_token) {
         axios({
             method:"POST",
             url:"https://cors-anywhere.herokuapp.com/https://kapi.kakao.com/v1/user/logout",
             headers:{
-              "Authorization":'Bearer ' + this.state.auth_token,
+              "Authorization":'Bearer ' + state.auth_token,
               "Content-type": 'application/x-www-form-urlencoded;charset=utf-8'
             },
         })
           .then(() => { 
                 commit('SET_AUTHTOKEN', { auth_token: "" })
-            })
+          })
             .catch(function (error) {
             if (error.response) {
             // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
@@ -234,12 +239,14 @@ export default new Vuex.Store({
             console.log('Error', );
             alert(error.message+ "입력 정보를 확인하세요.");
             }
-        })          
+            })   
+        .then(() => {
+          router.push({ name: "MAIN" })
+          }) 
       }
       router.push({ name: "MAIN" })
       this.dispatch("showAlert",5)
+      
     },
-    
-   
   },
 })

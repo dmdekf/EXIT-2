@@ -8,9 +8,6 @@ export default {
     name: 'Logout',
     methods: {
         ...mapActions(['logout']),
-        kakaologout() {
-
-        }
     },
     created() {
         this.logout()

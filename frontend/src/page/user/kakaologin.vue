@@ -44,7 +44,11 @@ export default {
         return {
             code:"",
             token:"",
-            refresh_token:""
+            refresh_token:"",
+            loginData:{
+              email:"",
+              auth_token:"",
+            }
         }
     },
     methods:{
@@ -63,7 +67,6 @@ export default {
           console.log(res.data.access_token)
           this.token=res.data.access_token
           this.refresh_token=res.data.refresh_token
-          console.log(this.token)
           if (this.token) {
           await axios({
             method:"GET",
@@ -75,8 +78,10 @@ export default {
           })
           .then((res)=> {
             console.log(res.data.kakao_account.email)
-            const email = '+'+res.data.kakao_account.email
-            this.sociallogin(email, this.token)
+            this.loginData.email='+'+res.data.kakao_account.email
+            this.loginData.auth_token=this.token
+            console.log(this.loginData.email)
+            this.sociallogin(this.loginData)
           })
           .catch(function (error) {
           if (error.response) {
