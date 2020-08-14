@@ -1,6 +1,7 @@
 <h1 align="center">Welcome to EXIT 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-0.6.0-blue.svg?cacheSeconds=2592000" />
+<div></div>
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0.2-blue.svg?cacheSeconds=2592000" />
   <a href="https://lab.ssafy.com/s03-webmobile1-sub2/s03p12a501/blob/master/README.md" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
@@ -9,18 +10,29 @@
   </a>
 </p>
 <p>
+<div>Front & Back</div>
  <img alt="Docker" src="https://img.shields.io/badge/Docker-black?logo=Docker&logoColor=1488C6" />
    <img alt="Node.js" src="https://img.shields.io/badge/Node.js-339933?logo=Node.js&logoColor=white" />
+   <img alt="Java" src="https://img.shields.io/badge/Java-007396?logo=Java&logoColor=white" />
     <img alt="Vuetify" src="https://img.shields.io/badge/Vuetify-1867C0?logo=vuetify&logoColor=white" />
     <img alt="Vue.js" src="https://img.shields.io/badge/Vue.js-4FC08D?logo=vue.js&logoColor=white" />
+    <img alt="CSS3" src="https://img.shields.io/badge/CSS3-1572B6?logo=CSS3&logoColor=white" />
+    <img alt="HTML5" src="https://img.shields.io/badge/html5-E34F26?logo=HTML5&logoColor=white" />
     <img alt="Spring" src="https://img.shields.io/badge/Spring-6DB33F?logo=Spring&logoColor=white" />
     <img alt="MariaDB" src="https://img.shields.io/badge/MariaDB-003545?logo=MariaDB&logoColor=white" />
+    <img alt="GitHub" src="https://img.shields.io/badge/GitHub-181717?logo=GitHub&logoColor=white" />
 </p>
 <p>
+<div>Env</div>
     <img alt="Amazon AWS" src="https://img.shields.io/badge/Amazon AWS-232F3E?logo=Amazon AWS&logoColor=white" />
     <img alt="Jira Software" src="https://img.shields.io/badge/Jira Software-0052CC?logo=Jira Software&logoColor=white" />
     <img alt="GitLab" src="https://img.shields.io/badge/GitLab-FCA121?logo=GitLab&logoColor=white" />
     <img alt="Jenkins" src="https://img.shields.io/badge/Jenkins-D24939?logo=Jenkins&logoColor=white" />
+    <img alt="Visual studio Code" src="https://img.shields.io/badge/VisualStudioCode-007ACC?logo=Visual studio Code&logoColor=white" />
+    <img alt="NPM" src="https://img.shields.io/badge/NPM-CB3837?logo=NPM&logoColor=white" />
+    <img alt="Apache Maven" src="https://img.shields.io/badge/Apache Maven-C71A36?logo=Apache Maven&logoColor=white" />
+    <img alt=" Yarn" src="https://img.shields.io/badge/Yarn-2C8EBB?logo=Yarn&logoColor=white" />
+
 </p>
 
 > Create your own portfolio blog using 'EXIT'
