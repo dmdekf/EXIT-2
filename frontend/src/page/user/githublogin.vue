@@ -68,7 +68,7 @@ export default {
               })
           .then((res)=> {
             const email = res.data[0].email
-            this.sociallogin(email)
+            this.sociallogin(email, this.token)
           })
           .catch(function (error) {
           if (error.response) {

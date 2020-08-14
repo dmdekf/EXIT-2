@@ -24,7 +24,8 @@ export default new Vuex.Store({
       5: { 0: "primary", 1: "로그아웃 되었습니다." },
       6: { 0: "primary", 1:"수정이 완료되었습니다."},
       num: 1
-    }
+    },
+    auth_token:""
   },
   plugins: [createPersistedState()],
   getters: {
@@ -32,6 +33,7 @@ export default new Vuex.Store({
     info: state => ({
       status: state.status,
       token: state.token,
+      auth_token: state.auth_token
     }),
     isLoggedIn: state => !!state.token,
     col: state => { return state.alert[state.alert.num][0] },
@@ -41,6 +43,9 @@ export default new Vuex.Store({
     SET_ON(state, { num }) {
       state.alert.on = !state.alert.on
       state.alert.num = num
+    },
+    SET_AUTHTOKEN(state, { auth_token }) {
+      state.auth_token = auth_token
     },
     // auth
     SET_TOKEN(state, { token }) {
@@ -135,7 +140,8 @@ export default new Vuex.Store({
       this.dispatch("showAlert",4)
       router.push({ name: "MAIN" })
     },
-    sociallogin({ commit, getters }, email) {
+    sociallogin({ commit, getters }, email, auth_token) {
+      commit('SET_AUTHTOKEN', { auth_token: auth_token})
       console.log(email)
       axios
         ({

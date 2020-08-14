@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import axios from "axios";
 let cols = ""
 export default {
