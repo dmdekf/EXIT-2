@@ -53,7 +53,7 @@ export default {
         const client_secret=process.env.VUE_APP_GITSECERET
         axios({
           method:"POST",
-          url:'https://github.com/login/oauth/access_token?',
+          url:'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token?',
           headers: {'Accept': 'application/json'},
           params: {'client_id': client_id, 'client_secret': client_secret,'code':this.code},
         })

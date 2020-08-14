@@ -51,11 +51,11 @@ export default {
       ...mapActions(['sociallogin']),
       postcode() {
         const client_id=process.env.VUE_APP_KAKAO
-        // const redirect_uri="http://i3a501.p.ssafy.io/user/logintest/kakao/callback"
-        const redirect_uri="http://localhost:3000/user/logintest/kakao/callback"
+        const redirect_uri="http://i3a501.p.ssafy.io/user/logintest/kakao/callback"
+        // const redirect_uri="http://localhost:3000/user/logintest/kakao/callback"
         axios({
           method:"POST",
-          url:'https://kauth.kakao.com/oauth/token?',
+          url:'https://cors-anywhere.herokuapp.com/https://kauth.kakao.com/oauth/token?',
           headers: {'content-type':'application/x-www-form-urlencoded; charset=utf-8'},
           params: {"grant_type":"authorization_code",'client_id': client_id, 'redirect_uri': redirect_uri,'code':this.code},
         })
@@ -74,7 +74,8 @@ export default {
             },
           })
           .then((res)=> {
-            const email = res.data.kakao_account.email
+            console.log(res.data.kakao_account.email)
+            const email = '+'+res.data.kakao_account.email
             this.sociallogin(email)
           })
           .catch(function (error) {

@@ -57,6 +57,12 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    showAlert({ commit }, n) {
+      commit('SET_ON', { num:n })
+      setTimeout(()=>{
+        commit('SET_ON', { num:3 })
+      },5000)
+    },
     postAuthData({ commit }, info) {
       axios.post(SERVER.URL + info.location, info.data)
         .then(res => {
@@ -112,10 +118,12 @@ export default new Vuex.Store({
             commit('SET_STATUS', { status: res.data.status })
             getters.config
             console.log(state.token)
-            this.showAlert(4)
+            // router.push({ name: "MAIN" })
+            this.dispatch("showAlert",4)
+            
             // alert(state.login_user + "님 로그인 되었습니다.");
           } else {
-            this.showAlert(2)
+            this.dispatch("showAlert",2)
           }
         })
         .catch(e => {
@@ -123,6 +131,8 @@ export default new Vuex.Store({
           // console.log(e.response.data)
           // getters.info = e.response
         });
+      
+      this.dispatch("showAlert",4)
       router.push({ name: "MAIN" })
     },
     sociallogin({ commit, getters }, email) {
@@ -132,7 +142,7 @@ export default new Vuex.Store({
           method: 'post',
           url: SERVER.URL + "/user/socialsignin",
           data: {
-            email: email
+            email
           }
         })
         // console.log(res.data)
@@ -145,10 +155,10 @@ export default new Vuex.Store({
             commit('SET_USER', { login_user: res.data.data.uid })
             commit('SET_STATUS', { status: res.data.data.status })
             getters.config
-            this.showAlert(4)
+            this.dispatch("showAlert",4)
             // alert(state.login_user + "님 로그인 되었습니다.");
           } else {
-            this.showAlert(2)
+            this.dispatch("showAlert",2)
             // alert("입력 정보를 확인하세요.");
           }
         })
@@ -158,7 +168,7 @@ export default new Vuex.Store({
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
-            this.showAlert(2)
+            this.dispatch("showAlert",2)
             // alert(error.response.data.data + "입력 정보를 확인하세요.");
           }
           else if (error.request) {
@@ -166,13 +176,13 @@ export default new Vuex.Store({
             // `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는
             // Node.js의 http.ClientRequest 인스턴스입니다.
             console.log(error.request);
-            this.showAlert(2)
+            this.dispatch("showAlert",2)
             // alert(error.request + "입력 정보를 확인하세요.");
           }
           else {
             // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
             console.log('Error',);
-            this.showAlert(2)
+            this.dispatch("showAlert",2)
             // alert(error.message + "입력 정보를 확인하세요.");
           }
         })
@@ -182,21 +192,16 @@ export default new Vuex.Store({
       
     },
     logout({ commit }) {
-      console.log(state.token)
+      // console.log(state.token)
       commit('SET_TOKEN', { token: "" })
       commit('SET_EMAIL', { user_email: "" })
       commit('SET_USER', { login_user: "" })
       commit('SET_STATUS', { status: "" })
-      console.log(state.token)
+      // console.log(state.token)
       router.push({ name: "MAIN" })
-      this.showAlert(5)
+      this.dispatch("showAlert",5)
     },
-    showAlert({ commit }, n) {
-      commit('SET_ON', { num:n })
-      setTimeout(()=>{
-        commit('SET_ON', { num:3 })
-      },5000)
-    },
+    
    
   },
 })

@@ -43,8 +43,6 @@
         >
         {{msg}}
         </v-alert>
-
-
         <router-view class="container  mx-10px"/>
         <v-footer
           id="footer"
