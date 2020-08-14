@@ -3,8 +3,6 @@ package com.web.blog.model.user;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,17 +11,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 @ToString
-@Entity (name="tb_comment")
+@Entity (name="ImgComment")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor 
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Comment {
-	@GeneratedValue(strategy = GenerationType.AUTO)
+public class ImgComment {
 	@Id
-	private int idx;
+	private int id;
 	
 	private int boardIdx;
 	
@@ -37,5 +33,20 @@ public class Comment {
 	private Date updateTime;
 	private Date deleteTime;
 	
-	 
+	private String uimage;
+
+	public ImgComment(Comment c, String uimage) {
+		super();
+		this.id = c.getIdx();
+		this.boardIdx = c.getBoardIdx();
+		this.content = c.getContent();
+		this.writer = c.getWriter();
+		this.deleteYn = c.getDeleteYn();
+		this.insertTime = c.getInsertTime();
+		this.updateTime = c.getUpdateTime();
+		this.deleteTime = c.getDeleteTime();
+		this.uimage = uimage;
+	}
+	
+	
 }

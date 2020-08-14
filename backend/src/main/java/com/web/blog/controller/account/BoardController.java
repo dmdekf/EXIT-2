@@ -71,9 +71,9 @@ public class BoardController {
 		List<Post> plist = new ArrayList<Post>();
 		for (Board b : list) {
 			int lnt = heartDao.findHeartByBid(b.getId() + "").size();
-			int cnt = commentDao.findByBoardIdx(b.getId() + "").size();
+			int cnt = commentDao.findByBoardIdx(b.getId()).size();
 			List<Bimg> bi = bimgDao.findByBid(b.getId());
-			String bimg = bi.size()>0?bi.get(0).getUimage():"";
+			String bimg = (bi!=null && bi.size()>0)?bi.get(0).getUimage():"";
 			plist.add(new Post(b, lnt, cnt, false, bimg));
 		}
 		plist.sort((a, b) -> b.getId() - a.getId());
