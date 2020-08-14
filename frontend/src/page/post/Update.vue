@@ -175,7 +175,7 @@
 <script>
 import axios from 'axios';
 import SERVER from "@/api/api";
-
+import { mapActions } from 'vuex'
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
 import Icon from '../../assets/img/menubar/index.vue'
 import {
@@ -219,6 +219,7 @@ export default {
           }
     },
     methods: {
+      ...mapActions(['showAlert']),
       moveList(){
           this.$router.push("/");
       },
@@ -235,11 +236,12 @@ export default {
         }).then((res)=>{
             var msg ;
             if(res.data.status){
-                msg = "수정이 완료되었습니다.";
+                this.showAlert(6)
                 this.$router.push("/");
+            } else {
+              this.showAlert(2)
             }
-            alert(msg);
-            this.$router.push("/");
+            
         })
       },
       deletePost(postId){

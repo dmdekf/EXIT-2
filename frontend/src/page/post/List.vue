@@ -24,8 +24,8 @@
                                 {{post.subject}}
                             </h3>
                             <hr/> 
-                            <p class="content">{{post.content.replace(/(<([^>]+)>|{})/ig,"")}}</p>
-
+                            <!-- <p class="content">{{post.content.replace(/(<([^>]+)>|{})/ig,"")}}</p> -->
+                            <p class="content" v-html="post.content">{{post.content}}</p>
                             <small class="date">{{ moment(post.created).locale('ko-kr').format("LLLL")}}</small>
                             
                             <div class="comment mt-1"><v-icon>mdi-comment-multiple-outline</v-icon>  {{post.cnt}}</div>
