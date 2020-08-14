@@ -107,6 +107,10 @@
                 </div>
                 </v-row>
                 <v-row class="ma-4">
+                    <span class="mr-4">
+
+                    <img width="50" height="50" :src="comment.uimage=='' ? require('@/assets/img/pimg/ttoru.jpg') : require('@/assets/img/pimg/'+comment.uimage)" class="post-img"/>
+                    </span>
                     {{comment.content}}
                 </v-row>
                 
@@ -187,10 +191,21 @@ export default {
                     }
                 })
         },
+        // getComments(){
+        //     axios({
+        //     method:"get",
+        //     url:SERVER.URL+"/feature/comment/detail/"+this.$store.state.login_user+"/"+this.id+"/comments",
+        //         }).then((res)=>{
+        //             if(res.data){
+        //                 console.log(res.data);
+        //                 this.comments = res.data;
+        //             }
+        //         }).catch((err) => console.error(err));
+        // },
         getComments(){
             axios({
             method:"get",
-            url:SERVER.URL+"/feature/comment/detail/"+this.$store.state.login_user+"/"+this.id+"/comments",
+            url:SERVER.URL+"/feature/comment/detail/"+this.id,
                 }).then((res)=>{
                     if(res.data){
                         console.log(res.data);
