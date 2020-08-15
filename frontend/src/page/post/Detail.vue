@@ -239,8 +239,8 @@ export default {
             })
             .then((res) => { 
                 console.log(res.data)
-                this.showAlert(3)
                 this.comments.push(res.data)
+                this.showAlert(3)   
             })
             .catch(function (error) {
             if (error.response) {
@@ -261,7 +261,9 @@ export default {
             console.log('Error', );
             alert(error.message+ "입력 정보를 확인하세요.");
             }
-        })          
+            
+        })  
+             
         },
         reset () {
             this.$refs.forminput.reset()
@@ -269,13 +271,14 @@ export default {
         deleteComment(index,commentidx) {
             console.log(index, commentidx)
             var idx = this.comments.length-index-1
-            this.showAlert(1)
+            
             axios({
                 method: "DELETE",
                 url: SERVER.URL+"/feature/comment/list/detail/comments/"+commentidx,
             })
-                            .then((res) => { 
+            .then((res) => { 
             this.comments.splice(idx, 1)
+            this.showAlert(1)
             })
             .catch((err) => console.log(err));
         },

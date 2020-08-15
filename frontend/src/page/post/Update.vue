@@ -236,8 +236,8 @@ export default {
         }).then((res)=>{
             var msg ;
             if(res.data.status){
-                this.showAlert(6)
                 this.$router.push("/");
+                this.showAlert(6)
             } else {
               this.showAlert(2)
             }
@@ -252,6 +252,7 @@ export default {
             let msg = postId+"번 글이 삭제가 완료됐습니다.";
             if(res.data.status){
                 msg = "삭제가 완료되었습니다.";
+                this.showAlert(1)
                 this.$router.push("/");
             }else{
             }

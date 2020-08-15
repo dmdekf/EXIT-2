@@ -225,12 +225,10 @@ export default {
         },
       })
         .then((res) => { 
-          
-          this.showAlert(3)
-          this.$router.push("/");
 
           if (res.data.status) {
             this.$router.push("/");
+          this.showAlert(3)
           }
         })
         .catch((err) => console.log(err.response.data));

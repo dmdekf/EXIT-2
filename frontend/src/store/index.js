@@ -103,7 +103,8 @@ export default new Vuex.Store({
           }
         })
         .catch(err => console.log(err.response.data))
-      alert("회원가입에 실패했습니다.");
+      this.dispatch("showAlert", 1)
+      // alert("회원가입에 실패했습니다.");
     },
     login({ commit, getters,state }, loginData) {
       console.log(loginData)
@@ -234,12 +235,14 @@ export default new Vuex.Store({
               // `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는
               // Node.js의 http.ClientRequest 인스턴스입니다.
               console.log(error.request);
-              alert(error.request + "입력 정보를 확인하세요.");
+              // alert(error.request + "입력 정보를 확인하세요.");
+              this.dispatch("showAlert", 1)
             }
             else {
               // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
               console.log('Error',);
-              alert(error.message + "입력 정보를 확인하세요.");
+              // alert(error.message + "입력 정보를 확인하세요.");
+              this.dispatch("showAlert", 1)
             }
           })
           .then(() => {
