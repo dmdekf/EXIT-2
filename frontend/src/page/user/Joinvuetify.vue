@@ -40,7 +40,7 @@
                       :type="show ? 'text' : 'password'"
                       name="password"
                       label="비밀번호를 입력해 주세요"
-                      hint="At least 8 characters"
+                      hint="8글자 이상,숫자 혹은 특수기호 포함. "
                       counter
                       @click:append="show = !show"
                     ></v-text-field>

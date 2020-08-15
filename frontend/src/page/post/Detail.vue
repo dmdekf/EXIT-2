@@ -41,7 +41,7 @@
                     </v-btn>
                     </div>
                     <div v-else>
-                    <v-btn icon v:on="userdetail()">
+                    <v-btn icon v:on="userfrofile(uid)">
                         <v-icon>mdi-account</v-icon>
                     </v-btn>
                     <small>{{uid}}</small>
@@ -187,18 +187,9 @@ export default {
             }).then(
                     this.likestatus = !this.likestatus                        
                 )
-        },            
-        userdetail(){
-            console.log(SERVER.URL);                
-            axios({
-            method:"get",
-            url:SERVER.URL+"/user/detail/"+this.uid,
-                }).then((res)=>{
-                    if(res.data.status){
-                        this.password = res.data.object.password;
-                    }else{
-                    }
-                })
+        },        
+        userfrofile(uid) {
+            this.$router.push(`user/profile/${uid}`);
         },
         getTags(){
             axios({

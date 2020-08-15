@@ -1,66 +1,119 @@
 <template>
-    <div class="user" id="join">
-        <div class="wrapC table">
-            <div class="middle">
-                <h1 class="display-2">회원정보</h1>
-                <div class="form-wrap">
-                    <div class="input-wrap">
-                        <input v-model="nickName" id="nickname" type="text" readonly="readonly"/>
-                    </div>
+  <div id="app">
+    <v-app id="inspire">
+      <v-main>
+        <v-container class="fill-height" fluid>
+          <v-row align="center" justify="center">
+            <v-col cols="12" sm="8" md="4">
+              <v-card class="elevation-12">
+                <v-toolbar color="#ade498" dark flat>
+                  <v-toolbar-title>회원 정보 수정</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
+                <v-card-text>
+                  <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-text-field
+                        prepend-icon="mdi-emoticon-cool-outline"
+                        v-model="nickName" id="nickname"
+                        label="nickName"
+                        outlined
+                        readonly
+                        dense
+                        type="text"
+                        persistent-hint="수정 불가."
+                    ></v-text-field>
+                    <v-text-field
+                        prepend-icon="mdi-email"
+                         v-model="email" id="email" type="text"
+                        label="email"
+                        outlined
+                        readonly
+                        dense
+                        persistent-hint="수정 불가."
+                    ></v-text-field>
+                   
+                    <v-text-field
+                      v-model="password"
+                      id="password" mdi-eye
+                      append-icon="mdi-email"
+                      :rules="[rules.required]"
+                      :type="show ? 'text' : 'password'"
+                      name="password"
+                      label="비밀번호를 변경합니다"
+                      hint="숫자 혹은 특수기호 포함 8글자 이상"
+                      counter
+                      @click:append="show = !show"
+                    ></v-text-field>
 
-                    <div class="input-wrap">
-                        <input v-model="email" id="email" type="text" readonly="readonly"/>
-                    </div>
-
-                    <div class="input-wrap password-wrap">
-                        <input
-                            v-model="password"
-                            id="password"
-                            :type="passwordType"
-                            placeholder="비밀번호를 입력해주세요"/>
-                        <span :class="{active : passwordType==='text'}">
-                            <i class="fas fa-eye"></i>
-                        </span>
-                    </div>
-
-                    <div class="input-wrap password-wrap">
-                        <input
-                            v-model="passwordConfirm"
-                            id="password-confirm"
-                            :type="passwordConfirmType"
-                            placeholder="비밀번호를 한번 더 입력해주세요"/>
-                        <span :class="{active : passwordConfirmType==='text'}">
-                            <i class="fas fa-eye"></i>
-                        </span>
-                    </div>
-                    <div class="input-wrap password-wrap">
-                        <input id="profile" type="file" placeholder="프로필 사진을 등록해주세요"/>
-                    </div>
-                    <div class="input-wrap">
-                        <textarea id="introduce" placeholder="자기소개를 등록해주세요"></textarea>
-                    </div>
-                    <div>
-                        <p>뭐든</p>
-                        <img :src="profileUrl">
-                    </div> 
-                </div>
-                <div justify="space-between" class="ma-2">
+                    <v-text-field
+                      v-model="passwordConfirm"
+                      :rules="[
+                        rules.required,
+                        passwordConfirmationRule,
+                      ]"
+                      :type="show1 ? 'text' : 'password'"
+                      name="input-10-1"
+                      label="비밀번호를 다시 입력해 주세요"
+                      hint="숫자 혹은 특수기호 포함 8글자 이상"
+                      counter
+                      @click:append="show1 = !show1"
+                    ></v-text-field>
+                    <v-file-input
+                      show-size
+                      rules="[value => !value || value.size < 1000000 || '이미지 크기는 1MB 이하여야합니다.']"
+                      id="profile"
+                      accept="image/png, image/jpeg, image/bmp"
+                      placeholder="프로필 사진을 등록해 주세요"
+                      prepend-icon="mdi-camera"
+                      label="프로필 사진"
+                    ></v-file-input>
+                    <v-textarea
+                      id="introduce"
+                      clearable
+                      clear-icon="cancel"
+                      auto-grow
+                      label="자기 소개를 입력해 주세요"
+                    ></v-textarea>
+                    <v-container fluid>
+                    <v-row justify="center" align="center">
+                    <v-col cols="8" aspect-ratio="2" contain>
+                      <div class="subheading pt-4">Too high</div>
+                      <v-img :src="profileUrl" aspect-ratio="1" max-width="100" max-height="100">
+                      <template v-slot:placeholder>
+                      <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
+                      >
+                        <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                      </v-row>
+                    </template>
+                      </v-img>
+                    </v-col>
+                  </v-row>
+                  </v-container>
+                  </v-form>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
                   <v-btn color="primary" v-on:click="userUpdate">수정하기</v-btn>
                   <v-btn color="red" v-on:click="moveDelete">회원탈퇴</v-btn>
                   <v-btn color="lime" v-on:click="moveList">메인화면</v-btn>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
 </template>
 
 <script>
 import axios from 'axios';
 import SERVER from "@/api/api";
-import {mapActions} from 'vuex'
 import { mapActions } from 'vuex'
+import { required, rules, valid } from "vuelidate/lib/validators";
 export default {
     data: () => {
         return {
@@ -70,7 +123,10 @@ export default {
             passwordConfirm: '',
             passwordType: "password",
             passwordConfirmType: "password",
-            profileUrl:""
+            profileUrl:"",
+            show: false,
+            show1: false,
+            isTerm: false,
         }
     },
     created() {
@@ -133,8 +189,16 @@ export default {
                 }
             })
         }
-    }
-}
+    },
+    computed: {
+    passwordConfirmationRule() {
+      return (
+        this.password === this.passwordConfirm ||
+        "동일한 비밀번호를 입력해 주세요."
+      );
+    },
+  },
+};
 </script>
 
 <style></style>
