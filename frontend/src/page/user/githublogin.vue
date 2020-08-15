@@ -43,7 +43,11 @@ export default {
     data: () => {
         return {
             code:"",
-            token:""
+            token:"",
+            loginData:{
+              email:"",
+              auth_token:"",
+            }
         }
     },
     methods:{
@@ -67,8 +71,9 @@ export default {
             }
               })
           .then((res)=> {
-            const email = res.data[0].email
-            this.sociallogin(email, this.token)
+            this.loginData.email = res.data[0].email
+            this.loginData.auth_token=this.token
+            this.sociallogin(this.loginData)
           })
           .catch(function (error) {
           if (error.response) {
