@@ -7,6 +7,8 @@ import Cookies from 'js-cookie'
 import router from "@/router";
 import SERVER from "@/api/api";
 import createPersistedState from 'vuex-persistedstate';
+const storagesession = window.sessionStorage;
+const storagelocal = window.localStorage;
 Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
@@ -210,43 +212,45 @@ export default new Vuex.Store({
       commit('SET_STATUS', { status: "" })
       if (state.auth_token) {
         axios({
-            method:"POST",
-            url:"https://cors-anywhere.herokuapp.com/https://kapi.kakao.com/v1/user/logout",
-            headers:{
-              "Authorization":'Bearer ' + state.auth_token,
-              "Content-type": 'application/x-www-form-urlencoded;charset=utf-8'
-            },
+          method: "POST",
+          url: "https://cors-anywhere.herokuapp.com/https://kapi.kakao.com/v1/user/logout",
+          headers: {
+            "Authorization": 'Bearer ' + state.auth_token,
+            "Content-type": 'application/x-www-form-urlencoded;charset=utf-8'
+          },
         })
-          .then(() => { 
-                commit('SET_AUTHTOKEN', { auth_token: "" })
+          .then(() => {
+            commit('SET_AUTHTOKEN', { auth_token: "" })
           })
-            .catch(function (error) {
+          .catch(function (error) {
             if (error.response) {
-            // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
+              // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
             }
             else if (error.request) {
-            // 요청이 이루어 졌으나 응답을 받지 못했습니다.
-            // `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는
-            // Node.js의 http.ClientRequest 인스턴스입니다.
-            console.log(error.request);
-            alert(error.request+ "입력 정보를 확인하세요.");
+              // 요청이 이루어 졌으나 응답을 받지 못했습니다.
+              // `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는
+              // Node.js의 http.ClientRequest 인스턴스입니다.
+              console.log(error.request);
+              alert(error.request + "입력 정보를 확인하세요.");
             }
             else {
-            // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
-            console.log('Error', );
-            alert(error.message+ "입력 정보를 확인하세요.");
+              // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
+              console.log('Error',);
+              alert(error.message + "입력 정보를 확인하세요.");
             }
-            })   
-        .then(() => {
-          router.push({ name: "MAIN" })
-          }) 
+          })
+          .then(() => {
+            storagesession.clear()
+            storagelocal.clear()
+          })
+          .then(() => {
+            router.push({ name: "MAIN" })
+            this.dispatch("showAlert", 5)
+          })
       }
-      router.push({ name: "MAIN" })
-      this.dispatch("showAlert",5)
-      
     },
   },
 })
