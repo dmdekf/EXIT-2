@@ -1,16 +1,19 @@
 <template>
   <div id="app">
+      <h1>유저프로필{{uid}}</h1>
   <v-app id="inspire">
     <v-card
-      max-width="400"
+      max-width="100%"
       class="mx-auto"
     >
-    <v-img :src="post.uimg=='' ? getcolor(post.id) : require('@/assets/img/bimg/'+post.uimg)" class="post-img" height="300px"
+    <v-img :src=getcolor() >
+    
+    <!-- <v-img :src="post.uimg=='' ? getcolor(post.id) : require('@/assets/img/bimg/'+post.uimg)" class="post-img" height="300px"
         dark
-      >/
+      >/ -->
         <v-row class="fill-height">
           <v-card-title class="white--text pl-12 pt-12">
-            <div class="display-1 pl-12 pt-12">{{this.uid}}</div>
+            <div class="display-1 pl-12 pt-12">{{uid}}</div>
           </v-card-title>
         </v-row>
       </v-img>
@@ -20,6 +23,7 @@
         </v-list-item-icon>
         <v-divider inset></v-divider>\
             <v-list-item v-for="(post,id) in posts" 
+                
                 @click="showDetail(post.id)"
                 :key="id">
             <v-list-item-content>
@@ -33,7 +37,6 @@
                 <v-icon>mdi-comment-multiple-outline</v-icon><span>:{{post.cnt}}</span>
             </v-list-item-icon>
             </v-list-item>  
-         </v-list-item-content>
         <v-divider inset></v-divider>   
       </v-list>
     </v-card>
@@ -57,25 +60,22 @@ export default {
     data:() => {
         return {
             posts:[],
-            searchData: { selected: "name", word: this.uid },
+            searchData: { selected: "user",word :""},
         }
     },
     methods: {
-        getcolor: function (num) {
+        getcolor: function () {
         axios
-            .get("https://jsonplaceholder.typicode.com/photos/"+num)
+            .get("https://jsonplaceholder.typicode.com/photos/6")
             .then((res) => {
-            let photos = res.data.thumbnailUrl
+                let result = res.data.thumbnailUrl
+            return result
             })
             .catch((err) => console.error(err));
-            return photos
-        },
-        getcolor(postnum) {
-            let result = this.photos[postnum+3].thumbnailUrl
-            return result
         },
         
         sendData() {
+            this.searchData.word = this.uid
             axios
                 .get(
                 SERVER.URL +

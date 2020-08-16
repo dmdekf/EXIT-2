@@ -60,7 +60,7 @@ const routes = [
   },
   {
     path: "/user/profile/:uid",
-    props: ({params}) => ({uid:String(params.uid)}),
+    props: ({params}) => ({uid:params.uid}),
     name: "USERPROFILE",
     component: Profile,
   },

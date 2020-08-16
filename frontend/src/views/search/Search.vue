@@ -52,12 +52,14 @@
               >
                 <v-list-item-content>
                 <span
-                  class="text-uppercase font-weight-regular caption"
-                  v-text="post.title"
+                  class="text-uppercase font-weight-large caption"
+                  v-text="post.subject"
                 ></span>
-                <div v-text="post.content"></div>
-                <hr/>
+                <!-- <div v-text="post.content"></div> -->
+                <v-divider ></v-divider></v-divider>   
+                <small>
                 <div> 글쓴이 :<span>{{post.uid}}</span></div>
+                </small>
                 </v-list-item-content>
               </v-list-item>
             </v-list>

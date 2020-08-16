@@ -41,7 +41,7 @@
                     </v-btn>
                     </div>
                     <div v-else>
-                    <v-btn icon v:on="userfrofile(uid)">
+                    <v-btn icon v-on:click="userfrofile(uid)">
                         <v-icon>mdi-account</v-icon>
                     </v-btn>
                     <small>{{uid}}</small>
@@ -55,11 +55,11 @@
         <v-card-text >
             <div v-html="content">{{content}}</div>
         </v-card-text>
-        <v-card-text>
+        <!-- <v-card-text>
             <span v-for="(tagl, idx) in tags" :key="idx">
                 <strong><span class="mr-2">#{{tagl.tag}}</span></strong>
             </span>
-        </v-card-text>
+        </v-card-text> -->
         </v-card>
         
         <hr>
@@ -67,7 +67,6 @@
         <div>
             <v-form
                 ref="form"
-                v-model="valid"
                 lazy-validation
                 onsubmit="return false" 
             >
@@ -100,7 +99,7 @@
                 </div>
                 <div>
                     <div v-if="(comment.writer)===login_user">
-                        <v-btn  v-on:click="deleteComment(index,comment.idx)" icon color="red">
+                        <v-btn  v-on:click="deleteComment(index,comment.id)" icon color="red">
                             <v-icon>mdi-trash-can-outline</v-icon>삭제
                         </v-btn>
                     </div>
@@ -111,12 +110,18 @@
                     </div>
                 </div>
                 </v-row>
-                <v-row class="ma-4">
-                    <span class="mr-4">
-
-                    <img width="50" height="50" :src="comment.uimage=='' ? require('@/assets/img/pimg/ttoru.jpg') : require('@/assets/img/pimg/'+comment.uimage)" class="post-img"/>
-                    </span>
+                <v-row class="ma-4" >
+                    <v-col
+                    >
+                    <v-avatar
+                    size="55px"
+                    >
+                    <img :src="comment.uimage=='' ? require('@/assets/img/pimg/ttoru.jpg') : require('@/assets/img/pimg/'+comment.uimage)" class="post-img"/>
+                    </v-avatar>
+                    <span >
                     {{comment.content}}
+                    </span>
+                    </v-col>
                 </v-row>
                 
                 <hr/> 
@@ -149,8 +154,8 @@ export default {
             content: '',
             created: '',
             likestatus:false,
-            tags:[],
-            taglist:[],
+            // tags:[],
+            // taglist:[],
             comments:[],
             rules: [
                 value => !!value || '내용을 입력해 주세요',
@@ -167,7 +172,7 @@ export default {
     },
     mounted(){
         this.getComments();
-        this.getTags();
+        // this.getTags();
     },
     computed:{
         ...mapState(['msg', 'col']),
@@ -189,20 +194,20 @@ export default {
                 )
         },        
         userfrofile(uid) {
-            this.$router.push(`user/profile/${uid}`);
+            this.$router.push(`/user/profile/${uid}`);
         },
-        getTags(){
-            axios({
-            method:"get",
-            url:SERVER.URL+"/searchBoard/"+this.id,
-                }).then((res)=>{
-                    if(res.data){
-                        console.log(res.data);
-                        this.tags = res.data.object;
-                        this.taglist = this.tags.tag;
-                    }
-                }).catch((err) => console.error(err));
-        },
+        // getTags(){
+        //     axios({
+        //     method:"get",
+        //     url:SERVER.URL+"/searchBoard/"+this.id,
+        //         }).then((res)=>{
+        //             if(res.data){
+        //                 console.log(res.data);
+        //                 this.tags = res.data.object;
+        //                 this.taglist = this.tags.tag;
+        //             }
+        //         }).catch((err) => console.error(err));
+        // },
         getComments(){
             axios({
             method:"get",
@@ -259,13 +264,13 @@ export default {
         reset () {
             this.$refs.forminput.reset()
             },
-        deleteComment(index,commentidx) {
-            console.log(index, commentidx)
+        deleteComment(index,commentid) {
+            console.log(index, commentid)
             var idx = this.comments.length-index-1
             
             axios({
                 method: "DELETE",
-                url: SERVER.URL+"/feature/comment/list/detail/comments/"+commentidx,
+                url: SERVER.URL+"/feature/comment/list/detail/comments/"+commentid,
             })
             .then((res) => { 
             this.comments.splice(idx, 1)
@@ -286,7 +291,7 @@ export default {
                 this.likestatus = res.data.ilike
                 this.uid = res.data.uid
                 this.login_user = this.$store.state.login_user
-                this.tags = res.data.object.tag;
+                // this.tags = res.data.object.tag;
             })
             .catch((err) => console.error(err));
     },
