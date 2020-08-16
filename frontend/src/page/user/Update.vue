@@ -11,32 +11,30 @@
                   <v-spacer></v-spacer>
                 </v-toolbar>
                 <v-card-text>
-                  <v-form ref="form" v-model="valid" lazy-validation>
+                  <v-form ref="form" lazy-validation>
                     <v-text-field
                         prepend-icon="mdi-emoticon-cool-outline"
                         v-model="nickName" id="nickname"
-                        label="nickName"
+                        label="nickName : 수정 불가"
                         outlined
                         readonly
                         dense
                         type="text"
-                        persistent-hint="수정 불가."
                     ></v-text-field>
                     <v-text-field
-                        prepend-icon="mdi-email"
+                        prepend-icon="mdi-email : 수정 불가"
                          v-model="email" id="email" type="text"
                         label="email"
                         outlined
                         readonly
                         dense
-                        persistent-hint="수정 불가."
                     ></v-text-field>
                    
                     <v-text-field
                       v-model="password"
                       id="password" mdi-eye
                       append-icon="mdi-email"
-                      :rules="[rules.required]"
+                      required
                       :type="show ? 'text' : 'password'"
                       name="password"
                       label="비밀번호를 변경합니다"
@@ -48,9 +46,9 @@
                     <v-text-field
                       v-model="passwordConfirm"
                       :rules="[
-                        rules.required,
                         passwordConfirmationRule,
                       ]"
+                      required
                       :type="show1 ? 'text' : 'password'"
                       name="input-10-1"
                       label="비밀번호를 다시 입력해 주세요"
@@ -60,34 +58,26 @@
                     ></v-text-field>
                     <v-file-input
                       show-size
-                      rules="[value => !value || value.size < 1000000 || '이미지 크기는 1MB 이하여야합니다.']"
+                      :rules="[value => !value || value.size < 3500000 || '이미지 크기는 3.5MB 이하여야합니다.']"
                       id="profile"
                       accept="image/png, image/jpeg, image/bmp"
                       placeholder="프로필 사진을 등록해 주세요"
                       prepend-icon="mdi-camera"
                       label="프로필 사진"
+                      v-model="profileUrl"
                     ></v-file-input>
                     <v-textarea
                       id="introduce"
                       clearable
-                      clear-icon="cancel"
+                      clear-icon="x"
                       auto-grow
                       label="자기 소개를 입력해 주세요"
                     ></v-textarea>
-                    <v-container fluid>
+                    <v-container fluid v-show="profileUrl">
                     <v-row justify="center" align="center">
                     <v-col cols="8" aspect-ratio="2" contain>
-                      <div class="subheading pt-4">Too high</div>
                       <v-img :src="profileUrl" aspect-ratio="1" max-width="100" max-height="100">
-                      <template v-slot:placeholder>
-                      <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                      >
-                        <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                      </v-row>
-                    </template>
+                     
                       </v-img>
                     </v-col>
                   </v-row>
