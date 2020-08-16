@@ -10,7 +10,7 @@
       >/
         <v-row class="fill-height">
           <v-card-title class="white--text pl-12 pt-12">
-            <div class="display-1 pl-12 pt-12">{{nickName}}</div>
+            <div class="display-1 pl-12 pt-12">{{this.uid}}</div>
           </v-card-title>
         </v-row>
       </v-img>
@@ -30,7 +30,7 @@
                 <v-icon >mdi-heart</v-icon>{{post.lnt}}
             </v-list-item-icon>
             <v-list-item-icon>
-                <v-icon>mdi-comment-multiple-outline</v-icon>{{post.cnt}}
+                <v-icon>mdi-comment-multiple-outline</v-icon><span>:{{post.cnt}}</span>
             </v-list-item-icon>
             </v-list-item>  
          </v-list-item-content>
