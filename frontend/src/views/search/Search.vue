@@ -94,7 +94,7 @@
 <script>
 import Vue from "vue";
 import axios from "axios";
-
+import { required, rules, valid } from "vuelidate/lib/validators";
 import router from "@/router";
 import SERVER from "@/api/api";
 export default {
@@ -104,10 +104,11 @@ export default {
       posts:[],
       selects: ["all", "user", "title", "content", "tag"],
       searchData: { selected: "", word: "" },
+      rules:{
       searchrules: [
         (value) => !!value || "Required.",
         (value) => (value && value.length >= 2) || "2글자 이상 입력해주세요",
-      ],
+      ],}
     };
   },
   methods: {

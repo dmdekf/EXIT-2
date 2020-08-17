@@ -11,7 +11,7 @@
                   <v-spacer></v-spacer>
                 </v-toolbar>
                 <v-card-text>
-                  <v-form ref="form" v-model="valid" lazy-validation>
+                  <v-form ref="form" lazy-validation>
                     <v-text-field
                       v-model="nickName"
                       id="nickName"
@@ -21,14 +21,12 @@
                       type="text"
                       :counter="10"
                       :rules="rules.nameRules"
-                      required
                     ></v-text-field>
                     <v-text-field
                       v-model="email"
                       id="email"
                       label="이메일을 입력해주세요"
                       :rules="rules.emailRules"
-                      required
                       name="email"
                       prepend-icon="mdi-email"
                       type="text"
@@ -36,25 +34,25 @@
 
                     <v-text-field
                       v-model="password"
-                      :rules="[rules.required]"
                       :type="show ? 'text' : 'password'"
                       name="password"
                       label="비밀번호를 입력해 주세요"
                       hint="8글자 이상,숫자 혹은 특수기호 포함. "
                       counter
+                      :rules="rules.passwordRules"
                       @click:append="show = !show"
                     ></v-text-field>
 
                     <v-text-field
                       v-model="passwordConfirm"
                       :rules="[
-                        rules.required,
+                        rules.passwordRules,
                         passwordConfirmationRule,
                       ]"
                       :type="show1 ? 'text' : 'password'"
                       name="input-10-1"
                       label="비밀번호를 다시 입력해 주세요"
-                      hint="At least 8 characters"
+                      hint="8글자 이상,숫자 혹은 특수기호 포함."
                       counter
                       @click:append="show1 = !show1"
                     ></v-text-field>
@@ -132,14 +130,18 @@ export default {
           (v) => !!v || "E-mail is required",
           (v) => /.+@.+\..+/.test(v) || "E-mail 형식을 맞춰주세요.",
         ],
-      },
+       passwordRules: [
+        (value) => !!value || "Required.",
+        (value) => (value && value.length >= 7) || "8글자 이상 입력해주세요",
+      ]}
+      ,
       nickName: "",
       password: "",
       passwordConfirm: "",
       isTerm: false,
       passwordType: "password",
       passwordConfirmType: "password",
-    };
+    }
   },
   computed: {
     passwordConfirmationRule() {

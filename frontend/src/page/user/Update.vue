@@ -22,9 +22,9 @@
                         type="text"
                     ></v-text-field>
                     <v-text-field
-                        prepend-icon="mdi-email : 수정 불가"
+                        prepend-icon="mdi-email"
                          v-model="email" id="email" type="text"
-                        label="email"
+                        label="email : 수정 불가"
                         outlined
                         readonly
                         dense
@@ -56,7 +56,7 @@
                       counter
                       @click:append="show1 = !show1"
                     ></v-text-field>
-                    <v-file-input
+                    <v-file-input 
                       show-size
                       :rules="[value => !value || value.size < 3500000 || '이미지 크기는 3.5MB 이하여야합니다.']"
                       id="profile"
@@ -64,7 +64,7 @@
                       placeholder="프로필 사진을 등록해 주세요"
                       prepend-icon="mdi-camera"
                       label="프로필 사진"
-                      v-model="profileUrl"
+                      :value="profileUrl"
                     ></v-file-input>
                     <v-textarea
                       id="introduce"
