@@ -55,11 +55,6 @@
         <v-card-text >
             <div v-html="content">{{content}}</div>
         </v-card-text>
-        <v-card-text>
-            <span v-for="(tagl, idx) in tags" :key="idx">
-                <strong><span class="mr-2">#{{tagl.tag}}</span></strong>
-            </span>
-        </v-card-text>
         </v-card>
         
         <hr>
@@ -100,7 +95,7 @@
                 </div>
                 <div>
                     <div v-if="(comment.writer)===login_user">
-                        <v-btn  v-on:click="deleteComment(index,comment.idx)" icon color="red">
+                        <v-btn  v-on:click="deleteComment(index,comment.id)" icon color="red">
                             <v-icon>mdi-trash-can-outline</v-icon>삭제
                         </v-btn>
                     </div>
@@ -149,8 +144,6 @@ export default {
             content: '',
             created: '',
             likestatus:false,
-            tags:[],
-            taglist:[],
             comments:[],
             rules: [
                 value => !!value || '내용을 입력해 주세요',
@@ -167,7 +160,6 @@ export default {
     },
     mounted(){
         this.getComments();
-        this.getTags();
     },
     computed:{
         ...mapState(['msg', 'col']),
@@ -199,18 +191,6 @@ export default {
                     }else{
                     }
                 })
-        },
-        getTags(){
-            axios({
-            method:"get",
-            url:SERVER.URL+"/searchBoard/"+this.id,
-                }).then((res)=>{
-                    if(res.data){
-                        console.log(res.data);
-                        this.tags = res.data.object;
-                        this.taglist = this.tags.tag;
-                    }
-                }).catch((err) => console.error(err));
         },
         getComments(){
             axios({
@@ -267,15 +247,21 @@ export default {
             this.$refs.forminput.reset()
             },
         deleteComment(index,commentidx) {
+
             console.log(index, commentidx)
             var idx = this.comments.length-index-1
             this.showAlert(1)
             axios({
                 method: "DELETE",
-                url: SERVER.URL+"/feature/comment/list/detail/comments/"+commentidx,
+                url: SERVER.URL+"/feature/comment/list/detail/comments/"+commentidx, 
             })
-                            .then((res) => { 
+            .then((res) => { 
             this.comments.splice(idx, 1)
+                // var index = this.comments.idx.indexOf(commentidx)
+                // console.log(index)
+                
+                alert("댓글 삭제 성공~");
+            alert("댓글 삭제 성공~");
             })
             .catch((err) => console.log(err));
         },
@@ -292,7 +278,6 @@ export default {
                 this.likestatus = res.data.ilike
                 this.uid = res.data.uid
                 this.login_user = this.$store.state.login_user
-                this.tags = res.data.object.tag;
             })
             .catch((err) => console.error(err));
     },
