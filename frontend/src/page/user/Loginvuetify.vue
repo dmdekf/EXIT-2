@@ -17,9 +17,10 @@
                     label="이메일을 입력해주세요"
                     name="email"
                     prepend-icon="mdi-account"
-                    :rules="[v => !!v || '값을 입력해 주세요']"
-                    type="text"
+                    :rules="[(v) => /.+@.+\..+/.test(v) || 'E-mail 형식을 맞춰주세요.', (v) => (!!v) || '값을 입력해 주세요']"
+                    type="email"
                     required
+                    
                   ></v-text-field>
 
                   <v-text-field
@@ -28,13 +29,13 @@
                     label="비밀번호"
                     name="password"
                     prepend-icon="mdi-lock"
-                    :rules="[v => !!v || '값을 입력해 주세요']"
+                    :rules="[v => !!v || '값을 입력해 주세요' , (v) => (v && v.length >= 7) || '8글자 이상 입력해주세요']"
                     type="password"
                     required
                   ></v-text-field>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" v-on:click="locallogin(loginData)">로그인</v-btn>
+                <v-btn color="primary" :disabled="!valid" v-on:click="locallogin(loginData)">로그인</v-btn>
                 <v-btn color="primary" to="/user/jointest">회원가입</v-btn>
               </v-card-actions>
                 </v-form>
@@ -62,7 +63,7 @@
 import axios from 'axios';
 import SERVER from "@/api/api";
 import { mapActions } from 'vuex'
-import { required, valid } from "vuelidate/lib/validators";
+import { required, valid,rules } from "vuelidate/lib/validators";
 export default {
 data() {
     return {
@@ -74,13 +75,9 @@ data() {
     }
   },
   methods: {
-    validate () {
-        this.$refs.form.validate()
-      },
     ...mapActions(['login']),
     locallogin(loginData) {
-      this.validate
-      this.login(loginData)
+        this.login(loginData)
       },
     kakaologin() {
       const client_id=process.env.VUE_APP_KAKAO

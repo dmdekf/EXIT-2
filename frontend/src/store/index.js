@@ -126,7 +126,7 @@ export default new Vuex.Store({
             commit('SET_USER', { login_user: res.data.data.uid })
             commit('SET_STATUS', { status: res.data.status })
             getters.config
-            // router.push({ name: "MAIN" })
+            router.push({ name: "MAIN" })
             this.dispatch("showAlert",4)
             
             // alert(state.login_user + "님 로그인 되었습니다.");
@@ -135,13 +135,13 @@ export default new Vuex.Store({
           }
         })
         .catch(e => {
-          
+          this.dispatch("showAlert",2)
           // console.log(e.response.data)
           // getters.info = e.response
         });
       
-      this.dispatch("showAlert",4)
-      router.push({ name: "MAIN" })
+      // this.dispatch("showAlert",4)
+      // router.push({ name: "MAIN" })
     },
     sociallogin({ commit, getters, state }, loginData) {
       commit('SET_AUTHTOKEN', { auth_token: loginData.auth_token })
