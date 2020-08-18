@@ -171,6 +171,7 @@
 
 <script>
 import "../../assets/css/user.scss";
+import "../../assets/css/editor.scss"
 import axios from "axios";
 import SERVER from "@/api/api";
 import Icon from '../../assets/img/menubar/index.vue'
@@ -225,11 +226,9 @@ export default {
         },
       })
         .then((res) => { 
-
-          if (res.data.status) {
+            this.showAlert(3)
             this.$router.push("/");
-          this.showAlert(3)
-          }
+          
         })
         .catch((err) => console.log(err.response.data));
     },
@@ -296,7 +295,7 @@ export default {
           new History(),
         ],
         content: `
-          <h3>Write here!<h3>
+          <p>This is some inserted text. </p>
         `,
         onUpdate: ({ getHTML }) => {
           this.content = getHTML()
@@ -356,7 +355,7 @@ symbol {
 .tag-editor, .tag-input, .tag-list {
   padding: 10px;
   margin: 20px;
-  border: 1px dashed red;
+  border: 1px dashed gray;
 }
 
 .tag-editor {

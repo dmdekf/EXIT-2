@@ -58,18 +58,14 @@ export default {
             },
             
         },
-        created() {
-            this.nickName = this.$store.state.login_user
-            this.email = this.$store.state.user_email
-            
+        created() {            
             axios({
                 method:"get",
-                url:SERVER.URL+"/user/detail?uid="+this.nickName,
+                url:SERVER.URL+"/user/detail/"+this.$store.state.login_user,
             }).then((res)=>{
-                if(res.data.status){
-                    this.password = res.data.object.password;
-                }else{
-
+                if (res.data.status){
+                    this.email = res.data.object.email
+                    this.nickName = res.data.object.uid
                 }
             })
         },

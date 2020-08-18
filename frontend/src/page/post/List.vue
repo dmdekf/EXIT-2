@@ -7,7 +7,7 @@
             <div v-for="(post, uid) in list" :key="uid">
                 <div class="post-card" v-if="post.id" v-on:click="showDetail(post.id)" >
                     <a style="color: black">
-                        <img :src="post.bimg=='' ? getcolor(post.id) : require('@/assets/img/bimg/'+post.bimg)" class="post-img"/>
+                        <v-img :src="post.bimg=='' ? getcolor(post.id) : require('@/assets/img/bimg/'+post.bimg)" class="post-img"></v-img>
                         <div class="contents">
                         <v-row>
                             <v-col>
@@ -34,13 +34,14 @@
             </div>
             <div class="tag-list-wrap justify-center">
             <v-btn class="mx-8 my-2" v-on:click="scrollToTop" color="#ffb367"><v-icon>mdi-arrow-collapse-up</v-icon></v-btn>
-                
-                <div class="tag-list">
+                <v-divider></v-divider>  
+                <p>
                     <v-btn class="mx-2 mt-1" dark color="indigo" v-on:click="writePost">
                         <v-icon dark>mdi-pencil</v-icon>
                         글 올리기
                     </v-btn>
-                </div>
+                </p>
+                
             </div>
             <infinite-loading @infinite="infiniteHandler" slot="append" spinner="waveDots"></infinite-loading>
             </section>

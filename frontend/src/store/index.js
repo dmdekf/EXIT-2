@@ -44,7 +44,7 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_ON(state, { num }) {
-      state.alert.on = !state.alert.on
+      state.alert.on = true
       state.alert.num = num
     },
     SET_AUTHTOKEN(state, { auth_token }) {
@@ -65,11 +65,11 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    showAlert({ commit }, n) {
+    showAlert({ commit, state }, n) {
       commit('SET_ON', { num:n })
-      setTimeout(()=>{
-        commit('SET_ON', { num:3 })
-      },5000)
+      setTimeout(() => {
+        state.alert.on=false
+      },3000)
     },
     postAuthData({ commit }, info) {
       axios.post(SERVER.URL + info.location, info.data)

@@ -20,15 +20,13 @@
                       prepend-icon="mdi-emoticon-cool-outline"
                       type="text"
                       :counter="10"
-                      :rules="rules.nameRules"
-                      required
+                      :rules="nameRules"
                     ></v-text-field>
                     <v-text-field
                       v-model="email"
                       id="email"
                       label="이메일을 입력해주세요"
-                      :rules="rules.emailRules"
-                      required
+                      :rules="emailRules"
                       name="email"
                       prepend-icon="mdi-email"
                       type="text"
@@ -36,25 +34,22 @@
 
                     <v-text-field
                       v-model="password"
-                      :rules="[rules.required]"
                       :type="show ? 'text' : 'password'"
                       name="password"
                       label="비밀번호를 입력해 주세요"
-                      hint="At least 8 characters"
+                      hint="8글자 이상,숫자 혹은 특수기호 포함. "
                       counter
+                      :rules="passwordRules"
                       @click:append="show = !show"
                     ></v-text-field>
 
                     <v-text-field
                       v-model="passwordConfirm"
-                      :rules="[
-                        rules.required,
-                        passwordConfirmationRule,
-                      ]"
+                      :rules="[passwordConfirmationRule]"                       
                       :type="show1 ? 'text' : 'password'"
-                      name="input-10-1"
+                      name="passwordConfirm"
                       label="비밀번호를 다시 입력해 주세요"
-                      hint="At least 8 characters"
+                      hint="8글자 이상,숫자 혹은 특수기호 포함."
                       counter
                       @click:append="show1 = !show1"
                     ></v-text-field>
@@ -64,13 +59,13 @@
                       label="약관에 동의하십니까?"
                       required
                     ></v-checkbox>
-                  </v-form>
-                </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="primary" v-on:click="signup">회원가입</v-btn>
                   <v-btn color="lime" v-on:click="moveList">메인화면</v-btn>
                 </v-card-actions>
+                  </v-form>
+                </v-card-text>
               </v-card>
             </v-col>
           </v-row>
@@ -91,17 +86,21 @@ export default {
   components: {},
   created() {},
   methods: {
+    validate () {
+        this.$refs.form.validate()
+      },
     moveList() {
       this.$router.push("/");
     },
     signup() {
+      thsi.validate
       axios({
         method: "post",
         url: SERVER.URL+"/account/signup",
         data: {
-          email: this.email,
-          password: this.password,
-          nickname: this.nickName,
+          email: "",
+          password: "",
+          nickname: "",
         },
       })
         .then((res) => {
@@ -122,24 +121,25 @@ export default {
       show1: false,
       email: "",
       checkbox: false,
-      rules: {
-        nameRules: [
-          (v) => !!v || "닉네임을 입력해 주세요.",
+      nameRules: [
+          (v) => !!v || '값을 입력해 주세요',
           (v) =>
-            (v && v.length <= 10) || "닉네임은 10글자 이하여야 합니다.",
-        ],
-        emailRules: [
-          (v) => !!v || "E-mail is required",
-          (v) => /.+@.+\..+/.test(v) || "E-mail 형식을 맞춰주세요.",
-        ],
-      },
+            (v && v.length <= 10) || "닉네임은 10글자 이하여야 합니다."],
+      emailRules: [
+        (v) => !!v || '값을 입력해 주세요',
+        (v) => /.+@.+\..+/.test(v) || "E-mail 형식을 맞춰주세요.",
+      ],
+      passwordRules: [
+      (value) => !!value || '값을 입력해 주세요',
+      (value) => (value && value.length >= 7) || "8글자 이상 입력해주세요"],
+      valid:true,
       nickName: "",
       password: "",
       passwordConfirm: "",
       isTerm: false,
       passwordType: "password",
       passwordConfirmType: "password",
-    };
+    }
   },
   computed: {
     passwordConfirmationRule() {
