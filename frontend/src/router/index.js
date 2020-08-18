@@ -10,6 +10,7 @@ import Joinvuetify from "../page/user/Joinvuetify.vue";
 import Signup from "../page/user/Signup.vue";
 import Authentication from "../page/user/Authentication";
 import Detail from "../page/user/Detail";
+import Profile from "../page/user/Profile.vue";
 import Update from "../page/user/Update";
 import Delete from "../page/user/Delete";
 import Logout from "../page/user/LogoutView.vue"
@@ -56,6 +57,12 @@ const routes = [
     path: "/user/detail",
     name: "USERDETAIL",
     component: Detail,
+  },
+  {
+    path: "/user/profile/:uid",
+    props: ({params}) => ({uid:params.uid}),
+    name: "USERPROFILE",
+    component: Profile,
   },
   {
     path: "/user/signup",
@@ -126,6 +133,7 @@ router.beforeEach((to, from, next) => {
   const unauthRequired = authPages.includes(to.name); // 로그인 해서는 안됨
  
   if (unauthRequired && store.state.status) {
+    alert("잘못된 접근입니다.")
     next("/");
   }
   authRequired && !store.state.status ? next({ name: 'LOGIN' }) : next();

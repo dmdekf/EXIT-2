@@ -5,6 +5,9 @@
       class="mx-auto my-10"
       max-width="1000px"
     >
+    <v-card-title class="white--text pl-12 pt-12">
+            <div class="display-1 pl-12 pt-12">회원 탈퇴</div>
+    </v-card-title>
       <v-container style="height: 600px;">
         <v-row
           class="fill-height"
@@ -16,7 +19,8 @@
             cols="12"
           >
           <div class="text-h2"> 
-            회원님 데이터를 삭제 중입니다....
+            {{this.$store.state.login_user}}회원님의
+            <p>데이터를 삭제 중입니다...</p> 
           </div>
           </v-col>
           <v-col cols="6">
@@ -39,7 +43,7 @@ import axios from 'axios';
 import { mapActions } from 'vuex'
 import SERVER from "@/api/api";
 export default {
-    created() {
+    destroyed () {
         this.uid = this.$store.state.login_user
         console.log(this.uid);
         axios({

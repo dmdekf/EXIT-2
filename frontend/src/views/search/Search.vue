@@ -52,12 +52,14 @@
               >
                 <v-list-item-content>
                 <span
-                  class="text-uppercase font-weight-regular caption"
-                  v-text="post.title"
+                  class="text-uppercase font-weight-large caption"
+                  v-text="post.subject"
                 ></span>
-                <div v-text="post.content"></div>
-                <hr/>
+                <!-- <div v-text="post.content"></div> -->
+                <v-divider ></v-divider></v-divider>   
+                <small>
                 <div> 글쓴이 :<span>{{post.uid}}</span></div>
+                </small>
                 </v-list-item-content>
               </v-list-item>
             </v-list>
@@ -92,7 +94,7 @@
 <script>
 import Vue from "vue";
 import axios from "axios";
-
+import { required, rules, valid } from "vuelidate/lib/validators";
 import router from "@/router";
 import SERVER from "@/api/api";
 export default {
@@ -102,10 +104,11 @@ export default {
       posts:[],
       selects: ["all", "user", "title", "content", "tag"],
       searchData: { selected: "", word: "" },
+      rules:{
       searchrules: [
         (value) => !!value || "Required.",
         (value) => (value && value.length >= 2) || "2글자 이상 입력해주세요",
-      ],
+      ],}
     };
   },
   methods: {
