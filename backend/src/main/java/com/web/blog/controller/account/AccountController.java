@@ -186,11 +186,12 @@ public class AccountController {
        //email = email.replace("\"", "");
        //email = email.replace("}", "");
        email = email.trim();
+       
        System.out.println(email.length());
        System.out.println(email.indexOf("+")+1);
        String email2 = email.substring(email.indexOf("+")+1,email.indexOf("}")-1);
+       email2 = email.substring(email.indexOf("+")+1).replaceAll("\\\"}", "");
        System.out.println(email2);
-       
        String uid = email2.substring(0,email2.indexOf("@"));
        uid = uid.length()>8?uid.substring(0, 9):uid;
        System.out.println(uid);

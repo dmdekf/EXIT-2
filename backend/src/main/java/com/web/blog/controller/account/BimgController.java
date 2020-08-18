@@ -56,7 +56,8 @@ public class BimgController {
          file.transferTo(new File("/home/ubuntu/bimg/"+bid+file.getOriginalFilename()));
          //file.transferTo(new File("C:\\Users\\multicampus\\Desktop\\s03p13a501\\frontend\\src\\assets\\img\\bimg\\"+bid+file.getOriginalFilename()));
          System.out.println("어디까지 실행이 되나2");
-         Bimg b = bimgDao.save(new Bimg(0,bid,bid+file.getOriginalFilename()));
+         Bimg b = bimgDao.save(new Bimg(0,bid,"/home/ubuntu/bimg/"+bid+file.getOriginalFilename()));
+         //Bimg b = bimgDao.save(new Bimg(0,bid,"C:\\Users\\multicampus\\Desktop\\s03p13a501\\frontend\\src\\assets\\img\\bimg\\"+bid+file.getOriginalFilename()));
          System.out.println("어디까지 실행이 되나3");
          result.status = true;
          result.data = "success";
