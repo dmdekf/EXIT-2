@@ -4,14 +4,14 @@
       <v-main>
         <v-container class="fill-height" fluid>
           <v-row align="center" justify="center">
-            <v-col cols="12" sm="8" md="4">
+            <v-col cols="8">
               <v-card class="elevation-12">
                 <v-toolbar color="#ade498" dark flat>
                   <v-toolbar-title>회원 정보 수정</v-toolbar-title>
                   <v-spacer></v-spacer>
                 </v-toolbar>
                 <v-card-text>
-                  <v-form ref="form" lazy-validation>
+                  <v-form ref="form" lazy-validation v-model="valid">
                     <v-text-field
                         prepend-icon="mdi-emoticon-cool-outline"
                         v-model="nickName" id="nickname"
@@ -32,36 +32,34 @@
                    
                     <v-text-field
                       v-model="password"
-                      id="password" mdi-eye
-                      append-icon="mdi-email"
-                      required
+                      id="password" 
+                      append-icon="mdi-eye"
+                      counter
+                      required="true"
+                      :rules="passwordRules"
                       :type="show ? 'text' : 'password'"
                       name="password"
                       label="비밀번호를 변경합니다"
                       hint="숫자 혹은 특수기호 포함 8글자 이상"
-                      counter
                       @click:append="show = !show"
                     ></v-text-field>
 
                     <v-text-field
                       v-model="passwordConfirm"
-                      :rules="[
-                        passwordConfirmationRule,
-                      ]"
+                      :rules="[passwordConfirmationRule]"    
                       required
                       :type="show1 ? 'text' : 'password'"
                       name="input-10-1"
                       label="비밀번호를 다시 입력해 주세요"
                       hint="숫자 혹은 특수기호 포함 8글자 이상"
                       counter
-                      @click:append="show1 = !show1"
                     ></v-text-field>
                     <v-file-input 
                       show-size
-                      :rules="[value => !value || value.size < 3500000 || '이미지 크기는 3.5MB 이하여야합니다.']"
+                      :rules="[(value) => (!value || value.size < 3500000) || '이미지 크기는 3.5MB 이하여야합니다.']"
                       id="profile"
                       accept="image/png, image/jpeg, image/bmp"
-                      placeholder="프로필 사진을 등록해 주세요"
+                      placeholder="프로필 사진을 변경할 수 있습니다."
                       prepend-icon="mdi-camera"
                       label="프로필 사진"
                       :value="profileUrl"
@@ -73,7 +71,7 @@
                       auto-grow
                       label="자기 소개를 입력해 주세요"
                     ></v-textarea>
-                    <v-container fluid v-show="profileUrl">
+                    <v-container fluid :v-show="profileUrl">
                     <v-row justify="center" align="center">
                     <v-col cols="8" aspect-ratio="2" contain>
                       <v-img :src="profileUrl" aspect-ratio="1" max-width="100" max-height="100">
@@ -82,14 +80,14 @@
                     </v-col>
                   </v-row>
                   </v-container>
-                  </v-form>
-                </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="primary" v-on:click="userUpdate">수정하기</v-btn>
                   <v-btn color="red" v-on:click="moveDelete">회원탈퇴</v-btn>
                   <v-btn color="lime" v-on:click="moveList">메인화면</v-btn>
                 </v-card-actions>
+                  </v-form>
+                </v-card-text>
               </v-card>
             </v-col>
           </v-row>
@@ -107,6 +105,7 @@ import { required, rules, valid } from "vuelidate/lib/validators";
 export default {
     data: () => {
         return {
+            valid:true,
             email: '',
             nickName: '',
             password: '',
@@ -117,18 +116,21 @@ export default {
             show: false,
             show1: false,
             isTerm: false,
+            passwordRules: [
+                (value) => !!value || "값을 입력해 주세요",
+                (value) => (value && value.length >= 7) || "8글자 이상 입력해주세요",
+              ],
         }
     },
     created() {
-        this.nickName = this.$store.state.login_user;
-        this.email = this.$store.state.user_email;
         axios({
-            method: "get",
-            url: SERVER.URL + "/user/update?uid=" + this.nickName
+            method: "",
+            url: SERVER.URL + "/user/detail/" + this.$store.state.login_user
         }).then((res) => {
             if (res.data.status) {
                 console.log(res.data);
                 this.email = res.data.object.email;
+                this.nickName = res.data.object.uid
             } else {}
         })
         axios({
@@ -157,7 +159,11 @@ export default {
                 .$router
                 .push("/user/delete");
         },
+        validate () {
+        this.$refs.form.validate()
+      },
         userUpdate() {
+            this.validate
             axios({
                 method: "put",
                 url: SERVER.URL + "/user/update",

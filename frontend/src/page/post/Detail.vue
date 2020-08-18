@@ -1,16 +1,6 @@
 <template>
 <div id="app">
     <v-app id="inspire">
-        <!-- <v-alert
-        v-show=alert
-        dismissible
-        text
-        fade
-        color="success"
-        v-bind="attrs"
-        >
-        댓글 작성이 성공했습니다.
-        </v-alert> -->
         <v-window>
         <v-window-item class="my-6">
         <v-card flat>
@@ -55,11 +45,6 @@
         <v-card-text >
             <div v-html="content">{{content}}</div>
         </v-card-text>
-        <!-- <v-card-text>
-            <span v-for="(tagl, idx) in tags" :key="idx">
-                <strong><span class="mr-2">#{{tagl.tag}}</span></strong>
-            </span>
-        </v-card-text> -->
         </v-card>
         
         <hr>
@@ -195,19 +180,19 @@ export default {
         },        
         userfrofile(uid) {
             this.$router.push(`/user/profile/${uid}`);
+        },          
+        userdetail(){
+            console.log(SERVER.URL);                
+            axios({
+            method:"get",
+            url:SERVER.URL+"/user/detail/"+this.uid,
+                }).then((res)=>{
+                    if(res.data.status){
+                        this.password = res.data.object.password;
+                    }else{
+                    }
+                })
         },
-        // getTags(){
-        //     axios({
-        //     method:"get",
-        //     url:SERVER.URL+"/searchBoard/"+this.id,
-        //         }).then((res)=>{
-        //             if(res.data){
-        //                 console.log(res.data);
-        //                 this.tags = res.data.object;
-        //                 this.taglist = this.tags.tag;
-        //             }
-        //         }).catch((err) => console.error(err));
-        // },
         getComments(){
             axios({
             method:"get",
@@ -257,13 +242,11 @@ export default {
             console.log('Error', );
             alert(error.message+ "입력 정보를 확인하세요.");
             }
-            
-        })  
-             
-        },
-        reset () {
+        	})
+        },  
+        reset() {
             this.$refs.forminput.reset()
-            },
+        },
         deleteComment(index,commentid) {
             console.log(index, commentid)
             var idx = this.comments.length-index-1
@@ -295,5 +278,6 @@ export default {
             })
             .catch((err) => console.error(err));
     },
-}
+  }
+
 </script>
