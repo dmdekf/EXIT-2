@@ -59,8 +59,8 @@
 <script>
 import axios from 'axios';
 import SERVER from "@/api/api";
-import {mapActions} from 'vuex'
-import { mapActions } from 'vuex'
+import { mapActions } from 'vuex';
+
 export default {
     data: () => {
         return {
