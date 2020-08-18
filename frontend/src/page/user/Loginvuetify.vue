@@ -81,8 +81,7 @@ data() {
     locallogin(loginData) {
       this.validate
       this.login(loginData)
-      }
-    },
+      },
     kakaologin() {
       const client_id=process.env.VUE_APP_KAKAO
       const redirect_uri="http://i3a501.p.ssafy.io/user/logintest/kakao/callback"
@@ -100,7 +99,7 @@ data() {
       window.location.href=gitapi
     },  
   } 
-
+}
 </script>
 
 <style lang="scss" scoped>
