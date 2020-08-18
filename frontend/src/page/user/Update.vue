@@ -139,7 +139,7 @@ export default {
         }).then((res)=>{
             if(res.data.status){
                 //this.camera_off_img = require("../../assets/images/camera_off.png")
-                this.profileUrl =require('../../assets/img/pimg/'+res.data.object.uimage);
+                this.profileUrl =res.data.object.uimage;
                 console.log(this.profileUrl)
                 
             }

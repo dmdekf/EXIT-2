@@ -101,7 +101,7 @@
                     <v-avatar
                     size="55px"
                     >
-                    <img :src="comment.uimage=='' ? require('@/assets/img/pimg/ttoru.jpg') : require('@/assets/img/pimg/'+comment.uimage)" class="post-img"/>
+                    <img :src="comment.uimage=='' ? require('@/assets/img/pimg/ttoru.jpg') : comment.uimage" class="post-img"/>
                     </v-avatar>
                     <span >
                     {{comment.content}}
