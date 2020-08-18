@@ -1,16 +1,6 @@
 <template>
 <div id="app">
     <v-app id="inspire">
-        <!-- <v-alert
-        v-show=alert
-        dismissible
-        text
-        fade
-        color="success"
-        v-bind="attrs"
-        >
-        댓글 작성이 성공했습니다.
-        </v-alert> -->
         <v-window>
         <v-window-item class="my-6">
         <v-card flat>
@@ -41,7 +31,7 @@
                     </v-btn>
                     </div>
                     <div v-else>
-                    <v-btn icon v:on="userdetail()">
+                    <v-btn icon v-on:click="userfrofile(uid)">
                         <v-icon>mdi-account</v-icon>
                     </v-btn>
                     <small>{{uid}}</small>
@@ -62,7 +52,6 @@
         <div>
             <v-form
                 ref="form"
-                v-model="valid"
                 lazy-validation
                 onsubmit="return false" 
             >
@@ -106,12 +95,18 @@
                     </div>
                 </div>
                 </v-row>
-                <v-row class="ma-4">
-                    <span class="mr-4">
-
-                    <img width="50" height="50" :src="comment.uimage=='' ? require('@/assets/img/pimg/ttoru.jpg') : require('@/assets/img/pimg/'+comment.uimage)" class="post-img"/>
-                    </span>
+                <v-row class="ma-4" >
+                    <v-col
+                    >
+                    <v-avatar
+                    size="55px"
+                    >
+                    <img :src="comment.uimage=='' ? require('@/assets/img/pimg/ttoru.jpg') : require('@/assets/img/pimg/'+comment.uimage)" class="post-img"/>
+                    </v-avatar>
+                    <span >
                     {{comment.content}}
+                    </span>
+                    </v-col>
                 </v-row>
                 
                 <hr/> 
@@ -144,6 +139,8 @@ export default {
             content: '',
             created: '',
             likestatus:false,
+            // tags:[],
+            // taglist:[],
             comments:[],
             rules: [
                 value => !!value || '내용을 입력해 주세요',
@@ -160,6 +157,7 @@ export default {
     },
     mounted(){
         this.getComments();
+        // this.getTags();
     },
     computed:{
         ...mapState(['msg', 'col']),
@@ -179,7 +177,10 @@ export default {
             }).then(
                     this.likestatus = !this.likestatus                        
                 )
-        },            
+        },        
+        userfrofile(uid) {
+            this.$router.push(`/user/profile/${uid}`);
+        },          
         userdetail(){
             console.log(SERVER.URL);                
             axios({
@@ -241,21 +242,18 @@ export default {
             console.log('Error', );
             alert(error.message+ "입력 정보를 확인하세요.");
             }
-            
-        })  
-             
-        },
-        reset () {
+        	})
+        },  
+        reset() {
             this.$refs.forminput.reset()
-            },
-        deleteComment(index,commentidx) {
-
-            console.log(index, commentidx)
+        },
+        deleteComment(index,commentid) {
+            console.log(index, commentid)
             var idx = this.comments.length-index-1
             
             axios({
                 method: "DELETE",
-                url: SERVER.URL+"/feature/comment/list/detail/comments/"+commentidx, 
+                url: SERVER.URL+"/feature/comment/list/detail/comments/"+commentid,
             })
             .then((res) => { 
             this.comments.splice(idx, 1)
@@ -276,8 +274,10 @@ export default {
                 this.likestatus = res.data.ilike
                 this.uid = res.data.uid
                 this.login_user = this.$store.state.login_user
+                // this.tags = res.data.object.tag;
             })
             .catch((err) => console.error(err));
     },
-}
+  }
+
 </script>
