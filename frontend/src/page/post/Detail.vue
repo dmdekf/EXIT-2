@@ -89,7 +89,7 @@
                         </v-btn>
                     </div>
                     <div v-else>
-                        <v-btn icon>
+                        <v-btn icon v-on:click="userfrofile(comment.writer)">
                         <v-icon>mdi-account-outline</v-icon></v-btn>
                         {{comment.writer}}
                     </div>
@@ -103,10 +103,10 @@
                     >
                     <img :src="comment.uimage=='' ? require('@/assets/img/pimg/ttoru.jpg') : 'https://picsum.photos/100/100'" class="post-img"/>
                     </v-avatar>
-                    </v-col>
                     <span >
                     {{comment.content}}
                     </span>
+                    </v-col>
                 </v-row>
                 <hr/> 
             </div> 
@@ -211,9 +211,6 @@ export default {
             axios({
                 method: "post",
                 url: SERVER.URL+"/feature/comment/list/detail/comments/"+postId+"/write",
-                
-        responseType: "blob",
-    
                 data: {
                         boardIdx:postId,
                         content:this.inputComment,
@@ -244,7 +241,8 @@ export default {
             console.log('Error', );
             alert(error.message+ "입력 정보를 확인하세요.");
             }
-        	})
+            })
+            this.reset()
         },  
         reset() {
             this.$refs.forminput.reset()
