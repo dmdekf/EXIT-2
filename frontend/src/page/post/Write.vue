@@ -166,10 +166,21 @@
     </v-col>
     </v-row>
     </v-app>
+    <v-container>
+      <h2>파일 업로더</h2>
+      <input
+      id = "file-selector"
+      ref="file"
+      type="file"
+      @change="handleFileUpload()"
+      />
+      <v-btn @click="fileUpload()"> 업로드</v-btn>
+    </v-container>
   </div>
 </template>
 
 <script>
+import AWS from 'aws-sdk'
 import "../../assets/css/user.scss";
 import "../../assets/css/editor.scss"
 import axios from "axios";
@@ -198,6 +209,23 @@ import {
   History,
 } from 'tiptap-extensions'
 export default {
+   data() {
+    return {
+      albumBucketName :"i3a501test",
+      bucketRegion : "ap-northeast-2",
+      IdentityPoolId : "ap-northeast-2:2c4f1218-fd6e-439a-aff6-d473a01bbe44",
+      file : null,
+      alert: true,
+      subject: '',
+      email:'',
+      hit:'',
+      uid:'',
+      content: '',
+      tag:'',
+      editor:null,
+      tags:[],
+    }
+  },
   components: {
     EditorContent,
     EditorMenuBar,
@@ -206,6 +234,43 @@ export default {
   created() {
   },
   methods: {
+    handleFileUpload(){
+      this.file = this.$refs.file.files[0]
+      console.log('파일이 업로드 되엇습니다')
+    },
+    fileUpload(){
+      console.log("실행됨 : fileUpload")
+      AWS.config.update({
+        region: this.bucketRegion,
+        credentials : new AWS.CognitoIdentityCredentials({
+          IdentityPoolId : this.IdentityPoolId
+        })
+        
+      })
+      console.log("실행됨 : 2")
+      const s3 = new AWS.S3({
+        apiVersion: '2006-03-01',
+        params:{
+          Buket : this.albumBucketName
+        }
+      })
+      console.log("실행됨 : 3")
+      let photoKey = this.file.name
+      s3.upload({
+        Key : photoKey,
+        Body : this.file,
+        ACL : 'public-read'
+      }),(err,data)=>{
+        console.log("실행됨 : Err")
+        if(err){
+          cosole.log(err)
+          return alert("Error : ", err.message);
+        }
+        alert('Success');
+        console.log(data)
+      }
+      console.log("실행됨 : duplk")
+    },
     ...mapActions(['showAlert']),
     moveList() {
       this.$router.push("/");
@@ -256,19 +321,7 @@ export default {
     },
   },
   watch: {},
-  data() {
-    return {
-      alert: true,
-      subject: '',
-      email:'',
-      hit:'',
-      uid:'',
-      content: '',
-      tag:'',
-      editor:null,
-      tags:[],
-    }
-  },
+ 
   beforeDestroy() {
     this.editor.destroy()
   },
