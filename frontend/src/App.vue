@@ -108,6 +108,9 @@ a {
 #footer {
   opacity: 80%;
 }
+#footer > div {
+  background-color:lightgray
+}
 #footer a {
   color:black; 
 }

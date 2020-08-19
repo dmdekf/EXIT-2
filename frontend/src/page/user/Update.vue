@@ -73,9 +73,9 @@
                       required=false
                       label="자기 소개를 입력해 주세요"
                     ></v-textarea>
-                    <v-container fluid :v-show="profileUrl">
-                    <v-row justify="center" align="center">
-                    <v-col cols="8" aspect-ratio="2" contain  align="center" justify="center">
+                    <v-container fluid :v-show="profileUrl" max-height="400">
+                    <v-row justify="center" align="center" max-height="400">
+                    <v-col cols="8" aspect-ratio="2" contain  align="center" justify="center" max-height="400">
                       
                       <v-img  :src="url" aspect-ratio="2" max-width="200" max-height="400">
                       </v-img>
@@ -132,7 +132,7 @@ export default {
             url: SERVER.URL + "/user/detail/" + this.$store.state.login_user
         }).then((res) => {
             if (res.data.status) {
-                console.log(res.data);
+                //(res.data);
                 this.email = res.data.object.email;
                 this.nickName = res.data.object.uid
             } else {}
@@ -144,7 +144,7 @@ export default {
             if(res.data.status){
                 //this.camera_off_img = require("../../assets/images/camera_off.png")
                 this.profileUrl =require('../../assets/img/pimg/'+res.data.object.uimage);
-                console.log(this.profileUrl)
+                //(this.profileUrl)
                 
             }
         })
@@ -155,7 +155,7 @@ export default {
         ...mapActions(['logout']),
         Preview_image() {
       this.url= URL.createObjectURL(this.image)
-      console.log(this.url)
+      //(this.url)
     },
         moveList() {
             this
