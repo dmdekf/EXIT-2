@@ -83,37 +83,6 @@ import axios from "axios";
 import { required, rules, valid } from "vuelidate/lib/validators";
 
 export default {
-  components: {},
-  created() {},
-  methods: {
-    validate () {
-        this.$refs.form.validate()
-      },
-    moveList() {
-      this.$router.push("/");
-    },
-    signup() {
-      thsi.validate
-      axios({
-        method: "post",
-        url: SERVER.URL+"/account/signup",
-        data: {
-          email: "",
-          password: "",
-          nickname: "",
-        },
-      })
-        .then((res) => {
-          if (res.data.status) {
-            alert("이메일 인증!!");
-            this.$router.push("/user/signup");
-          }
-        })
-        .catch((err) => console.log(err.response.data));
-    },
-  },
-
-  watch: {},
   data: () => {
     return {
       alert: true,
@@ -141,6 +110,37 @@ export default {
       passwordConfirmType: "password",
     }
   },
+  components: {},
+  created() {},
+  methods: {
+    validate () {
+        this.$refs.form.validate()
+      },
+    moveList() {
+      this.$router.push("/");
+    },
+    signup() {
+      this.validate
+      axios({
+        method: "post",
+        url: SERVER.URL+"/account/signup",
+        data: {
+          email: this.email,
+          password: this.password,
+          nickname: this.nickName,
+        },
+      })
+        .then((res) => {
+          if (res.data.status) {
+            alert("이메일 인증!!");
+            this.$router.push("/user/signup");
+          }
+        })
+        .catch((err) => console.log(err.response.data));
+    },
+  },
+
+  watch: {},
   computed: {
     passwordConfirmationRule() {
       return (

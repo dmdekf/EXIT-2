@@ -56,7 +56,7 @@
                   v-text="post.subject"
                 ></span>
                 <!-- <div v-text="post.content"></div> -->
-                <v-divider ></v-divider></v-divider>   
+                <v-divider ></v-divider>  
                 <small>
                 <div> 글쓴이 :<span>{{post.uid}}</span></div>
                 </small>
