@@ -35,7 +35,7 @@
                       id="password" 
                       append-icon="mdi-eye"
                       counter
-                      required="true"
+                      required
                       :rules="passwordRules"
                       :type="show ? 'text' : 'password'"
                       name="password"
@@ -56,33 +56,35 @@
                     ></v-text-field>
                     <v-file-input 
                       show-size
-                      :rules="[(value) => (!value || value.size < 3500000) || '이미지 크기는 3.5MB 이하여야합니다.']"
+                      :rules="[(v) => (!v || v.size < 3500000) || '이미지 크기는 3.5MB 이하여야합니다.']"
                       id="profile"
                       accept="image/png, image/jpeg, image/bmp"
                       placeholder="프로필 사진을 변경할 수 있습니다."
                       prepend-icon="mdi-camera"
                       label="프로필 사진"
-                      :value="profileUrl"
+                      @change="Preview_image"
+                      v-model="image"
                     ></v-file-input>
                     <v-textarea
                       id="introduce"
                       clearable
                       clear-icon="x"
                       auto-grow
+                      required=false
                       label="자기 소개를 입력해 주세요"
                     ></v-textarea>
                     <v-container fluid :v-show="profileUrl">
                     <v-row justify="center" align="center">
-                    <v-col cols="8" aspect-ratio="2" contain>
-                      <v-img :src="profileUrl" aspect-ratio="1" max-width="100" max-height="100">
-                     
+                    <v-col cols="8" aspect-ratio="2" contain  align="center" justify="center">
+                      
+                      <v-img  :src="url" aspect-ratio="2" max-width="200" max-height="400">
                       </v-img>
                     </v-col>
                   </v-row>
                   </v-container>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="primary" v-on:click="userUpdate">수정하기</v-btn>
+                  <v-btn color="primary" :disabled="!valid" v-on:click="userUpdate">수정하기</v-btn>
                   <v-btn color="red" v-on:click="moveDelete">회원탈퇴</v-btn>
                   <v-btn color="lime" v-on:click="moveList">메인화면</v-btn>
                 </v-card-actions>
@@ -113,12 +115,14 @@ export default {
             passwordType: "password",
             passwordConfirmType: "password",
             profileUrl:"",
+            url: null,
+            image: null,
             show: false,
             show1: false,
             isTerm: false,
             passwordRules: [
-                (value) => !!value || "값을 입력해 주세요",
-                (value) => (value && value.length >= 7) || "8글자 이상 입력해주세요",
+                (v) => !!v || '값을 입력해 주세요',
+                (v) => (v && v.length >= 7) || '8글자 이상 입력해주세요',
               ],
         }
     },
@@ -149,6 +153,10 @@ export default {
     methods: {
         ...mapActions(['showAlert']),
         ...mapActions(['logout']),
+        Preview_image() {
+      this.url= URL.createObjectURL(this.image)
+      console.log(this.url)
+    },
         moveList() {
             this
                 .$router
@@ -190,7 +198,7 @@ export default {
     passwordConfirmationRule() {
       return (
         this.password === this.passwordConfirm ||
-        "동일한 비밀번호를 입력해 주세요."
+        '동일한 비밀번호를 입력해 주세요.'
       );
     },
   },
