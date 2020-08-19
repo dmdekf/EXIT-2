@@ -1,7 +1,7 @@
 <template>
 <div id="app">
     <v-app id="inspire">
-        <v-window>
+        <v-window class="mb-6">
         <v-window-item class="my-6">
         <v-card flat>
         <v-card-title class="blue lighten-5">
@@ -78,7 +78,7 @@
         </div>
          <div v-for="(comment, index) in reverseComments" :key="index">
             <div class="contents"> 
-            <v-row justify="space-between" class="ma-2" >
+            <v-row justify="space-between" class="ma-0" >
                 <div># {{reverseComments.length-index}}번째 댓글
                     <small>{{ moment(comment.insertTime).locale('ko-kr').fromNow()}}</small>
                 </div>
@@ -89,28 +89,26 @@
                         </v-btn>
                     </div>
                     <div v-else>
-                        <v-btn icon>
+                        <v-btn icon v-on:click="userfrofile(comment.writer)">
                         <v-icon>mdi-account-outline</v-icon></v-btn>
                         {{comment.writer}}
                     </div>
                 </div>
                 </v-row>
-                <v-row class="ma-4" >
-                    <v-col
-                    >
+                <v-row class="ma-2" >
+                    <v-col class="ma-0 pa-0">
                     <v-avatar
-                    size="55px"
+                    size="50px"
+                    class="mr-2"
                     >
-                    <img :src="comment.uimage=='' ? require('@/assets/img/pimg/ttoru.jpg') : comment.uimage" class="post-img"/>
+                    <img :src="comment.uimage=='' ? require('@/assets/img/pimg/ttoru.jpg') : 'https://picsum.photos/100/100'" class="post-img"/>
                     </v-avatar>
                     <span >
                     {{comment.content}}
                     </span>
                     </v-col>
                 </v-row>
-                
                 <hr/> 
-
             </div> 
         </div>
         </v-card>
@@ -196,6 +194,7 @@ export default {
         getComments(){
             axios({
             method:"get",
+            headers: {'Content-Type': 'multipart/form-data'},
             url:SERVER.URL+"/feature/comment/detail/"+this.id,
                 }).then((res)=>{
                     if(res.data){
@@ -242,7 +241,8 @@ export default {
             console.log('Error', );
             alert(error.message+ "입력 정보를 확인하세요.");
             }
-        	})
+            })
+            this.reset()
         },  
         reset() {
             this.$refs.forminput.reset()

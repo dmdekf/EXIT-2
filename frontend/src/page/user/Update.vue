@@ -6,7 +6,7 @@
           <v-row align="center" justify="center">
             <v-col cols="8">
               <v-card class="elevation-12">
-                <v-toolbar color="#ade498" dark flat>
+                <v-toolbar color="deep-purple accent-3" dark flat>
                   <v-toolbar-title>회원 정보 수정</v-toolbar-title>
                   <v-spacer></v-spacer>
                 </v-toolbar>
