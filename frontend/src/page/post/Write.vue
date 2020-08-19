@@ -309,8 +309,8 @@ export default {
   position: relative;
   display: inline-block;
   vertical-align: middle;
-  width: 0.8rem;
-  height: 0.8rem;
+  width: 1rem;
+  height: 1rem;
   margin: 0 .3rem;
   top: -.05rem;
   fill: currentColor;
@@ -374,5 +374,14 @@ symbol {
     background-color: black;
     color: white;
     /* padding: 0 0.4rem; */
+}
+.menubar {
+  margin: 1rem;
+}
+button, [type=button], [type=reset], [type=submit], [role=button] {
+    margin-right: 0.3rem;
+}
+.editor__content * {
+    margin-left: 1rem;
 }
 </style>
