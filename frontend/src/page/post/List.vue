@@ -75,8 +75,16 @@ export default {
     },
     methods: {
         getImg(postnum) {
-            let result = "https://picsum.photos/id/"+(postnum+100)+"/300/200"
-            return result
+            let result = "https://picsum.photos/id/"+(postnum+50)+"/300/200"
+            console.log(result)
+            if (typeof result == 'jpeg') {
+                return result
+            } else {
+                postnum = postnum+10
+                result = "https://picsum.photos/id/"+(postnum)+"/300/200"
+                return result
+            }
+            
         },
         getPosts() {
             this.nickName = this.$store.state.login_user;
