@@ -93,14 +93,13 @@ export default {
       this.$router.push("/");
     },
     signup() {
-      thsi.validate
       axios({
         method: "post",
         url: SERVER.URL+"/account/signup",
         data: {
-          email: "",
-          password: "",
-          nickname: "",
+          email: this.email,
+          password: this.password,
+          nickname: this.nickname,
         },
       })
         .then((res) => {
@@ -112,8 +111,6 @@ export default {
         .catch((err) => console.log(err.response.data));
     },
   },
-
-  watch: {},
   data: () => {
     return {
       alert: true,

@@ -7,7 +7,8 @@
             <div v-for="(post, uid) in list" :key="uid">
                 <div class="post-card" v-if="post.id" v-on:click="showDetail(post.id)" >
                     <a style="color: black">
-                        <v-img :src="post.bimg=='' ? getcolor(post.id) : require('@/assets/img/bimg/'+post.bimg)" class="post-img"></v-img>
+                        <v-img :src="getImg(post.id)"></v-img>
+                        
                         <div class="contents">
                         <v-row>
                             <v-col>
@@ -64,6 +65,7 @@ export default {
             list:[],
             photos: [],
             limit:0,
+            url:""
         }
     },
     components:{
@@ -72,22 +74,9 @@ export default {
     mounted(){
         this.getPosts()
     },
-    created() {
-      console.log(this.$store.state.status)
-      console.log(this.$store.state.user_email)
-      console.log(this.$store.state.login_user)
-    },
     methods: {
-        getPhotos: function () {
-        axios
-            .get("https://jsonplaceholder.typicode.com/photos")
-            .then((res) => {
-            this.photos = [...this.photos, ...res.data];
-            })
-            .catch((err) => console.error(err));
-        },
-        getcolor(postnum) {
-            let result = this.photos[postnum+3].thumbnailUrl
+        getImg(postnum) {
+            let result = "https://picsum.photos/id/"+(postnum+100)+"/300/200"
             return result
         },
         getPosts() {
@@ -100,7 +89,6 @@ export default {
                     }
             })
             .catch((err) => console.error(err));
-            this.getPhotos()
         },
         showDetail(id){
             this.$router.push(`/post/detail/${id}`);
@@ -121,7 +109,7 @@ export default {
                     $state.complete();
                 }
             }, 500 )
-            this.getPhotos();
+            this.getImg()
         }
     },
 }

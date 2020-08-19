@@ -42,8 +42,8 @@ export default {
     created() {
         this.uid = this.$route.query.uid;
         this.userkey = this.$route.query.userkey;
-        console.log(this.uid);
-        console.log(this.userkey);
+        //(this.uid);
+        //(this.userkey);
         axios({
             method:"get",
             url:SERVER.URL+'/account/key_alter?uid='+this.uid+'&userkey='+this.userkey,
