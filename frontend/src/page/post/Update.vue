@@ -334,3 +334,19 @@ export default {
   },
 }
 </script>
+<style>
+.v-application code {
+    background-color: black;
+    color: white;
+    /* padding: 0 0.4rem; */
+}
+.menubar {
+  margin: 1rem;
+}
+button, [type=button], [type=reset], [type=submit], [role=button] {
+    margin-right: 0.3rem;
+}
+.editor__content * {
+    margin-left: 1rem;
+}
+</style>
