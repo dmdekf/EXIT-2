@@ -355,7 +355,7 @@ symbol {
 .tag-editor, .tag-input, .tag-list {
   padding: 10px;
   margin: 20px;
-  border: 1px dashed gray;
+  border: 1px dashed black;
 }
 
 .tag-editor {
@@ -369,5 +369,10 @@ symbol {
 
 .tag-list {
   border-color: green;
+}
+.v-application code {
+    background-color: black;
+    color: white;
+    /* padding: 0 0.4rem; */
 }
 </style>
