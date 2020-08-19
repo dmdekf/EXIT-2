@@ -35,7 +35,6 @@
             </div>
             <div class="tag-list-wrap justify-center">
             <v-btn class="mx-8 my-2" v-on:click="scrollToTop" color="#ffb367"><v-icon>mdi-arrow-collapse-up</v-icon></v-btn>
-                <v-divider></v-divider>  
                 <p>
                     <v-btn class="mx-2 mt-1" dark color="indigo" v-on:click="writePost">
                         <v-icon dark>mdi-pencil</v-icon>
@@ -109,7 +108,7 @@ export default {
                     $state.complete();
                 }
             }, 500 )
-            this.getImg()
+            this.getImg(this.limit)
         }
     },
 }
