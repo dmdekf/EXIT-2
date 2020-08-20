@@ -42,6 +42,9 @@
             </v-list-item>
         </v-card-title>
         <v-card min-height="300">
+        <div v-for="(b, index) in boardImageList" :key="index">
+            <img :src="b.uimage"/>
+        </div>
         <v-card-text >
             <div v-html="content">{{content}}</div>
         </v-card-text>
@@ -133,6 +136,8 @@ export default {
     },
     data: () => {
         return {
+            boardImageList : [],
+
             subject: '',
             content: '',
             created: '',
@@ -257,6 +262,18 @@ export default {
                 this.login_user = this.$store.state.login_user
             })
             .catch((err) => console.error(err));
+        axios({
+            method : "post",
+            url :  SERVER.URL + "/boardImg/"+this.id,
+        }).then((res)=>{
+            if(res.data.status){
+                this.boardImageList = res.data.object
+                console.dir(this.boardImageList)
+                
+            }
+        })
+        console.log("실행은 되나..")
+
     },
   }
 

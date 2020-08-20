@@ -43,8 +43,10 @@
                   <v-container v-else fluid>
                   <v-row  justify="center" align="center">
                     <v-col class="subtitle-1 text-center mb-5" cols="8" aspect-ratio="2" contain>
-                      
-                    <div class="overline"> 
+                    <div v-if="profileUrl!=``">
+                      <v-img :src="profileUrl"/>
+                    </div>
+                    <div v-else class="overline"> 
                         프로필 사진을 등록해 보세요.
                     </div>
                     </v-col>
@@ -74,6 +76,7 @@ export default {
             return {
                 email: '',
                 nickName: '',
+                profileUrl : '',
             }
         },
         methods: {
@@ -93,6 +96,14 @@ export default {
                 if (res.data.status){
                     this.email = res.data.object.email
                     this.nickName = res.data.object.uid
+                }
+            })
+            axios({
+              method :"POST",
+              url : SERVER.URL+ "/getImg/"+this.$store.state.login_user,
+            }).then((res)=>{
+                if (res.data.status){
+                    this.profileUrl = res.data.object.uimage
                 }
             })
         },
