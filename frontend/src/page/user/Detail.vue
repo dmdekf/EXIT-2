@@ -45,6 +45,7 @@
                     <v-col class="subtitle-1 text-center mb-5" cols="8" aspect-ratio="2" contain>
                     <div v-if="profileUrl!=``">
                       <v-img :src="profileUrl"/>
+                      
                     </div>
                     <div v-else class="overline"> 
                         프로필 사진을 등록해 보세요.
@@ -54,6 +55,9 @@
                   </v-container>
                 <v-card-actions>
                   <v-spacer></v-spacer>
+                  <span v-if="profileUrl">
+                  <v-btn @click="deleteProfile" color="#9896f1" text>프로필 사진 삭제</v-btn>
+                  </span>
                   <v-btn color="primary" v-on:click="moveUpdate">수정하기</v-btn>
                   <v-btn color="lime" v-on:click="moveList">메인화면</v-btn>
                 </v-card-actions>
@@ -80,6 +84,17 @@ export default {
             }
         },
         methods: {
+            deleteProfile(){
+              axios({
+                method: "DELETE",
+                url: SERVER.URL + "/profile/delete/" + this.$store.state.login_user
+              }).then((res) => {
+                  if (res.data.status) {
+                      //(res.data);
+                      this.profileUrl=""
+            } else {}
+        })
+            },
             moveList(){
                 this.$router.push("/");
             },

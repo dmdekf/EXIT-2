@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -109,6 +110,27 @@ public class ImageController {
       }else {
          result.status = false;
          result.data = "can't find image";
+         response = new ResponseEntity<>(result,HttpStatus.BAD_REQUEST);
+      }
+      
+      return response;
+   }
+   @DeleteMapping("/profile/delete/{uid}")
+   @ApiOperation(value = "회원사진 지우기")
+   public Object deleteProfile(@PathVariable String uid) throws Exception {
+      ResponseEntity response = null;
+      final BasicResponse result = new BasicResponse();
+      System.out.println("회원사진 지우기");
+      Optional<Pimg> pimg = pimgDao.findById(uid);
+      if(pimg.isPresent()) {
+    	 pimgDao.deleteById(uid);
+         result.status = true;
+         result.data = "success";
+         response = new ResponseEntity<>(result,HttpStatus.OK);
+         return response;
+      }else {
+         result.status = false;
+         result.data = "fail";
          response = new ResponseEntity<>(result,HttpStatus.BAD_REQUEST);
       }
       
