@@ -282,8 +282,6 @@ export default {
             Bucket: this.albumBucketName
         }
       })
-      //const href = this.request.httpRequest.endpoint.href;
-      //const hf = AWS.response.request.httpRequest.endpoint.href;
       s3.listObjects({
         Delimiter: '/'
       }, (err, data) => {
@@ -342,24 +340,8 @@ export default {
       this.editor.focus()
     },
   },
-<<<<<<< HEAD
   watch: {},
  
-=======
-  data() {
-    return {
-      alert: true,
-      subject: '',
-      email:'',
-      hit:'',
-      uid:'',
-      content: '',
-      tag:'',
-      editor:null,
-      tags:[],
-    }
-  },
->>>>>>> cfac55b8ac528780b5a03648c11fccfa364278a0
   beforeDestroy() {
     this.editor.destroy()
   },

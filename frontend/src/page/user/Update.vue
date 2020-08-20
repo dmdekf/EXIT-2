@@ -62,7 +62,6 @@
                       placeholder="프로필 사진을 변경할 수 있습니다."
                       prepend-icon="mdi-camera"
                       label="프로필 사진"
-<<<<<<< HEAD
                       :value="profileUrl"
                     ></v-file-input> -->
                     <input
@@ -72,11 +71,6 @@
                       @change="handleFileUpload()"
                     />
                     <v-btn @click="uploadFile" color="primary" text> 업로드</v-btn>
-=======
-                      @change="Preview_image"
-                      v-model="image"
-                    ></v-file-input>
->>>>>>> cfac55b8ac528780b5a03648c11fccfa364278a0
                     <v-textarea
                       id="introduce"
                       clearable

@@ -7,12 +7,7 @@
             <div v-for="(post, uid) in list" :key="uid">
                 <div class="post-card" v-if="post.id" v-on:click="showDetail(post.id)" >
                     <a style="color: black">
-<<<<<<< HEAD
-                        <v-img :src="post.bimg=='' ? getcolor(post.id) : post.bimg" class="post-img"></v-img>
-=======
-                        <v-img :src="getImg(post.id)"></v-img>
-                        
->>>>>>> cfac55b8ac528780b5a03648c11fccfa364278a0
+                        <v-img :src="post.bimg=='' ? getImg(post.id) : post.bimg" class="post-img"></v-img>
                         <div class="contents">
                         <v-row>
                             <v-col>
