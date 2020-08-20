@@ -43,6 +43,7 @@ public class BimgController {
    public Object saveBoardImage(@RequestBody Bimg bimg) throws Exception {
       ResponseEntity response = null;
       final BasicResponse result = new BasicResponse();System.out.println("이거시 실행");
+      System.out.println(bimg.getBid());
       if(!boardDao.findById(bimg.getBid()).isPresent()) {
          result.status = false;
          result.data = "not find board";
@@ -50,7 +51,7 @@ public class BimgController {
          return response;
       }
       try {
-         System.out.println("어디까지 실행이 되나2");
+         System.out.println("어디까지 실행이 되나 : boardBimg2");
          Bimg b = bimgDao.save(bimg);
          //Bimg b = bimgDao.save(new Bimg(0,bid,"C:\\Users\\multicampus\\Desktop\\s03p13a501\\frontend\\src\\assets\\img\\bimg\\"+bid+file.getOriginalFilename()));
          System.out.println("어디까지 실행이 되나3");

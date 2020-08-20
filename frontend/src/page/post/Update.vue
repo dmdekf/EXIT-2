@@ -255,7 +255,7 @@ export default {
         let photoKey = this.file.name
          axios({
             method: "post",
-            url: SERVER.URL + "/user/pimg",
+            url: SERVER.URL + "/board/bimg",
             data: {
                     bid: this.id,
                     uimage : 'https://photo-album-two.s3.ap-northeast-2.amazonaws.com/'+photoKey
