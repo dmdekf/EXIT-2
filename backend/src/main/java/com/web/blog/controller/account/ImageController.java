@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,7 @@ import com.web.blog.dao.user.PimgDao;
 import com.web.blog.dao.user.UserDao;
 import com.web.blog.model.BasicResponse;
 import com.web.blog.model.user.Pimg;
+import com.web.blog.model.user.SignupRequest;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -35,6 +37,30 @@ public class ImageController {
    PimgDao pimgDao ; 
    @Autowired
    UserDao userDao;
+   @PostMapping("/user/pimg")
+   @ApiOperation(value = "회원사진 업로드")
+   public Object profileImage(@RequestBody Pimg pimg) throws Exception {
+      ResponseEntity response = null;
+      final BasicResponse result = new BasicResponse();System.out.println("이거시 실행");
+      if(!userDao.findById(pimg.getUid()).isPresent()) {
+         result.status = false;
+         result.data = "not find user";
+         response = new ResponseEntity<>(result,HttpStatus.BAD_REQUEST);
+         return response;
+      }
+      try {
+         //pimgDao.save(new Pimg(uid,"c:/img/"+uid+file.getOriginalFilename()));
+         pimgDao.save(pimg);
+         result.status = true;
+         result.data = "success";
+         response = new ResponseEntity<>(result,HttpStatus.OK);
+      }catch(Exception e) {
+         System.out.println("에러");
+         result.status = false;
+         response = new ResponseEntity<>(result,HttpStatus.BAD_REQUEST);
+      }
+      return response;
+   }
    
    @PostMapping("/user/image")
    @ApiOperation(value = "회원사진")
@@ -53,10 +79,10 @@ public class ImageController {
       }
       try {
         // file.transferTo(new File("c:/img/"+uid+file.getOriginalFilename()));
-         file.transferTo(new File("/home/ubuntu/pimg/"+uid+file.getOriginalFilename()));
+         file.transferTo(new File("https://photo-album-two.s3.ap-northeast-2.amazonaws.com/"+file.getOriginalFilename()));
          
          //pimgDao.save(new Pimg(uid,"c:/img/"+uid+file.getOriginalFilename()));
-         pimgDao.save(new Pimg(uid,"/home/ubuntu/pimg/"+uid+file.getOriginalFilename()));
+         pimgDao.save(new Pimg(uid,"https://photo-album-two.s3.ap-northeast-2.amazonaws.com"+file.getOriginalFilename()));
          result.status = true;
          result.data = "success";
          response = new ResponseEntity<>(result,HttpStatus.OK);

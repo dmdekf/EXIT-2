@@ -174,7 +174,12 @@
       type="file"
       @change="handleFileUpload()"
       />
-      <v-btn @click="fileUpload()"> 업로드</v-btn>
+      <v-btn @click="uploadFile" color="primary" flat> 업로드</v-btn>
+      <h1>파일 리스트</h1>
+      <div v-for="(file,index) in fileList" :key="file.Key">
+        #{{index+1}} {{file.Key}}
+        <img :src="`https://photo-album-two.s3.ap-northeast-2.amazonaws.com/`+file.Key"/>
+      </div>
     </v-container>
   </div>
 </template>
@@ -211,10 +216,15 @@ import {
 export default {
    data() {
     return {
-      albumBucketName :"i3a501test",
+      albumBucketName :"photo-album-two",
       bucketRegion : "ap-northeast-2",
-      IdentityPoolId : "ap-northeast-2:2c4f1218-fd6e-439a-aff6-d473a01bbe44",
+      IdentityPoolId : "ap-northeast-2:242f0477-ae48-4591-9ee8-e628cfcfd999",
       file : null,
+
+      fileList:[],
+
+      photoUrlList:[],
+
       alert: true,
       subject: '',
       email:'',
@@ -232,44 +242,62 @@ export default {
     Icon,
   },
   created() {
+    this.getFiles()
   },
   methods: {
     handleFileUpload(){
       this.file = this.$refs.file.files[0]
       console.log('파일이 업로드 되엇습니다')
     },
-    fileUpload(){
-      console.log("실행됨 : fileUpload")
+    uploadFile(){
       AWS.config.update({
         region: this.bucketRegion,
-        credentials : new AWS.CognitoIdentityCredentials({
-          IdentityPoolId : this.IdentityPoolId
+        credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: this.IdentityPoolId
         })
-        
       })
-      console.log("실행됨 : 2")
       const s3 = new AWS.S3({
         apiVersion: '2006-03-01',
-        params:{
-          Buket : this.albumBucketName
+        params: {
+            Bucket: this.albumBucketName
         }
       })
-      console.log("실행됨 : 3")
       let photoKey = this.file.name
+
       s3.upload({
-        Key : photoKey,
-        Body : this.file,
-        ACL : 'public-read'
-      }),(err,data)=>{
-        console.log("실행됨 : Err")
-        if(err){
-          cosole.log(err)
-          return alert("Error : ", err.message);
+        Key: photoKey,
+        Body: this.file,
+        ACL: 'public-read'
+      }, (err, data) => {
+          if (err) {
+              return alert('There was an error uploading your photo: ', err.message);
+          }
+          alert('Successfully uploaded photo.');
+      });
+    },
+    getFiles(){
+      AWS.config.update({
+        region: this.bucketRegion,
+        credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: this.IdentityPoolId
+        })
+      })
+      const s3 = new AWS.S3({
+        apiVersion: '2006-03-01',
+        params: {
+            Bucket: this.albumBucketName
         }
-        alert('Success');
-        console.log(data)
-      }
-      console.log("실행됨 : duplk")
+      })
+      s3.listObjects({
+        Delimiter: '/'
+      }, (err, data) => {
+        if (err) {
+            return alert('There was an error listing your albums: ' + err.message);
+        } else {
+          this.fileList = data.Contents
+          console.log(data)
+        }
+    });
     },
     ...mapActions(['showAlert']),
     moveList() {

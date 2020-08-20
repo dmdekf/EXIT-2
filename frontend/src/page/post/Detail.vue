@@ -101,7 +101,7 @@
                     size="50px"
                     class="mr-2"
                     >
-                    <img :src="comment.uimage=='' ? require('@/assets/img/pimg/ttoru.jpg') : 'https://picsum.photos/100/100'" class="post-img"/>
+                    <img :src="comment.uimage=='' ? 'https://picsum.photos/100/100' : comment.uimage" class="post-img"/>
                     </v-avatar>
                     <span >
                     {{comment.content}}
