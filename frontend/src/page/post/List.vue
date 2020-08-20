@@ -7,7 +7,8 @@
             <div v-for="(post, uid) in list" :key="uid">
                 <div class="post-card" v-if="post.id" v-on:click="showDetail(post.id)" >
                     <a style="color: black">
-                        <v-img :src="post.bimg=='' ? getcolor(post.id) : require('@/assets/img/bimg/'+post.bimg)" class="post-img"></v-img>
+                        <v-img :src="getImg(post.id)"></v-img>
+                        
                         <div class="contents">
                         <v-row>
                             <v-col>
@@ -34,7 +35,6 @@
             </div>
             <div class="tag-list-wrap justify-center">
             <v-btn class="mx-8 my-2" v-on:click="scrollToTop" color="#ffb367"><v-icon>mdi-arrow-collapse-up</v-icon></v-btn>
-                <v-divider></v-divider>  
                 <p>
                     <v-btn class="mx-2 mt-1" dark color="indigo" v-on:click="writePost">
                         <v-icon dark>mdi-pencil</v-icon>
@@ -64,6 +64,7 @@ export default {
             list:[],
             photos: [],
             limit:0,
+            url:""
         }
     },
     components:{
@@ -72,23 +73,18 @@ export default {
     mounted(){
         this.getPosts()
     },
-    created() {
-      console.log(this.$store.state.status)
-      console.log(this.$store.state.user_email)
-      console.log(this.$store.state.login_user)
-    },
     methods: {
-        getPhotos: function () {
-        axios
-            .get("https://jsonplaceholder.typicode.com/photos")
-            .then((res) => {
-            this.photos = [...this.photos, ...res.data];
-            })
-            .catch((err) => console.error(err));
-        },
-        getcolor(postnum) {
-            let result = this.photos[postnum+3].thumbnailUrl
-            return result
+        getImg(postnum) {
+            let result = "https://picsum.photos/id/"+(postnum+50)+"/300/200"
+            console.log(result)
+            if (typeof result == 'jpeg') {
+                return result
+            } else {
+                postnum = postnum+10
+                result = "https://picsum.photos/id/"+(postnum)+"/300/200"
+                return result
+            }
+            
         },
         getPosts() {
             this.nickName = this.$store.state.login_user;
@@ -100,7 +96,6 @@ export default {
                     }
             })
             .catch((err) => console.error(err));
-            this.getPhotos()
         },
         showDetail(id){
             this.$router.push(`/post/detail/${id}`);
@@ -121,7 +116,7 @@ export default {
                     $state.complete();
                 }
             }, 500 )
-            this.getPhotos();
+            this.getImg(this.limit)
         }
     },
 }

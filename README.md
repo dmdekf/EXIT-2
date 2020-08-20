@@ -1,7 +1,7 @@
 <h1 align="center">Welcome to EXIT 👋</h1>
 <p>
 <div></div>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.2-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.1-blue.svg?cacheSeconds=2592000" />
   <a href="https://lab.ssafy.com/s03-webmobile1-sub2/s03p12a501/blob/master/README.md" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
@@ -37,6 +37,7 @@
 
 > Create your own portfolio blog using 'EXIT'
 
+
 ### 🏠 [Homepage](http://i3a501.p.ssafy.io/)
 
 ## What it is
@@ -47,6 +48,10 @@
 
 ## Main Feature
 
+- 인피니트 스크롤을 활용한 메인 페이지 구현
+- 소셜 oauth 를 통한 로그인 구현
+- 에디터 tiptap을 이용한 글쓰기
+- 검색 기능을 통한 포스트 보기
 - 이미지, 게시글, 코딩블럭을 통한 코드 업로드
 - 팔로우한 유저의 코드보기
 - 유저들의 게시글과 코드에 댓글 남기기
@@ -57,64 +62,104 @@
 
 ## 기술 스택
 
-- Front-end: Vue.cli, node.js
-- Back-end: Spring, Docker,MariaDB
+- Front-end: Vue.cli, node.js, Vuetify, Vuex, bootstrap
+- Back-end: Spring, Docker, MariaDB
 - Env & etc: AWS-EC2, labssafy, Jira, Jenkins
 - API를 이용하여 서버 구동
+- Oauth2.0을 이용한 소셜 로그인
+- Tiptap을 이용한 글쓰기 방식에 다양한 기능제공
 - Vue.cli와 router를 이용하여 SPA를 구현함으로써 빠른 UI/UX 향상
+
+## 진행 상황
+
+# V 1.01  2020-08-07
+### Frontend   
+-유저 jwt연결/ 각 페이지 라우터 수정 / 프론트엔드 수정 코드 통합   
+-댓글 페이지 작성/ 게시글 페이지 수정      
+-포스트 업데이트 페이지 라우터 및 버튼 연결   
+### Backend   
+-게시글 상세보기 URL 수정/   
+-댓글 DB생성/ 댓글 CRUD/Swagger Test 완료   
+-Tag 검색 쿼리 추가   
+-프로필 이미지 디비 생성 및 CRUD   
+
+# V 1.02  2020-08-08
+### Frontend
+- `moment` 이용 - 서버 시간 기록 형식 수정, 댓글 시간 만들기
+- 로그인 동의 rule적용,
+- 포스트 상세 페이지 줄바꿈 적용
+
+
+# V 1.03  2020-08-14
+### Frontend
+- 소셜 로그인 - 깃허브, 카카오 완성
+- 포스트 관련 에디터 적용 - 리스트, 디테일, 업데이트 with Tiptap
+- 포스트, 댓글, 유저의 프로필 사진 등록 및 나타내기
+- 전체 페이지 스타일 수정
+- 검색페이지 결과없음 반영
+
+### Backend   
+- 사진 이미지 디비 수정
+- 소셜 로그인 데이타 수정
+- 유저 오류 해결
+
+# V 1.1  2020-08-20
+### EXIT 총 정리
+- 블로그 이미지 적용
+- 유저 프로필 생성 및 글 목록 작성
+- 에디터 코드블럭 색상 추가
+- 기능 수정 및 테스트
+
+### 배포 이력   
+
+#### V1.0  : 2020.07.31 09:00   
+#### V1.01 : 2020.08.07 09:00
+#### V1.02 : 2020.08.14 20:00
+#### V1.1 : 2020.08.20 10:00
 
 ## REST API
 
-#### 유저 정보
+#### 유저
 
 ---
 
-- GET /user/{uid} //유저 데이터 불러오기
-- PUT /user/{uid} //유저 데이터 수정하기
+- GET /user/detail/{uid}    : 유저 데이터 불러오기
+- PUT /user/update  :유저 데이터 수정하기
+- DELETE /user/delete/{uid} : 회원 탈퇴
 
 #### 게시물
 
 ---
 
-- GET /post/{range}/{key_word} // Post 검색하기
-- GET /post/{p_id} // Post 상세 페이지
-- PUT /post/update // Post 수정
-- DELETE /post/delete/{u_id}  // Post 삭제
-- GET /search/{selected}/{word} // 게시물 검색 
+- GET /feature/board/detail/{uid}/{id}  : 해당 유저가 게시물의 상세 정보 확인
+- GET /featrue/board/list/{id}  : 모든 게시글의 정보 반환 
+- GET /feature/board/list/{id}  : 해당 게시글의 상세 정보 반환
+- PUT /feature/board/update : 게시글 수정하기 
+- POST /feature/board/write : 게시글 쓰기 
+- DELETE /feature/board/delete/{id}     : 게시물 삭제
 
-### ✨ [Demo](i3a501.p.ssafy.io)
+### 댓글 기능 
 
-## Install
+- GET /feature/comment/detail/{uid}/{id}/comments : 게시글 번호에 해당하는 댓글 정보 반환 
+- DELETE /feature/comment/list/detail/comments/{idx} : 해당 댓글을 삭제하단다
+- POST /feature/comment/list/detail/comments/{id}/wirte : 새로운 댓글 작성 
+- 
 
-```sh
-yarn install
-```
+### 좋아요 기능 
+ - GET /heart/{bid}     : 해당 게시글의 하트 수 반환 
+ - GET /like/{bid}/{uid}    :해당 게시글의 좋아요 상태 변환 
 
-## Run 
+### 검색 기능 
 
-### Spring Boot
+ - GET /search/{select}/{keyword}    : 키워드에 따라 검색 
 
-```
-run WebBlogApplication.java  as Spring Boot App
-```
-
-### Vue.Cli
-
-```sh
-yarn serve
-```
-
-### DB
-
-```
-Docker start mariadb
-docker exec -it mariadb mysql -u root -p
-```
-
-### Vuetify
-```
-vue install vuetify
-```
+---
+#### 계정 관리
+ - GET /accoutn/key_alter : 이메일 인증 
+ - GET /account/login : 로그인 
+ - GET /accoutn/signup : 회원가입 
+ - POST /user/socialsignin : 소셜 로그인 
+ - POST /user/info : 회원정보 가져오기 
 
 ## Author
 
@@ -146,3 +191,4 @@ Copyright © 2020 Youngwook Go, Yunji Na, Soyun Jeon, Hyung jin Jeon
 
 ***
 _This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
+

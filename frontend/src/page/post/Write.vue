@@ -152,16 +152,13 @@
               <editor-content class="editor__content" 
                 :editor="editor"
                 />
-                <!-- <p>{{content}}</p> -->
-
-                <!-- Input hashtag -->
             </v-form>
             </v-card-text>
-      <v-card-actions> 
-                  <v-spacer></v-spacer>
-                  <v-btn color="primary" v-on:click="writePost">글올리기</v-btn>
-                  <v-btn color="lime" v-on:click="moveList">메인화면</v-btn>
-                </v-card-actions>
+            <v-card-actions> 
+              <v-spacer></v-spacer>
+              <v-btn color="primary" v-on:click="writePost">글올리기</v-btn>
+              <v-btn color="lime" v-on:click="moveList">메인화면</v-btn>
+            </v-card-actions>
       </v-card>
     </v-col>
     </v-row>
@@ -215,8 +212,6 @@ export default {
     EditorMenuBar,
     Icon,
   },
-  created() {
-  },
   methods: {
     ...mapActions(['showAlert']),
     moveList() {
@@ -262,12 +257,9 @@ export default {
           ],
         }],
       }, true)
-      // HTML string is also supported
-      // this.editor.setContent('<p>This is some inserted text. </p>')
       this.editor.focus()
     },
   },
-  watch: {},
   data() {
     return {
       alert: true,
@@ -285,7 +277,6 @@ export default {
     this.editor.destroy()
   },
   mounted(){
-
     this. editor = new Editor({
         extensions: [
           new Blockquote(),
@@ -389,10 +380,6 @@ pre {
   top: -.05rem;
   fill: currentColor;
 
-  // &.has-align-fix {
-  // 	top: -.1rem;
-  // }
-
   &__svg {
     display: inline-block;
     vertical-align: top;
@@ -410,7 +397,6 @@ pre {
 
 }
 
-// svg sprite
 body > svg,
 .icon use > svg,
 symbol {
@@ -446,8 +432,7 @@ symbol {
 }
 .v-application code {
     background-color: black;
-    //color: white;
-    /* padding: 0 0.4rem; */
+    color: white;
 }
 .menubar {
   margin: 1rem;
@@ -456,7 +441,7 @@ button, [type=button], [type=reset], [type=submit], [role=button] {
     margin-right: 0.3rem;
 }
 .editor__content * {
-    margin-left: 1rem;
-    margin-right: 1rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }
 </style>

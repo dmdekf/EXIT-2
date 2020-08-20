@@ -287,7 +287,7 @@ export default {
       axios
           .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+this.id)
           .then((res) => {
-              console.log(res.data);
+              //(res.data);
               this.subject = res.data.subject;
               this.content = res.data.content;
               
@@ -317,12 +317,12 @@ export default {
                   
                   onUpdate: ({ getHTML }) => {
                     contents = getHTML()
-                    console.log("2 this.content: "+this.content)
-                    console.log("2 contents: "+contents)
+                    //("2 this.content: "+this.content)
+                    //("2 contents: "+contents)
                   },
               })
-              //console.log("create this.content: "+this.content)
-              //console.log("create contents: "+contents)
+              ////("create this.content: "+this.content)
+              ////("create contents: "+contents)
           })
           .then(()=>{
             contents = this.content

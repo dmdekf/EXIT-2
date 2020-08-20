@@ -41,14 +41,12 @@
                 </v-form>
               </v-card-text>
               <div class="contents"> 
-              <!-- <v-layout align-center justify-center class="ma-3 contents"> -->
                 <v-row class="ma-3">
                 <v-btn block class="grey lighten-2 mb-3" v-on:click="gitlogin" ><v-icon>mdi-github</v-icon> | Signin with GitHub </v-btn>
                 </v-row>
                 <v-row class="ma-3">
                 <v-btn block class="yellow accent-4 mb-3" v-on:click="kakaologin"><v-icon>mdi-message</v-icon> | Signin with Kakao </v-btn>
                 </v-row>
-              <!-- </v-layout> -->
               </div>
               
             </v-card>
@@ -82,7 +80,6 @@ data() {
     kakaologin() {
       const client_id=process.env.VUE_APP_KAKAO
       const redirect_uri="http://i3a501.p.ssafy.io/user/logintest/kakao/callback"
-      // const redirect_uri="http://localhost:3000/user/logintest/kakao/callback"
       const kakaoapi = "https://kauth.kakao.com/oauth/authorize?client_id="+client_id+"&redirect_uri="+redirect_uri+"&response_type=code"
      
       window.location.href=kakaoapi
@@ -90,7 +87,6 @@ data() {
     gitlogin() {
       const client_id=process.env.VUE_APP_GIT
       const redirect_uri="http://i3a501.p.ssafy.io/user/logintest/callback"
-      // const redirect_uri="http://localhost:3000/user/logintest/callback"
       const gitapi = "https://github.com/login/oauth/authorize?client_id="+client_id+"&redirect_uri="+redirect_uri+"&scope=user:email"
      
       window.location.href=gitapi
