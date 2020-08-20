@@ -148,11 +148,10 @@
 ### 좋아요 기능 
  - GET /heart/{bid}     : 해당 게시글의 하트 수 반환 
  - GET /like/{bid}/{uid}    :해당 게시글의 좋아요 상태 변환 
- - 
 
 ### 검색 기능 
 
- -GET /search/{select}/{keyword}    : 키워드에 따라 검색 
+ - GET /search/{select}/{keyword}    : 키워드에 따라 검색 
 
 ---
 #### 계정 관리
