@@ -1,7 +1,7 @@
 <h1 align="center">Welcome to EXIT 👋</h1>
 <p>
 <div></div>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.2-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.1-blue.svg?cacheSeconds=2592000" />
   <a href="https://lab.ssafy.com/s03-webmobile1-sub2/s03p12a501/blob/master/README.md" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
@@ -38,7 +38,7 @@
 > Create your own portfolio blog using 'EXIT'
 
 
-### 🏠 (http://i3a501.p.ssafy.io/)
+### 🏠 http://i3a501.p.ssafy.io/
 
 ## What it is
 
