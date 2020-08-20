@@ -61,7 +61,7 @@
                     ></v-checkbox>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="primary" v-on:click="signup">회원가입</v-btn>
+                  <v-btn color="primary" :disabled="!valid" v-on:click="signup">회원가입</v-btn>
                   <v-btn color="lime" v-on:click="moveList">메인화면</v-btn>
                 </v-card-actions>
                   </v-form>
@@ -93,14 +93,69 @@ export default {
       this.$router.push("/");
     },
     signup() {
-      thsi.validate
       axios({
         method: "post",
         url: SERVER.URL+"/account/signup",
         data: {
-          email: "",
-          password: "",
-          nickname: "",
+          email: this.email,
+          password: this.password,
+          nickname: this.nickname,
+        },
+      })
+        .then((res) => {
+          if (res.data.status) {
+            alert("이메일 인증!!");
+            this.$router.push("/user/signup");
+          }
+        })
+        .catch((err) => console.log(err.response.data));
+    },
+  },
+  data: () => {
+    return {
+      alert: true,
+      show: false,
+      show1: false,
+      email: "",
+      checkbox: false,
+      nameRules: [
+          (v) => !!v || '값을 입력해 주세요',
+          (v) =>
+            (v && v.length <= 10) || '닉네임은 10글자 이하여야 합니다.'],
+      emailRules: [
+        (v) => !!v || '값을 입력해 주세요',
+        (v) => /.+@.+\..+/.test(v) || 'E-mail 형식을 맞춰주세요.',
+      ],
+      passwordRules: [
+      (value) => !!value || '값을 입력해 주세요',
+      (value) => (value && value.length >= 7) || '8글자 이상 입력해주세요'],
+      valid:true,
+      nickName: "",
+      password: "",
+      passwordConfirm: "",
+      isTerm: false,
+      passwordType: "password",
+      passwordConfirmType: "password",
+    }
+  },
+  components: {},
+  created() {},
+  methods: {
+    validate () {
+        this.$refs.form.validate()
+      },
+    moveList() {
+      this.$router.push("/");
+    },
+    signup() {
+      this.validate
+      axios({
+        method: "post",
+        url: SERVER.URL+"/account/signup",
+        data: {
+          email: this.email,
+          password: this.password,
+          nickname: this.nickName,
         },
       })
         .then((res) => {
@@ -114,33 +169,6 @@ export default {
   },
 
   watch: {},
-  data: () => {
-    return {
-      alert: true,
-      show: false,
-      show1: false,
-      email: "",
-      checkbox: false,
-      nameRules: [
-          (v) => !!v || '값을 입력해 주세요',
-          (v) =>
-            (v && v.length <= 10) || "닉네임은 10글자 이하여야 합니다."],
-      emailRules: [
-        (v) => !!v || '값을 입력해 주세요',
-        (v) => /.+@.+\..+/.test(v) || "E-mail 형식을 맞춰주세요.",
-      ],
-      passwordRules: [
-      (value) => !!value || '값을 입력해 주세요',
-      (value) => (value && value.length >= 7) || "8글자 이상 입력해주세요"],
-      valid:true,
-      nickName: "",
-      password: "",
-      passwordConfirm: "",
-      isTerm: false,
-      passwordType: "password",
-      passwordConfirmType: "password",
-    }
-  },
   computed: {
     passwordConfirmationRule() {
       return (

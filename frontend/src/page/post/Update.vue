@@ -340,7 +340,7 @@ export default {
       axios
           .get(SERVER.URL +"/feature/board/detail/"+this.$store.state.login_user+"/"+this.id)
           .then((res) => {
-              console.log(res.data);
+              //(res.data);
               this.subject = res.data.subject;
               this.content = res.data.content;
               
@@ -370,12 +370,12 @@ export default {
                   
                   onUpdate: ({ getHTML }) => {
                     contents = getHTML()
-                    console.log("2 this.content: "+this.content)
-                    console.log("2 contents: "+contents)
+                    //("2 this.content: "+this.content)
+                    //("2 contents: "+contents)
                   },
               })
-              //console.log("create this.content: "+this.content)
-              //console.log("create contents: "+contents)
+              ////("create this.content: "+this.content)
+              ////("create contents: "+contents)
           })
           .then(()=>{
             contents = this.content
@@ -387,3 +387,19 @@ export default {
   },
 }
 </script>
+<style>
+.v-application code {
+    background-color: black;
+    color: white;
+    /* padding: 0 0.4rem; */
+}
+.menubar {
+  margin: 1rem;
+}
+button, [type=button], [type=reset], [type=submit], [role=button] {
+    margin-right: 0.3rem;
+}
+.editor__content * {
+    margin-left: 1rem;
+}
+</style>

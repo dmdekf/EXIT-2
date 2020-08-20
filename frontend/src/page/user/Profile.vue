@@ -7,10 +7,6 @@
     <v-row>
         <v-col cos="12">
         <v-img src="https://picsum.photos/400/500" >
-    
-    <!-- <v-img :src="post.uimg=='' ? getcolor(post.id) : require('@/assets/img/bimg/'+post.uimg)" class="post-img" height="300px"
-        dark
-      >/ -->
         <v-row class="fill-height">
           <v-card-title class="text_border white--text pl-12 pt-15 text-right ma-5">
             <div class="display-1 pl-12 pt-15 mt-5">{{uid}}</div>
@@ -80,13 +76,10 @@ export default {
                     "/" +
                 this.searchData.word)
                 .then((res) => {
-                console.log(res.data)
                 if (res.data.object.length==0) {
                     this.posts = ''
-                    console.log(this.posts)
                 } else {    
                     this.posts = res.data.object
-                    console.log(this.posts)
                 }
                 })
                 .catch((err) => console.error(err));
@@ -105,18 +98,14 @@ export default {
                     "/" +
                 this.searchData.word)
                 .then((res) => {
-                console.log(res.data)
                 if (res.data.object.length==0) {
                     this.posts = ''
-                    console.log(this.posts)
                 } else {    
                     this.posts = res.data.object
-                    console.log(this.posts)
                 }
                 })
                 .catch((err) => console.error(err));
     }
-        
 }
 </script>
 <style>

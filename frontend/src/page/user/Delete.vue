@@ -45,7 +45,7 @@ import SERVER from "@/api/api";
 export default {
     destroyed () {
         this.uid = this.$store.state.login_user
-        console.log(this.uid);
+        //(this.uid);
         axios({
             method:"delete",
             url:SERVER.URL+"/user/delete/"+this.uid,
@@ -60,6 +60,7 @@ export default {
                 }
             this.$router.push("/");
         })
+        this.$router.push("/");
     },
     data: function(){
         return {

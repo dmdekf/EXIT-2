@@ -42,8 +42,7 @@
             >
             검색 결과
             </v-toolbar>
-            <v-list three-line >
-              <!-- 누나 여기 키 뭐로해야하지?.? for문이 틀렸다고해서 대충 틀은 잡아놨는데 실수한걸까봐-->
+            <v-list>
               <v-list-item
                 v-for="(post,id) in posts" 
                 ripple
@@ -55,8 +54,7 @@
                   class="text-uppercase font-weight-large caption"
                   v-text="post.subject"
                 ></span>
-                <!-- <div v-text="post.content"></div> -->
-                <v-divider ></v-divider></v-divider>   
+                <v-divider ></v-divider>   
                 <small>
                 <div> 글쓴이 :<span>{{post.uid}}</span></div>
                 </small>
@@ -76,7 +74,6 @@
             검색 결과
             </v-toolbar>
             <v-list three-line >
-              <!-- 누나 여기 키 뭐로해야하지?.? for문이 틀렸다고해서 대충 틀은 잡아놨는데 실수한걸까봐-->
               <v-list-item
               >
                 <v-list-item-content>
@@ -129,13 +126,10 @@ export default {
             "/" +
           this.searchData.word)
         .then((res) => {
-          console.log(res.data)
           if (res.data.object.length==0) {
             this.posts = ''
-            console.log(this.posts)
           } else {    
             this.posts = res.data.object
-            console.log(this.posts)
           }
         })
         .catch((err) => console.error(err));
