@@ -123,20 +123,44 @@
 
 ---
 
-- GET /user/{uid} //유저 데이터 불러오기
-- PUT /user/{uid} //유저 데이터 수정하기
+- GET /user/detail/{uid}    : 유저 데이터 불러오기
+- PUT /user/update  :유저 데이터 수정하기
+- DELETE /user/delete/{uid} : 회원 탈퇴
 
 #### 게시물
 
 ---
 
-- GET /post/{range}/{key_word} // Post 검색하기
-- GET /post/{p_id} // Post 상세 페이지
-- PUT /post/update // Post 수정
-- DELETE /post/delete/{u_id}  // Post 삭제
-- GET /search/{selected}/{word} // 게시물 검색 
+- GET /feature/board/detail/{uid}/{id}  : 해당 유저가 게시물의 상세 정보 확인
+- GET /featrue/board/list/{id}  : 모든 게시글의 정보 반환 
+- GET /feature/board/list/{id}  : 해당 게시글의 상세 정보 반환
+- PUT /feature/board/update : 게시글 수정하기 
+- POST /feature/board/write : 게시글 쓰기 
+- DELETE /feature/board/delete/{id}     : 게시물 삭제
+
+### 댓글 기능 
+
+- GET /feature/comment/detail/{uid}/{id}/comments : 게시글 번호에 해당하는 댓글 정보 반환 
+- DELETE /feature/comment/list/detail/comments/{idx} : 해당 댓글을 삭제하단다
+- POST /feature/comment/list/detail/comments/{id}/wirte : 새로운 댓글 작성 
+- 
+
+### 좋아요 기능 
+ - GET /heart/{bid}     : 해당 게시글의 하트 수 반환 
+ - GET /like/{bid}/{uid}    :해당 게시글의 좋아요 상태 변환 
+ - 
+
+### 검색 기능 
+
+ -GET /search/{select}/{keyword}    : 키워드에 따라 검색 
 
 ---
+#### 계정 관리
+ - GET /accoutn/key_alter : 이메일 인증 
+ - GET /account/login : 로그인 
+ - GET /accoutn/signup : 회원가입 
+ - POST /user/socialsignin : 소셜 로그인 
+ - POST /user/info : 회원정보 가져오기 
 
 ## Author
 
