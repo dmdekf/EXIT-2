@@ -38,7 +38,7 @@
 > Create your own portfolio blog using 'EXIT'
 
 
-### 🏠 [Homepage] (http://i3a501.p.ssafy.io/)
+### 🏠 (http://i3a501.p.ssafy.io/)
 
 ## What it is
 
