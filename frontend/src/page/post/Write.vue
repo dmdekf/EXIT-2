@@ -166,21 +166,6 @@
     </v-col>
     </v-row>
     </v-app>
-    <v-container>
-      <h2>파일 업로더</h2>
-      <input
-      id = "file-selector"
-      ref="file"
-      type="file"
-      @change="handleFileUpload()"
-      />
-      <v-btn @click="uploadFile" color="primary" flat> 업로드</v-btn>
-      <h1>파일 리스트</h1>
-      <div v-for="(file,index) in fileList" :key="file.Key">
-        #{{index+1}} {{file.Key}}
-        <img :src="`https://photo-album-two.s3.ap-northeast-2.amazonaws.com/`+file.Key"/>
-      </div>
-    </v-container>
   </div>
 </template>
 
@@ -250,6 +235,7 @@ export default {
       console.log('파일이 업로드 되엇습니다')
     },
     uploadFile(){
+      const href = this.request.httpRequest.endpoint.href;
       AWS.config.update({
         region: this.bucketRegion,
         credentials: new AWS.CognitoIdentityCredentials({
@@ -288,6 +274,8 @@ export default {
             Bucket: this.albumBucketName
         }
       })
+      //const href = this.request.httpRequest.endpoint.href;
+      //const hf = AWS.response.request.httpRequest.endpoint.href;
       s3.listObjects({
         Delimiter: '/'
       }, (err, data) => {
