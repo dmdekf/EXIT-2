@@ -210,7 +210,8 @@ export default {
         createComment(postId) {
             axios({
                 method: "post",
-                url: SERVER.URL+"/feature/comment/list/detail/comments/"+postId+"/write",
+                //url: SERVER.URL+"/feature/comment/list/detail/comments/"+postId+"/write",
+                url: SERVER.URL+"/feature/comment/wirte",
                 data: {
                         boardIdx:postId,
                         content:this.inputComment,
