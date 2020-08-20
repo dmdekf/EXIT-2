@@ -53,11 +53,10 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="primary" v-on:click="moveUpdate">수정하기</v-btn>
-                  <v-btn color="red" v-on:click="moveDelete">회원탈퇴</v-btn>
                   <v-btn color="lime" v-on:click="moveList">메인화면</v-btn>
                 </v-card-actions>
                 </v-card-text>
-              </v-card>
+              </v-card> 
             </v-col>
           </v-row>
         </v-container>

@@ -2,7 +2,7 @@
   <div class="editor">
     <v-app id="inspire">
       <v-row>
-        <v-col>
+        <v-col cols="12">
           <v-card class="elevation-12" >
             <v-toolbar color="primary" dark flat>
                   <v-toolbar-title>글 작성</v-toolbar-title>
@@ -446,7 +446,7 @@ symbol {
 }
 .v-application code {
     background-color: black;
-    color: white;
+    //color: white;
     /* padding: 0 0.4rem; */
 }
 .menubar {
@@ -457,5 +457,6 @@ button, [type=button], [type=reset], [type=submit], [role=button] {
 }
 .editor__content * {
     margin-left: 1rem;
+    margin-right: 1rem;
 }
 </style>
