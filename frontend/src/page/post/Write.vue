@@ -167,6 +167,7 @@
 </template>
 
 <script>
+import AWS from 'aws-sdk'
 import "../../assets/css/user.scss";
 import "../../assets/css/editor.scss"
 import axios from "axios";
@@ -207,12 +208,91 @@ import {
 } from '../codeHighlight/example'
 
 export default {
+   data() {
+    return {
+      albumBucketName :"photo-album-two",
+      bucketRegion : "ap-northeast-2",
+      IdentityPoolId : "ap-northeast-2:242f0477-ae48-4591-9ee8-e628cfcfd999",
+      file : null,
+
+      fileList:[],
+
+      photoUrlList:[],
+
+      alert: true,
+      subject: '',
+      email:'',
+      hit:'',
+      uid:'',
+      content: '',
+      tag:'',
+      editor:null,
+      tags:[],
+    }
+  },
   components: {
     EditorContent,
     EditorMenuBar,
     Icon,
   },
+  created() {
+  },
   methods: {
+    handleFileUpload(){
+      this.file = this.$refs.file.files[0]
+      console.log('파일이 업로드 되엇습니다')
+    },
+    uploadFile(){
+      const href = this.request.httpRequest.endpoint.href;
+      AWS.config.update({
+        region: this.bucketRegion,
+        credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: this.IdentityPoolId
+        })
+      })
+      const s3 = new AWS.S3({
+        apiVersion: '2006-03-01',
+        params: {
+            Bucket: this.albumBucketName
+        }
+      })
+      let photoKey = this.file.name
+
+      s3.upload({
+        Key: photoKey,
+        Body: this.file,
+        ACL: 'public-read'
+      }, (err, data) => {
+          if (err) {
+              return alert('There was an error uploading your photo: ', err.message);
+          }
+          alert('Successfully uploaded photo.');
+      });
+    },
+    getFiles(){
+      AWS.config.update({
+        region: this.bucketRegion,
+        credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: this.IdentityPoolId
+        })
+      })
+      const s3 = new AWS.S3({
+        apiVersion: '2006-03-01',
+        params: {
+            Bucket: this.albumBucketName
+        }
+      })
+      s3.listObjects({
+        Delimiter: '/'
+      }, (err, data) => {
+        if (err) {
+            return alert('There was an error listing your albums: ' + err.message);
+        } else {
+          this.fileList = data.Contents
+          console.log(data)
+        }
+    });
+    },
     ...mapActions(['showAlert']),
     moveList() {
       this.$router.push("/");
@@ -260,19 +340,8 @@ export default {
       this.editor.focus()
     },
   },
-  data() {
-    return {
-      alert: true,
-      subject: '',
-      email:'',
-      hit:'',
-      uid:'',
-      content: '',
-      tag:'',
-      editor:null,
-      tags:[],
-    }
-  },
+  watch: {},
+ 
   beforeDestroy() {
     this.editor.destroy()
   },

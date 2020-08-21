@@ -80,7 +80,7 @@ public class UserController {
 			System.out.println(request.getPassword());
 			User u = user.get();
 			u.setEmail(request.getEmail());
-			if (request.getPassword() != null) {
+			if (request.getPassword() != null && request.getPassword().trim()!="") {
 				u.setPassword(request.getPassword());
 			}
 			u = userDao.save(u);

@@ -54,7 +54,7 @@
                       hint="숫자 혹은 특수기호 포함 8글자 이상"
                       counter
                     ></v-text-field>
-                    <v-file-input 
+                    <!-- <v-file-input 
                       show-size
                       :rules="[(v) => (!v || v.size < 3500000) || '이미지 크기는 3.5MB 이하여야합니다.']"
                       id="profile"
@@ -62,9 +62,15 @@
                       placeholder="프로필 사진을 변경할 수 있습니다."
                       prepend-icon="mdi-camera"
                       label="프로필 사진"
-                      @change="Preview_image"
-                      v-model="image"
-                    ></v-file-input>
+                      :value="profileUrl"
+                    ></v-file-input> -->
+                    <input
+                      id = "file-selector"
+                      ref="file"
+                      type="file"
+                      @change="handleFileUpload()"
+                    />
+                    <v-btn @click="uploadFile" color="primary" text> 업로드</v-btn>
                     <v-textarea
                       id="introduce"
                       clearable
@@ -107,6 +113,12 @@ import { required, rules, valid } from "vuelidate/lib/validators";
 export default {
     data: () => {
         return {
+          albumBucketName :"photo-album-two",
+          bucketRegion : "ap-northeast-2",
+          IdentityPoolId : "ap-northeast-2:242f0477-ae48-4591-9ee8-e628cfcfd999",
+          file : null,
+
+
             valid:true,
             email: '',
             nickName: '',
@@ -143,14 +155,51 @@ export default {
         }).then((res)=>{
             if(res.data.status){
                 //this.camera_off_img = require("../../assets/images/camera_off.png")
-                this.profileUrl =require('../../assets/img/pimg/'+res.data.object.uimage);
-                //(this.profileUrl)
+                this.profileUrl =res.data.object.uimage;
+                console.log(this.profileUrl)
                 
             }
         })
     },
 
     methods: {
+      handleFileUpload(){
+      this.file = this.$refs.file.files[0]
+      console.log('파일이 업로드 되엇습니다')
+    },
+    uploadFile(){
+      AWS.config.update({
+        region: this.bucketRegion,
+        credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: this.IdentityPoolId
+        })
+      })
+      const s3 = new AWS.S3({
+        apiVersion: '2006-03-01',
+        params: {
+            Bucket: this.albumBucketName
+        }
+      })
+      let photoKey = this.file.name
+      axios({
+            method: "post",
+            url: SERVER.URL + "/user/pimg",
+            data: {
+                    uid: this.nickName,
+                    uimage : 'https://photo-album-two.s3.ap-northeast-2.amazonaws.com/'+photoKey
+                }
+      })
+      s3.upload({
+        Key: photoKey,
+        Body: this.file,
+        ACL: 'public-read'
+      }, (err, data) => {
+          if (err) {
+              return alert('There was an error uploading your photo: ', err.message);
+          }
+          alert('Successfully uploaded photo.');
+      });
+    },
         ...mapActions(['showAlert']),
         ...mapActions(['logout']),
         Preview_image() {

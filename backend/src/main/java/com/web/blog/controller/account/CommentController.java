@@ -2,7 +2,9 @@ package com.web.blog.controller.account;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,18 @@ public class CommentController {
 	CommentDao commentDao;
 	@Autowired
 	PimgDao pimgDao;
+	
+	@ApiOperation(value = "새로운 댓글 정보를 입력한다. 그리고 DB입력 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
+	@PostMapping("/wirte")
+	public Object writeCommentWithImage(@RequestBody Comment comment) {
+		System.out.println("wirte ");
+		System.out.println(comment.toString());
+		comment.setInsertTime(new Date());
+		comment.setDeleteYn("N");
+		Comment c = commentDao.save(comment);
+		String uimage = pimgDao.findById(comment.getWriter()).isPresent()?pimgDao.findById(comment.getWriter()).get().getUimage():"";
+		return new ImgComment(c, uimage);
+	}
 
 	@ApiOperation(value = "게시글번호에 해당하는 댓글의 정보를 반환한다.", response = CommentController.class)
 	@GetMapping("/detail/{uid}/{id}/comments")

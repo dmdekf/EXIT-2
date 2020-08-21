@@ -163,6 +163,16 @@
                   <v-btn color="primary" v-on:click="moveUpdate()">수정하기</v-btn>
                   <v-btn color="red" v-on:click="deletePost(id)">삭제하기</v-btn>
                 </v-card-actions>
+                <v-container>
+                  <h2>파일 업로더</h2>
+                  <input
+                  id = "file-selector"
+                  ref="file"
+                  type="file"
+                  @change="handleFileUpload()"
+                  />
+                  <v-btn @click="uploadFile" color="primary" flat> 업로드</v-btn>
+                </v-container>
               </v-card>
             </v-col>
           </v-row>
@@ -173,6 +183,7 @@
 </template>
 
 <script>
+import AWS from 'aws-sdk'
 import axios from 'axios';
 import SERVER from "@/api/api";
 import { mapActions } from 'vuex'
@@ -213,12 +224,54 @@ export default {
     },
     data: () => {
       return {
+        albumBucketName :"photo-album-two",
+        bucketRegion : "ap-northeast-2",
+        IdentityPoolId : "ap-northeast-2:242f0477-ae48-4591-9ee8-e628cfcfd999",
+        file : null,
+
           subject: '',
           created: '',
           content: '',
           }
     },
     methods: {
+      handleFileUpload(){
+        this.file = this.$refs.file.files[0]
+        console.log('파일이 업로드 되엇습니다')
+      },
+      uploadFile(){
+        AWS.config.update({
+          region: this.bucketRegion,
+          credentials: new AWS.CognitoIdentityCredentials({
+              IdentityPoolId: this.IdentityPoolId
+          })
+        })
+        const s3 = new AWS.S3({
+          apiVersion: '2006-03-01',
+          params: {
+              Bucket: this.albumBucketName
+          }
+        })
+        let photoKey = this.file.name
+         axios({
+            method: "post",
+            url: SERVER.URL + "/board/bimg",
+            data: {
+                    bid: this.id,
+                    uimage : 'https://photo-album-two.s3.ap-northeast-2.amazonaws.com/'+photoKey
+                }
+        })
+        s3.upload({
+          Key: photoKey,
+          Body: this.file,
+          ACL: 'public-read'
+        }, (err, data) => {
+            if (err) {
+                return alert('There was an error uploading your photo: ', err.message);
+            }
+            alert('Successfully uploaded photo.');
+        });
+      },
       ...mapActions(['showAlert']),
       moveList(){
           this.$router.push("/");

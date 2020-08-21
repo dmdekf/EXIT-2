@@ -42,6 +42,9 @@
             </v-list-item>
         </v-card-title>
         <v-card min-height="300">
+        <div v-for="(b, index) in boardImageList" :key="index">
+            <img :src="b.uimage"/>
+        </div>
         <v-card-text >
             <div v-html="content">{{content}}</div>
         </v-card-text>
@@ -101,7 +104,7 @@
                     size="50px"
                     class="mr-2"
                     >
-                    <img :src="comment.uimage=='' ? require('@/assets/img/pimg/ttoru.jpg') : 'https://picsum.photos/100/100'" class="post-img"/>
+                    <img :src="comment.uimage=='' ? 'https://picsum.photos/100/100' : comment.uimage" class="post-img"/>
                     </v-avatar>
                     <span >
                     {{comment.content}}
@@ -133,6 +136,8 @@ export default {
     },
     data: () => {
         return {
+            boardImageList : [],
+
             subject: '',
             content: '',
             created: '',
@@ -205,7 +210,8 @@ export default {
         createComment(postId) {
             axios({
                 method: "post",
-                url: SERVER.URL+"/feature/comment/list/detail/comments/"+postId+"/write",
+                //url: SERVER.URL+"/feature/comment/list/detail/comments/"+postId+"/write",
+                url: SERVER.URL+"/feature/comment/wirte",
                 data: {
                         boardIdx:postId,
                         content:this.inputComment,
@@ -257,6 +263,18 @@ export default {
                 this.login_user = this.$store.state.login_user
             })
             .catch((err) => console.error(err));
+        axios({
+            method : "post",
+            url :  SERVER.URL + "/boardImg/"+this.id,
+        }).then((res)=>{
+            if(res.data.status){
+                this.boardImageList = res.data.object
+                console.dir(this.boardImageList)
+                
+            }
+        })
+        console.log("실행은 되나..")
+
     },
   }
 

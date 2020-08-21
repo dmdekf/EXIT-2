@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,7 @@ import com.web.blog.dao.user.BimgDao;
 import com.web.blog.dao.user.BoardDao;
 import com.web.blog.model.BasicResponse;
 import com.web.blog.model.user.Bimg;
+import com.web.blog.model.user.Pimg;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse; 
@@ -36,8 +38,38 @@ public class BimgController {
    @Autowired
    BoardDao boardDao;
    
+   @PostMapping("/board/bimg")
+   @ApiOperation(value = "게시글에 사진을 올립니다.")
+   public Object saveBoardImage(@RequestBody Bimg bimg) throws Exception {
+      ResponseEntity response = null;
+      final BasicResponse result = new BasicResponse();System.out.println("이거시 실행");
+      System.out.println(bimg.getBid());
+      if(!boardDao.findById(bimg.getBid()).isPresent()) {
+         result.status = false;
+         result.data = "not find board";
+         response = new ResponseEntity<>(result,HttpStatus.BAD_REQUEST);
+         return response;
+      }
+      try {
+         System.out.println("어디까지 실행이 되나 : boardBimg2");
+         Bimg b = bimgDao.save(bimg);
+         //Bimg b = bimgDao.save(new Bimg(0,bid,"C:\\Users\\multicampus\\Desktop\\s03p13a501\\frontend\\src\\assets\\img\\bimg\\"+bid+file.getOriginalFilename()));
+         System.out.println("어디까지 실행이 되나3");
+         result.status = true;
+         result.data = "success";
+         result.object = b.getUimage();
+         response = new ResponseEntity<>(result,HttpStatus.OK);
+      }catch(Exception e) {
+         System.out.println("에러");
+         result.status = false;
+         result.data = "fail";
+         response = new ResponseEntity<>(result,HttpStatus.BAD_REQUEST);
+      }
+      return response;
+   }
+   
    @PostMapping("/board/image")
-   @ApiOperation(value = "회원사진")
+   @ApiOperation(value = "게시글 사진")
    public Object image(@RequestParam("profile") MultipartFile file, @RequestParam("bid") int bid) throws Exception {
       ResponseEntity response = null;
       final BasicResponse result = new BasicResponse();System.out.println("이거시 실행");
@@ -56,7 +88,8 @@ public class BimgController {
          file.transferTo(new File("/home/ubuntu/bimg/"+bid+file.getOriginalFilename()));
          //file.transferTo(new File("C:\\Users\\multicampus\\Desktop\\s03p13a501\\frontend\\src\\assets\\img\\bimg\\"+bid+file.getOriginalFilename()));
          System.out.println("어디까지 실행이 되나2");
-         Bimg b = bimgDao.save(new Bimg(0,bid,bid+file.getOriginalFilename()));
+         Bimg b = bimgDao.save(new Bimg(0,bid,"/home/ubuntu/bimg/"+bid+file.getOriginalFilename()));
+         //Bimg b = bimgDao.save(new Bimg(0,bid,"C:\\Users\\multicampus\\Desktop\\s03p13a501\\frontend\\src\\assets\\img\\bimg\\"+bid+file.getOriginalFilename()));
          System.out.println("어디까지 실행이 되나3");
          result.status = true;
          result.data = "success";

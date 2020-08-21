@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@toast-ui/vue-editor": "^2.3.1",
+    "aws-sdk": "^2.735.0",
     "axios": "^0.19.2",
     "classlist.js": "^1.1.20150312",
     "connect-history-api-fallback": "^1.6.0",
